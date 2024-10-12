@@ -34,7 +34,7 @@ function Sidebar() {
       </button>
       {isOpen && (
         <div
-          className={`sidebar fixed top-0 left-0 w-60 h-screen bg-green-600 text-white p-4 transition duration-300 translate-x-0`}
+          className={`sidebar fixed top-0 left-0 w-60 z-50 h-screen bg-green-600 text-white p-4 transition duration-300 translate-x-0`}
         >
           <div className="w-full max-w-xs mx-auto">
             <div className="bg-green-600 text-white p-4 rounded">
