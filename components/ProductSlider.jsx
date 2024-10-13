@@ -4,14 +4,13 @@ import React from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import Image from "next/image";
 
 const ProductSlider = ({ title, products }) => {
   const settings = {
     dots: true,
     infinite: true,
     speed: 500,
-    slidesToShow: 4, // Default number of slides to show
+    slidesToShow: 5, // Default number of slides to show
     slidesToScroll: 1,
     responsive: [
       {

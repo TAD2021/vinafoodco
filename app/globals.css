@@ -25,3 +25,21 @@ body {
     text-wrap: balance;
   }
 }
+
+h1,
+h2,
+h3,
+h4,
+h5,
+p,
+li {
+  color: #000000;
+}
+
+.slick-prev {
+  left: 0 !important; /* Adjust this value to move the button inside */
+}
+
+.slick-next {
+  right: 0 !important; /* Adjust this value to move the button inside */
+}
