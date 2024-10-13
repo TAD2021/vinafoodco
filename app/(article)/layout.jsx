@@ -2,7 +2,8 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import { Inter } from "next/font/google";
-import "./globals.css";
+import "../globals.css";
+import Aside from "@/components/Aside";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,7 +18,12 @@ export default function RootLayout({ children }) {
       <body className={`antialiased bg-gray-100 ${inter.className}`}>
         <Header />
         <Navbar />
-        {children}
+        <main className="container mx-auto mt-6 px-6">
+          <div className="flex flex-col lg:flex-row">
+            <div className="w-full lg:w-3/4 lg:pr-6">{children}</div>
+            <Aside />
+          </div>
+        </main>
         <Footer />
       </body>
     </html>

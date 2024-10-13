@@ -1,7 +1,7 @@
 import { Fragment } from "react";
-import ImageSlider from "../components/ImageSlider";
-import ProductSlider from "../components/ProductSlider";
-import NewsSlider from "../components/NewsSlider";
+import ImageSlider from "../../components/ImageSlider";
+import ProductSlider from "../../components/ProductSlider";
+import NewsSlider from "../../components/NewsSlider";
 
 export default function Home() {
   const images = [

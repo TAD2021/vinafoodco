@@ -20,7 +20,7 @@ function Header() {
               href="#"
               className="text-gray-700 hover:text-red-600 transition-colors duration-300"
             >
-              <CiShoppingCart />
+              <CiShoppingCart size={20} />
             </Link>
             <span className="absolute -top-1/2 left-1/2 inline-block w-4 h-4 bg-red-600 text-white text-xs font-bold text-center rounded-full">
               3
