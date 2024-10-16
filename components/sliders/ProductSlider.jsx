@@ -5,7 +5,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-const ProductSlider = ({ title, products }) => {
+const ProductSlider = ({ title, products, children }) => {
   const settings = {
     dots: true,
     infinite: true,

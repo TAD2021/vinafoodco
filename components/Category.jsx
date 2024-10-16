@@ -1,6 +1,8 @@
 "use client";
+
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { FaBars } from "react-icons/fa";
 
 function Category() {
   const pathname = usePathname();
@@ -15,11 +17,11 @@ function Category() {
   return (
     <div className="w-64 relative">
       <div
-        className="bg-yellow-500 flex items-center p-2 cursor-pointer"
+        className="bg-yellow-300 flex items-center p-2 cursor-pointer"
         onClick={toggleMenu}
       >
-        <i className="fas fa-bars text-black"></i>
-        <span className="ml-2 hover:text-gray-200 font-bold">DANH MỤC</span>
+        <FaBars />
+        <span className="ml-2 font-bold">DANH MỤC</span>
       </div>
       <div
         id="menu"

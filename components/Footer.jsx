@@ -75,7 +75,7 @@ function Footer() {
           </div>
         </div>
         <div className="mt-6 border-t pt-6 text-center text-gray-600">
-          © Bản quyền thuộc về Thuận Hòa Food
+          © Bản quyền thuộc về Vinafoodco
         </div>
       </div>
     </footer>
