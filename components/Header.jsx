@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { CiShoppingCart } from "react-icons/ci";
-import Sidebar from "./Sidebar";
+import Sidebar from "./sidebars/Sidebar";
 
 function Header() {
   return (

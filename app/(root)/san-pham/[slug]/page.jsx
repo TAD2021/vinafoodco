@@ -1,4 +1,4 @@
-import ProductSlider from "@/components/ProductSlider";
+import ProductSlider from "@/components/sliders/ProductSlider";
 import { CiCalendar } from "react-icons/ci";
 import { FaEye } from "react-icons/fa";
 

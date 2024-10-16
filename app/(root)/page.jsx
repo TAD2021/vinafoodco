@@ -1,13 +1,13 @@
 import { Fragment } from "react";
-import ImageSlider from "../../components/ImageSlider";
-import ProductSlider from "../../components/ProductSlider";
-import NewsSlider from "../../components/NewsSlider";
+
+import ProductSlider from "../../components/sliders/ProductSlider";
+import ImageSlider from "../../components/sliders/ImageSlider";
+import NewsSlider from "../../components/sliders/NewsSlider";
 
 export default function Home() {
   const images = [
     "https://media.loveitopcdn.com/22751/thumb/6912x3456/green-natural-healthy-food-menu-banner-4.jpg?zc=1",
     "https://via.placeholder.com/1200x600.png?text=Second+Image",
-    "https://via.placeholder.com/1200x600.png?text=Third+Image",
   ];
 
   const teaProducts = [
@@ -137,6 +137,7 @@ export default function Home() {
       </div>
       <div className="container mx-auto flex">
         <main className="w-full p-4">
+          <ProductSlider title="TRÀ THANH LỌC" products={teaProducts} />
           <ProductSlider title="TRÀ THANH LỌC" products={teaProducts} />
           <ProductSlider title="BỘT THỰC DƯỠNG" products={powderProducts} />
           <ProductSlider
