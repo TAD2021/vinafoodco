@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { CiCalendar, CiStar } from "react-icons/ci";
 import {
   FaEye,
