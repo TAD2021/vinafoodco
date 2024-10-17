@@ -6,6 +6,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { CiCalendar } from "react-icons/ci";
 import { FaEye } from "react-icons/fa";
+import Image from "next/image";
 
 const NewsSlider = ({ title, newsItems }) => {
   const settings = {
@@ -49,8 +50,10 @@ const NewsSlider = ({ title, newsItems }) => {
           <div key={index} className="p-4">
             <article className="bg-white p-4 rounded-lg shadow h-full flex flex-col justify-between">
               <div>
-                <img
+                <Image
                   alt={`News Image ${index + 1}`}
+                  width={160}
+                  height={160}
                   className="w-full rounded-lg mb-2 object-cover h-40"
                   src={news.imgSrc}
                 />

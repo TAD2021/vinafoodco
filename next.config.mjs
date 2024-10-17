@@ -7,6 +7,16 @@ const nextConfig = {
         hostname: "storage.googleapis.com",
         pathname: "/a1aa/image/**",
       },
+      {
+        protocol: "https",
+        hostname: "via.placeholder.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "media.loveitopcdn.com",
+        pathname: "/**",
+      },
     ],
   },
 };

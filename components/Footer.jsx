@@ -70,7 +70,6 @@ function Footer() {
               src="https://storage.googleapis.com/a1aa/image/vLOpaLHkNfXpYyY4msSe2h7R1mjsh2R5epMDCC6iI5J1QRLnA.jpg"
               width={240}
               height={240}
-              layout="responsive"
             />
           </div>
         </div>

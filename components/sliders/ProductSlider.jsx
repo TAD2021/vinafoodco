@@ -4,6 +4,7 @@ import React from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import Image from "next/image";
 
 const ProductSlider = ({ title, products, children }) => {
   const settings = {
@@ -55,8 +56,10 @@ const ProductSlider = ({ title, products, children }) => {
         {products.map((product, index) => (
           <div key={index} className="p-4">
             <article className="bg-white p-4 rounded-lg shadow h-80 flex flex-col justify-between">
-              <img
+              <Image
                 alt={product.title}
+                width={160}
+                height={160}
                 className="w-full rounded-lg mb-2 object-cover h-40"
                 src={product.imgSrc}
               />

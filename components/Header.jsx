@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { CiShoppingCart } from "react-icons/ci";
 import Sidebar from "./sidebars/Sidebar";
+import Image from "next/image";
 
 function Header() {
   return (
@@ -8,10 +9,12 @@ function Header() {
       <div className="container mx-auto flex justify-between items-center py-4 px-6">
         <Sidebar />
         <div className="flex items-center">
-          <img
+          <Image
             alt="Thuận Hòa Food Logo"
-            className="h-10 w-auto md:h-12"
+            className="w-auto md:h-12"
             src="https://storage.googleapis.com/a1aa/image/HfE5mbCkV6Q9fUxHClWc65vXUM3teCbPzSgihK1dlstkRRLnA.jpg"
+            width={40}
+            height={40}
           />
         </div>
         <nav className="flex items-center space-x-6">
