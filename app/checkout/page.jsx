@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { FaMoneyCheck } from "react-icons/fa";
 import { FaMoneyBill } from "react-icons/fa";
 
@@ -65,12 +66,12 @@ export default function Checkout() {
         </div>
         <div class="w-full lg:w-1/3 bg-white p-4 rounded shadow mb-4 lg:mb-0 mx-0 lg:mx-4">
           <div class="flex items-center mb-4">
-            <img
+            <Image
               alt="Logo Thuận Hòa"
               class="mr-4"
-              height="100"
               src="https://storage.googleapis.com/a1aa/image/HfE5mbCkV6Q9fUxHClWc65vXUM3teCbPzSgihK1dlstkRRLnA.jpg"
-              width="100"
+              width={100}
+              height={100}
             />
             <div>
               <h2 class="text-lg font-bold">Thông Tin Đặt Hàng</h2>
@@ -119,12 +120,12 @@ export default function Checkout() {
         <div class="w-full lg:w-1/3 bg-white p-4 rounded shadow">
           <h2 class="text-lg font-bold mb-4">Đơn Hàng Của Bạn</h2>
           <div class="flex items-center mb-4">
-            <img
+            <Image
               alt="Bột gạo lứt mè đen"
               class="mr-4"
-              height="50"
               src="https://storage.googleapis.com/a1aa/image/RHjlje5JvKSAZ6w4kHHaR9tV96RyuWT7HIMdff2D6muAykMnA.jpg"
-              width="50"
+              width={50}
+              height={50}
             />
             <div class="flex-1">
               <p>Bột gạo lứt mè đen</p>
@@ -133,12 +134,12 @@ export default function Checkout() {
             <p>60.000đ</p>
           </div>
           <div class="flex items-center mb-4">
-            <img
+            <Image
               alt="Trà gạo lứt đậu đỏ Thuận Hòa 300g"
               class="mr-4"
-              height="50"
               src="https://storage.googleapis.com/a1aa/image/HjXWFo5ZMbY1ANNfKpSEUQTeTuYs2t90A776iqla67T9YSmTA.jpg"
-              width="50"
+              width={50}
+              height={50}
             />
             <div class="flex-1">
               <p>Trà gạo lứt đậu đỏ Thuận Hòa 300g</p>

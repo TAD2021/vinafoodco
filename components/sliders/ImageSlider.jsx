@@ -4,6 +4,7 @@ import Slider from "react-slick";
 import { GrFormPrevious, GrFormNext } from "react-icons/gr";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import Image from "next/image";
 
 const ImageSlider = ({ images }) => {
   const NextArrow = ({ onClick }) => (
@@ -40,7 +41,9 @@ const ImageSlider = ({ images }) => {
     <Slider {...settings}>
       {images.map((image, index) => (
         <div key={index}>
-          <img
+          <Image
+            width={500}
+            height={500}
             alt={`Slide ${index}`}
             className="w-full rounded-lg h-full object-cover"
             src={image}

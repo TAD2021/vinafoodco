@@ -1,4 +1,5 @@
 import ProductSlider from "@/components/sliders/ProductSlider";
+import Image from "next/image";
 import { CiCalendar } from "react-icons/ci";
 import { FaEye } from "react-icons/fa";
 
@@ -37,34 +38,34 @@ export default function Sanpham() {
           <div class=" bg-white rounded shadow p-6 mb-6">
             <div class="flex flex-col lg:flex-row">
               <div class="w-full lg:w-1/3">
-                <img
+                <Image
                   alt="Product Image"
                   class="w-full"
-                  height="400"
                   src="https://storage.googleapis.com/a1aa/image/vXn0WB7YLc5xN5O8LUcFgxlfsfR8Hr6L5iV8kfNDLeER0NYOB.jpg"
-                  width="300"
+                  width={300}
+                  height={400}
                 />
                 <div class="flex mt-4">
-                  <img
+                  <Image
                     alt="Thumbnail 1"
                     class="w-1/3"
-                    height="100"
                     src="https://storage.googleapis.com/a1aa/image/NaVpVal2XuIzPJKBcNlUGCfDnye9OE9imxLmCNWVaRZMdDmTA.jpg"
-                    width="100"
+                    width={100}
+                    height={100}
                   />
-                  <img
+                  <Image
                     alt="Thumbnail 2"
                     class="w-1/3 mx-2"
-                    height="100"
                     src="https://storage.googleapis.com/a1aa/image/z0THeRhRFRyEfEW1sebxRY9Yefox7O8lKfrwq494nXAZU3g5E.jpg"
-                    width="100"
+                    width={100}
+                    height={100}
                   />
-                  <img
+                  <Image
                     alt="Thumbnail 3"
                     class="w-1/3"
-                    height="100"
                     src="https://storage.googleapis.com/a1aa/image/UZnyXVoO8xKwDJYMIkZ5job01Sw8e3pOKOsDjoSADQ6quBzJA.jpg"
-                    width="100"
+                    width={100}
+                    height={100}
                   />
                 </div>
               </div>
@@ -115,12 +116,12 @@ export default function Sanpham() {
                 xanh lòng, một loại đậu có nhiều công dụng tốt cho sức khỏe. Trà
                 có hương vị thơm ngon, dễ uống và có thể dùng hàng ngày.
               </p>
-              <img
+              <Image
                 alt="Product Description Image"
                 class="w-full mt-4"
-                height="800"
                 src="https://storage.googleapis.com/a1aa/image/3kgCyGfc3eiTYkqp83zsPfKq5jVoQExvqvC0e30Uj4QS1NYOB.jpg"
-                width="600"
+                width={600}
+                height={800}
               />
               <p class="text-center mt-2">
                 Trà Đậu Đen Xanh Lòng Thuận Hòa 500g
@@ -181,12 +182,12 @@ export default function Sanpham() {
             <h3 className="text-lg font-bold text-gray-800 mb-4">MỚI VỀ</h3>
             <ul className="space-y-4">
               <li className="flex items-center">
-                <img
+                <Image
                   alt="Product Image 1"
                   className="w-16 h-16 object-cover rounded mr-4"
-                  height="60"
                   src="https://storage.googleapis.com/a1aa/image/fPAOciTQHD2XQiwDAOfPciSy3PsYV7gbRAY6r614eCit31LnA.jpg"
-                  width="60"
+                  width={60}
+                  height={60}
                 />
                 <div>
                   <p className="text-gray-700">Bột ngũ cốc khoai lang</p>
@@ -194,12 +195,12 @@ export default function Sanpham() {
                 </div>
               </li>
               <li className="flex items-center">
-                <img
+                <Image
                   alt="Product Image 2"
                   className="w-16 h-16 object-cover rounded mr-4"
-                  height="60"
                   src="https://storage.googleapis.com/a1aa/image/3FRIfeq12IlsA0tHvzfd6fHRx7W5IpCWeiKfD48ui9cGfd9yJA.jpg"
-                  width="60"
+                  width={60}
+                  height={60}
                 />
                 <div>
                   <p className="text-gray-700">Trà gạo lứt đỏ 300g</p>
@@ -207,12 +208,12 @@ export default function Sanpham() {
                 </div>
               </li>
               <li className="flex items-center">
-                <img
+                <Image
                   alt="Product Image 3"
                   className="w-16 h-16 object-cover rounded mr-4"
-                  height="60"
                   src="https://storage.googleapis.com/a1aa/image/1XoxBPx4UXqZJxffC0PhpjvQAukTQMeDYp4kyKWPtjSu31LnA.jpg"
-                  width="60"
+                  width={60}
+                  height={60}
                 />
                 <div>
                   <p className="text-gray-700">Trà đậu đỏ 300g</p>
@@ -220,12 +221,12 @@ export default function Sanpham() {
                 </div>
               </li>
               <li className="flex items-center">
-                <img
+                <Image
                   alt="Product Image 4"
                   className="w-16 h-16 object-cover rounded mr-4"
-                  height="60"
                   src="https://storage.googleapis.com/a1aa/image/pgey6bBB6b1erkgPMdVaFiZPF2XKDd1UFSQ0iq5Xf6OR41LnA.jpg"
-                  width="60"
+                  width={60}
+                  height={60}
                 />
                 <div>
                   <p className="text-gray-700">Trà đậu đen 300g</p>
@@ -233,12 +234,12 @@ export default function Sanpham() {
                 </div>
               </li>
               <li className="flex items-center">
-                <img
+                <Image
                   alt="Product Image 5"
                   className="w-16 h-16 object-cover rounded mr-4"
-                  height="60"
                   src="https://storage.googleapis.com/a1aa/image/XSqooTskDhqqIlbxCDfR9xvyecrYBMfMv8iqh890serQwrXOB.jpg"
-                  width="60"
+                  width={60}
+                  height={60}
                 />
                 <div>
                   <p className="text-gray-700">Bột ngũ cốc dinh dưỡng</p>
@@ -251,12 +252,12 @@ export default function Sanpham() {
             <h3 className="text-lg font-bold text-gray-800 mb-4">TIN HAY</h3>
             <ul className="space-y-4">
               <li className="flex items-center">
-                <img
+                <Image
                   alt="News Image 1"
                   className="w-16 h-16 object-cover rounded mr-4"
-                  height="60"
                   src="https://storage.googleapis.com/a1aa/image/AaXQiVj0BLKAJVq4ytVprz6BHw1oDqDZVCKCb5mooInfd9yJA.jpg"
-                  width="60"
+                  width={60}
+                  height={60}
                 />
                 <div className="flex-1">
                   <p className="text-gray-700 break-words">
@@ -272,7 +273,7 @@ export default function Sanpham() {
                 </div>
               </li>
               <li className="flex items-center">
-                <img
+                <Image
                   alt="News Image 2"
                   className="w-16 h-16 object-cover rounded mr-4"
                   height="60"
@@ -293,12 +294,12 @@ export default function Sanpham() {
                 </div>
               </li>
               <li className="flex items-center">
-                <img
+                <Image
                   alt="News Image 3"
                   className="w-16 h-16 object-cover rounded mr-4"
-                  height="60"
                   src="https://storage.googleapis.com/a1aa/image/qlNFAXMBpkpUPla6zot4HMaYHEFRyJgDJXqWLxtCaoned9yJA.jpg"
-                  width="60"
+                  width={60}
+                  height={60}
                 />
                 <div className="flex-1">
                   <p className="text-gray-700 break-words">
