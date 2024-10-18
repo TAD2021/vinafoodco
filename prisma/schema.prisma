@@ -12,3 +12,141 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id       Int       @id @default(autoincrement())
+  email    String    @unique
+  password String
+  name     String
+  products Product[] // Quan hệ với các sản phẩm mà người dùng có thể tạo
+  posts    Post[] // Quan hệ với các bài viết mà người dùng có thể tạo
+  comments Comment[] // Quan hệ với các bình luận của người dùng
+  carts    Cart[] // Quan hệ với các giỏ hàng của người dùng
+  orders   Order[] // Quan hệ với các đơn hàng của người dùng
+  payments Payment[] // Quan hệ với các thanh toán của người dùng
+}
+
+model Product {
+  id          Int         @id @default(autoincrement())
+  name        String
+  description String
+  price       Float
+  userId      Int
+  user        User        @relation(fields: [userId], references: [id])
+  categoryId  Int
+  category    Category    @relation(fields: [categoryId], references: [id])
+  comments    Comment[] // Bình luận liên quan đến sản phẩm
+  images      Image[] // Các hình ảnh liên quan đến sản phẩm
+  cartItems   CartItem[] // Các mục trong giỏ hàng liên quan đến sản phẩm
+  orderItems  OrderItem[] // Các mục trong đơn hàng liên quan đến sản phẩm
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+model Category {
+  id          Int       @id @default(autoincrement())
+  name        String
+  description String?
+  products    Product[] // Các sản phẩm thuộc danh mục này
+}
+
+model Post {
+  id        Int       @id @default(autoincrement())
+  title     String
+  content   String
+  authorId  Int
+  author    User      @relation(fields: [authorId], references: [id])
+  comments  Comment[] // Bình luận cho bài viết
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  content   String
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  productId Int? // Bình luận có thể liên quan đến sản phẩm
+  product   Product? @relation(fields: [productId], references: [id])
+  postId    Int? // Bình luận có thể liên quan đến bài viết
+  post      Post?    @relation(fields: [postId], references: [id])
+  createdAt DateTime @default(now())
+}
+
+model Cart {
+  id        Int        @id @default(autoincrement())
+  userId    Int
+  user      User       @relation(fields: [userId], references: [id])
+  cartItems CartItem[] // Quan hệ với các mục trong giỏ hàng
+}
+
+model CartItem {
+  id        Int     @id @default(autoincrement())
+  quantity  Int     @default(1)
+  productId Int
+  product   Product @relation(fields: [productId], references: [id])
+  cartId    Int
+  cart      Cart    @relation(fields: [cartId], references: [id])
+}
+
+enum OrderStatus {
+  PENDING
+  SHIPPED
+  DELIVERED
+  CANCELED
+}
+
+model Order {
+  id         Int         @id @default(autoincrement())
+  userId     Int
+  user       User        @relation(fields: [userId], references: [id])
+  orderItems OrderItem[] // Các mục trong đơn hàng
+  totalPrice Float
+  status     OrderStatus @default(PENDING) // Sử dụng Enum để quản lý trạng thái
+  createdAt  DateTime    @default(now())
+  payments   Payment[] // Các thanh toán liên quan đến đơn hàng
+}
+
+model OrderItem {
+  id        Int     @id @default(autoincrement())
+  quantity  Int     @default(1)
+  productId Int
+  product   Product @relation(fields: [productId], references: [id])
+  orderId   Int
+  order     Order   @relation(fields: [orderId], references: [id])
+  price     Float // Giá tại thời điểm mua
+}
+
+enum PaymentMethod {
+  CREDIT_CARD
+  PAYPAL
+  BANK_TRANSFER
+  CASH_ON_DELIVERY
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+model Payment {
+  id        Int           @id @default(autoincrement())
+  userId    Int
+  user      User          @relation(fields: [userId], references: [id])
+  orderId   Int
+  order     Order         @relation(fields: [orderId], references: [id])
+  amount    Float
+  method    PaymentMethod // Sử dụng Enum để quản lý phương thức thanh toán
+  status    PaymentStatus @default(PENDING) // Sử dụng Enum để quản lý trạng thái thanh toán
+  createdAt DateTime      @default(now())
+}
+
+model Image {
+  id        Int      @id @default(autoincrement())
+  url       String // URL hoặc đường dẫn của hình ảnh
+  productId Int
+  product   Product  @relation(fields: [productId], references: [id])
+  createdAt DateTime @default(now())
+}

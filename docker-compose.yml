@@ -7,14 +7,23 @@ services:
       - "3000:3000"
     volumes:
       - .:/app
+      - /app/node_modules
+    command: npm run dev # Sử dụng npm run dev cho phát triển
+    environment:
+      - NODE_ENV=development
     depends_on:
-      - db
-  db:
+      - mysql
+  mysql:
     image: mysql:8
+    container_name: my-mysql
     environment:
       MYSQL_ROOT_PASSWORD: t10102001
       MYSQL_DATABASE: vinafoodco
+      MYSQL_USER: user
+      MYSQL_PASSWORD: userpassword
     volumes:
       - mysql_data:/var/lib/mysql
+    ports:
+      - '3306:3306'
 volumes:
   mysql_data:

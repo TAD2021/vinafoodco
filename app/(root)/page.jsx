@@ -138,7 +138,6 @@ export default function Home() {
       <div className="container mx-auto flex">
         <main className="w-full p-4">
           <ProductSlider title="TRÀ THANH LỌC" products={teaProducts} />
-          <ProductSlider title="TRÀ THANH LỌC" products={teaProducts} />
           <ProductSlider title="BỘT THỰC DƯỠNG" products={powderProducts} />
           <ProductSlider
             title="BỘT DINH DƯỠNG BỔ SUNG"
