@@ -124,13 +124,13 @@ const CommentSection = ({ productSlug }) => {
                                 <p className="font-bold text-lg">{comment.name}</p>
                                 <div className="flex ml-2">
                                     {[1, 2, 3, 4, 5].map((star) => (
-                                       <>
+                                        <>
                                             {star <= comment.rating ? (
                                                 <FaStar key={star} className="text-yellow-500 h-5 w-5" />
                                             ) : (
                                                 <CiStar key={star} className="text-gray-300 h-5 w-5" />
                                             )}
-                                       </>
+                                        </>
                                     ))}
                                 </div>
                             </div>

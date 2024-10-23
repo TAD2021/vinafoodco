@@ -2,8 +2,39 @@ import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 
 export async function GET(req) {
+  const { searchParams } = new URL(req.url); // Get the query parameters from the request URL
+  const isNew = searchParams.get('new');
+
   try {
-    const products = await prisma.product.findMany({
+    let products;
+    if (isNew === 'true') {
+      products = await prisma.product.findMany({
+        orderBy: {
+          createdAt: 'desc',
+        },
+        take: 5,
+        select: {
+          name: true,
+          price: true,
+          slug: true,
+          images: {
+            take: 1, // Chỉ lấy 1 hình ảnh mỗi sản phẩm
+            select: {
+              url: true,
+            },
+          },
+        },
+      });
+      // Chuyển đổi cấu trúc dữ liệu để trả về hình ảnh là một trường duy nhất (thay vì mảng)
+      const formattedProducts = products.map((product) => ({
+        name: product.name,
+        price: product.price,
+        slug: product.slug,
+        image: product.images.length > 0 ? product.images[0].url : null, // Lấy URL của hình ảnh đầu tiên nếu tồn tại
+      }));
+      return NextResponse.json(formattedProducts); // Trả về phản hồi JSON
+    }
+    products = await prisma.product.findMany({
       select: {
         name: true, // Chỉ lấy tên sản phẩm
         price: true, // Chỉ lấy giá sản phẩm

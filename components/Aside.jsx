@@ -1,98 +1,75 @@
+'use client'
+
+import { formatCurrency } from "@/utils/formatCurrency";
 import Image from "next/image";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 import { CiCalendar } from "react-icons/ci";
 import { FaEye } from "react-icons/fa";
 
 function Aside() {
+  const [categories, setCategories] = useState([]);
+  const [newProducts, setNewProducts] = useState([]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch('/api/categories');
+        const data = await response.json();
+        setCategories(data);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+
+    const fetchNewProducts = async () => {
+      try {
+        const response = await fetch('/api/products?new=true');
+        const data = await response.json();
+        setNewProducts(data);
+      } catch (error) {
+        console.error("Error fetching new products:", error);
+      }
+    };
+
+    fetchCategories();
+    fetchNewProducts();
+  }, []);
+
   return (
     <aside className="w-full lg:w-1/4 mt-6 lg:mt-0">
       <div className="bg-white p-4 shadow rounded mb-6">
         <h3 className="text-lg font-bold text-gray-800 mb-4">SHOP</h3>
         <ul className="space-y-4">
-          <li className="flex justify-between items-center border-b border-orange-300 pb-2 last:border-b-0">
-            <span className="text-gray-700">Bột Ngũ Cốc</span>
-          </li>
-          <li className="flex justify-between items-center border-b border-orange-300 pb-2 last:border-b-0">
-            <span className="text-gray-700">Bột Đậu Xanh</span>
-          </li>
-          <li className="flex justify-between items-center border-b border-orange-300 pb-2 last:border-b-0">
-            <span className="text-gray-700">Bột Đậu Đỏ</span>
-          </li>
-          <li className="flex justify-between items-center border-b border-orange-300 pb-2 last:border-b-0">
-            <span className="text-gray-700">Bột Đậu Nành</span>
-          </li>
-          <li className="flex justify-between items-center border-b border-orange-300 pb-2 last:border-b-0">
-            <span className="text-gray-700">Bột Đậu Đen</span>
-          </li>
+          {categories.map((category) => (
+            <li  key={category.id} className="flex justify-between items-center border-b border-orange-300 pb-2 last:border-b-0">
+              <Link href={category.slug} passHref>
+                <span className="text-gray-700">{category.name}</span>
+              </Link>
+            </li>
+          ))}
         </ul>
       </div>
       <div className="bg-white p-4 shadow rounded mb-6">
         <h3 className="text-lg font-bold text-gray-800 mb-4">MỚI VỀ</h3>
         <ul className="space-y-4">
-          <li className="flex items-center">
-            <Image
-              alt="Product Image 1"
-              className="w-16 h-16 object-cover rounded mr-4"
-              src="https://storage.googleapis.com/a1aa/image/fPAOciTQHD2XQiwDAOfPciSy3PsYV7gbRAY6r614eCit31LnA.jpg"
-              width={60}
-              height={60}
-            />
-            <div>
-              <p className="text-gray-700">Bột ngũ cốc khoai lang</p>
-              <p className="text-green-600">60.000đ</p>
-            </div>
-          </li>
-          <li className="flex items-center">
-            <Image
-              alt="Product Image 2"
-              className="w-16 h-16 object-cover rounded mr-4"
-              src="https://storage.googleapis.com/a1aa/image/3FRIfeq12IlsA0tHvzfd6fHRx7W5IpCWeiKfD48ui9cGfd9yJA.jpg"
-              width={60}
-              height={60}
-            />
-            <div>
-              <p className="text-gray-700">Trà gạo lứt đỏ 300g</p>
-              <p className="text-green-600">60.000đ</p>
-            </div>
-          </li>
-          <li className="flex items-center">
-            <Image
-              alt="Product Image 3"
-              className="w-16 h-16 object-cover rounded mr-4"
-              width={60}
-              height={60}
-              src="https://storage.googleapis.com/a1aa/image/1XoxBPx4UXqZJxffC0PhpjvQAukTQMeDYp4kyKWPtjSu31LnA.jpg"
-            />
-            <div>
-              <p className="text-gray-700">Trà đậu đỏ 300g</p>
-              <p className="text-green-600">60.000đ</p>
-            </div>
-          </li>
-          <li className="flex items-center">
-            <Image
-              alt="Product Image 4"
-              className="w-16 h-16 object-cover rounded mr-4"
-              src="https://storage.googleapis.com/a1aa/image/pgey6bBB6b1erkgPMdVaFiZPF2XKDd1UFSQ0iq5Xf6OR41LnA.jpg"
-              width={60}
-              height={60}
-            />
-            <div>
-              <p className="text-gray-700">Trà đậu đen 300g</p>
-              <p className="text-green-600">60.000đ</p>
-            </div>
-          </li>
-          <li className="flex items-center">
-            <Image
-              alt="Product Image 5"
-              className="w-16 h-16 object-cover rounded mr-4"
-              src="https://storage.googleapis.com/a1aa/image/XSqooTskDhqqIlbxCDfR9xvyecrYBMfMv8iqh890serQwrXOB.jpg"
-              width={60}
-              height={60}
-            />
-            <div>
-              <p className="text-gray-700">Bột ngũ cốc dinh dưỡng</p>
-              <p className="text-green-600">60.000đ</p>
-            </div>
-          </li>
+          {newProducts.map((product) => (
+            <Link key={product.slug} href={product.slug}>
+              <li  className="flex items-center">
+                <Image
+                  alt={product.name}
+                  className="w-16 h-16 object-cover rounded mr-4"
+                  src={product.image || "/placeholder-image.png"} // Hình ảnh dự phòng nếu không có
+                  width={60}
+                  height={60}
+                />
+                <div>
+                  <p className="text-gray-700">{product.name}</p>
+                  <p className="text-green-600">{formatCurrency(product.price)}</p>
+                </div>
+              </li>
+            </Link>
+          ))}
         </ul>
       </div>
       <div className="bg-white p-4 shadow rounded">

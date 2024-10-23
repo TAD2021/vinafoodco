@@ -6,10 +6,10 @@ const prisma = new PrismaClient();
 // async function createCategories() {
 //   const categories = await prisma.category.createMany({
 //     data: [
-//       { name: 'Trà Sâm' },
-//       { name: 'Dược Liệu' },
-//       { name: 'Bột Thực Phẩm' },
-//       { name: 'Yến Sào' },
+//       { name: 'Trà Sâm', slug: slugify('Trà Sâm', { lower: true })},
+//       { name: 'Dược Liệu', slug: slugify('Dược Liệu', { lower: true }) },
+//       { name: 'Bột Thực Phẩm', slug: slugify('Bột Thực Phẩm', { lower: true }) },
+//       { name: 'Yến Sào', slug: slugify('Yến Sào', { lower: true }) },
 //     ],
 //   });
 
