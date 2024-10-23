@@ -1,139 +1,120 @@
-const { PrismaClient } = require('@prisma/client')
+const { PrismaClient, DisplayType } = require('@prisma/client')
+const slugify = require('slugify');
 
-const prisma = new PrismaClient()
+const prisma = new PrismaClient();
+
+// async function createCategories() {
+//   const categories = await prisma.category.createMany({
+//     data: [
+//       { name: 'Trà Sâm' },
+//       { name: 'Dược Liệu' },
+//       { name: 'Bột Thực Phẩm' },
+//       { name: 'Yến Sào' },
+//     ],
+//   });
+
+//   console.log(categories);
+// }
+
+// createCategories();
+
+// async function createUser(email, password, name) {
+//   const user = await prisma.user.create({
+//     data: {
+//       email,
+//       password,
+//       name,
+//     },
+//   });
+//   console.log('User created:', user);
+// }
+
+// createUser('admin@gmail.com', 'password123', 'John Doe')
+//   .then(async () => {
+//     await prisma.$disconnect();
+//   })
+//   .catch(async (e) => {
+//     console.error(e);
+//     await prisma.$disconnect();
+//   });
 
 async function main() {
-  // Tạo người dùng
-  const user1 = await prisma.user.create({
-    data: {
-      email: 'user1@example.com',
-      password: 'password123',
-      name: 'Nguyễn Văn A',
-    },
-  })
+  const userId = 1; // ID người dùng
+  const categoryId = 1; // ID danh mục
 
-  const user2 = await prisma.user.create({
-    data: {
-      email: 'user2@example.com',
-      password: 'password456',
-      name: 'Trần Thị B',
-    },
-  })
+  const name = 'Trà sâm thái nguyên ww2';
+  const slug = slugify(name, { lower: true });
 
-  // Tạo danh mục
-  const category1 = await prisma.category.create({
-    data: {
-      name: 'Điện thoại',
-      description: 'Các sản phẩm điện thoại di động',
-    },
-  })
+  // Danh sách tên thẻ
+  const tagNames = ['Trà sâm', 'tree sâm'];
 
-  const category2 = await prisma.category.create({
-    data: {
-      name: 'Laptop',
-      description: 'Các sản phẩm laptop',
-    },
-  })
+  // Tìm hoặc tạo thẻ
+  const tags = await Promise.all(tagNames.map(async (tagName) => {
+      let tag = await prisma.tag.findUnique({
+          where: { name: tagName },
+      });
 
-  // Tạo sản phẩm
-  const product1 = await prisma.product.create({
-    data: {
-      name: 'Điện thoại Samsung Galaxy S23',
-      description: 'Điện thoại Samsung Galaxy S23 với màn hình 6.1 inch.',
-      price: 24990000,
-      userId: user1.id,
-      categoryId: category1.id,
-      images: {
-        create: [
-          { url: 'https://example.com/samsung-galaxy-s23-1.jpg' },
-          { url: 'https://example.com/samsung-galaxy-s23-2.jpg' },
-        ],
+      if (!tag) {
+          tag = await prisma.tag.create({
+              data: { name: tagName },
+          });
+      }
+
+      return tag;
+  }));
+
+  // Tạo một sản phẩm mới
+  const newProduct = await prisma.product.create({
+      data: {
+          name,
+          description: 'Trà sâm thái nguyên',
+          price: 200000,
+          slug,
+          userId: userId,
+          categoryId: categoryId,
+          tags: {
+              connect: tags.map(tag => ({ id: tag.id })), // Kết nối với thẻ đã tìm thấy hoặc tạo mới
+          },
+          images: {
+              create: [
+                  { url: 'https://i.pinimg.com/564x/50/06/87/500687e92f063c19bdb0d6d8174c80ba.jpg' },
+                  { url: 'https://i.pinimg.com/enabled_hi/564x/67/0e/c3/670ec3fd3cb5e64b4a67e4cce9714047.jpg' },
+                  { url: 'https://i.pinimg.com/enabled_hi/564x/67/0e/c3/670ec3fd3cb5e64b4a67e4cce9714047.jpg' }
+              ], // Thêm hình ảnh
+          },
+          attributes: {
+              create: [
+                  {
+                      attributeName: 'Thành phần',
+                      attributeValue: 'Đậu đỏ, Đậu xanh, Đậu đen, Đậu nành, Gạo lứt đã được rang chín.',
+                      sortOrder: 1,
+                      displayType: 'SINGLE_LINE', // Sửa lại nếu cần
+                  },
+                  {
+                      attributeName: 'Công dụng',
+                      attributeValue: `
+                        <li>Bồi dưỡng cơ thể, trợ tiêu hóa, nhuận trường.</li>
+                        <li>Là bữa ăn sáng, ăn xế với đầy đủ dưỡng chất.</li>
+                        <li>Rất thích hợp cho người mới ốm dậy, biếng ăn, người lớn tuổi, khả năng ăn kém.</li>
+                        <li>Rất tốt cho phụ nữ mang thai và cho con bú. Kokkoh dùng thay sữa mẹ nếu mẹ không đủ sữa. Sử dụng làm bột ăn dặm cho trẻ em.</li>
+                        <li>Là bữa ăn thay thế để giảm cân hoặc tăng cân.</li>
+                      `,
+                      sortOrder: 2,
+                      displayType: 'LIST', // Sửa lại nếu cần
+                  },
+              ], // Thêm thuộc tính
+          },
       },
-    },
-  })
+  });
 
-  const product2 = await prisma.product.create({
-    data: {
-      name: 'Laptop Dell XPS 13',
-      description: 'Laptop Dell XPS 13 với thiết kế mỏng nhẹ.',
-      price: 33990000,
-      userId: user2.id,
-      categoryId: category2.id,
-      images: {
-        create: [
-          { url: 'https://example.com/dell-xps-13-1.jpg' },
-          { url: 'https://example.com/dell-xps-13-2.jpg' },
-        ],
-      },
-    },
-  })
-
-  // Tạo bài viết
-  const post1 = await prisma.post.create({
-    data: {
-      title: 'Review Samsung Galaxy S23',
-      content: 'Chi tiết về sản phẩm Samsung Galaxy S23.',
-      authorId: user1.id,
-    },
-  })
-
-  // Tạo bình luận
-  const comment1 = await prisma.comment.create({
-    data: {
-      content: 'Sản phẩm tuyệt vời!',
-      userId: user2.id,
-      productId: product1.id,
-      postId: post1.id,
-    },
-  })
-
-  // Tạo giỏ hàng
-  const cart = await prisma.cart.create({
-    data: {
-      userId: user2.id,
-      cartItems: {
-        create: {
-          quantity: 1,
-          productId: product1.id,
-        },
-      },
-    },
-  })
-
-  // Tạo đơn hàng
-  const order = await prisma.order.create({
-    data: {
-      userId: user1.id,
-      totalPrice: product1.price,
-      orderItems: {
-        create: {
-          quantity: 1,
-          productId: product1.id,
-          price: product1.price,
-        },
-      },
-    },
-  })
-
-  // Tạo thanh toán
-  await prisma.payment.create({
-    data: {
-      userId: user1.id,
-      orderId: order.id,
-      amount: order.totalPrice,
-      method: 'CREDIT_CARD',
-      status: 'COMPLETED',
-    },
-  })
-
-  console.log('Dữ liệu đã được tạo thành công!')
+  console.log(`Đã thêm sản phẩm: ${newProduct.name}`);
 }
 
 main()
   .catch(e => {
-    console.error(e)
-    process.exit(1)
+      console.error(e);
+      process.exit(1);
   })
   .finally(async () => {
-    await prisma.$disconnect()
-  })
+      await prisma.$disconnect();
+  });

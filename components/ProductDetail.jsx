@@ -1,0 +1,138 @@
+'use client'
+
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
+import { FaCartPlus, FaFacebookF, FaLinkedinIn, FaPinterest, FaShoppingBasket, FaTwitter } from "react-icons/fa";
+import ImageGallery from "./ImageGallery";
+import { formatCurrency } from "@/utils/formatCurrency";
+import { parseListItems } from "@/utils/parseListItems";
+import Button from "./Button";
+import CommentSection from "./CommentSection";
+
+function ProductDetail() {
+    const pathName = usePathname();
+    const slug = pathName.split('/').pop();
+    
+    const [product, setProduct] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+  
+    useEffect(() => {
+        const fetchProduct = async () => {
+            try {
+                const response = await fetch(`http://localhost:3000/api/products/${slug}`);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data = await response.json();
+                setProduct(data);
+            } catch (error) {
+                setError(error.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+    
+        fetchProduct();
+    }, [slug]);
+
+    console.log(product)
+  
+    if (loading) return <p>Loading...</p>;
+    if (error) return <p>Error: {error}</p>;
+
+    const handleAddToCart = () => {
+        // Logic để thêm sản phẩm vào giỏ hàng
+        console.log("Thêm vào giỏ hàng:", product);
+    };
+
+    const handleBuyNow = () => {
+        // Logic để mua ngay sản phẩm
+        console.log("Mua ngay:", product);
+    };
+    
+    return (
+        <div className="w-full lg:w-3/4 lg:mr-6">
+            <div className=" bg-white rounded shadow p-6 mb-6">
+                <div className="flex flex-col md:flex-row">
+                    <div className="w-full md:w-1/3">
+                        <ImageGallery images={product.images}/>
+                    </div>
+                    <div className="w-full md:w-2/3 md:pl-4 mt-4 md:mt-0">
+                        <h1 className="text-2xl font-bold">{product.name}</h1>
+                        <p className="text-green-600 text-xl font-semibold">{formatCurrency(product.price)}</p>
+                        {product.attributes.sort((a, b) => a.sortOrder - b.sortOrder).map((attribute) => {
+                            const { attributeName, attributeValue, displayType } = attribute;
+
+                            if (displayType === 'SINGLE_LINE') {
+                                return (
+                                    <div key={attributeName}>
+                                        <p className="mt-2"><strong>{attributeName}:</strong> {attributeValue}</p>
+                                    </div>
+                                );
+                            }
+
+                            if (displayType === 'LIST') {
+                                return (
+                                    <div key={attributeName}>
+                                        <p className="mt-2"><strong>{attributeName}:</strong></p>
+                                        <ul className="list-disc list-inside">
+                                            {parseListItems(attributeValue)} {/* Sử dụng hàm parseListItems */}
+                                        </ul>
+                                    </div>
+                                );
+                            }
+                        })}
+                        <div className="mt-4">
+                            <p><strong>Tình trạng:</strong> Còn hàng</p>
+                            <div className="flex items-center mt-2">
+                                <span className="mr-2">Số lượng:</span>
+                                <button className="px-2 py-1 border">-</button>
+                                <input className="w-12 text-center border mx-2" type="text" value="1" />
+                                <button className="px-2 py-1 border">+</button>
+                            </div>
+                            <div className="flex space-x-4 mt-4">
+                                <Button 
+                                    label="Thêm vào giỏ hàng" 
+                                    icon={FaCartPlus} 
+                                    onClick={handleAddToCart} 
+                                    className="bg-green-500"
+                                />
+                                <Button
+                                    label="Mua ngay" 
+                                    icon={FaShoppingBasket} 
+                                    onClick={handleBuyNow} 
+                                    className="bg-green-700"
+                                />
+                            </div>
+                        </div>
+                        <div className="mt-4">
+                            <div className="flex">
+                                <span className="mr-2">Chia sẻ:</span>
+                                <Link className="text-gray-600" href="#"><FaFacebookF /></Link>
+                                <Link className="text-gray-600 ml-2" href="#"><FaTwitter /></Link>
+                                <Link className="text-gray-600 ml-2" href="#"><FaLinkedinIn /></Link>
+                                <Link className="text-gray-600 ml-2" href="#"><FaPinterest /></Link>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {product.description && (
+                    <div className="mt-8">
+                        <h2 className="text-xl font-bold">Mô tả</h2>
+                        {product.description}
+                    </div>
+                )}
+            </div>
+            <div className=" bg-white rounded shadow p-6 mb-6">
+                {/* <ProductSlider title="SẢN PHẨM TƯƠNG TỰ" products={teaProducts} /> */}
+            </div>
+            <div class="bg-white rounded shadow p-6">
+                <CommentSection productSlug={slug}/>
+            </div>
+        </div>
+    );
+}
+
+export default ProductDetail

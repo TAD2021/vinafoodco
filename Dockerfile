@@ -1,23 +1,19 @@
-# Dockerfile
+# Use Node.js image as the base
 FROM node:20
-
-# Đặt thư mục làm việc
+# Set the working directory
 WORKDIR /app
 
-# Sao chép package.json và package-lock.json
+# Copy only package.json and package-lock.json for efficient caching
 COPY package*.json ./
 
-# Cài đặt các phụ thuộc
+# Install dependencies
 RUN npm install
 
-# Sao chép toàn bộ mã nguồn vào container
+# Copy the rest of the application code
 COPY . .
 
-# Biên dịch mã Next.js
-RUN npm run build
-
-# Expose port
+# Expose the port Next.js runs on
 EXPOSE 3000
 
-# Chạy ứng dụng
-CMD ["npm", "start"]
+# Start the Next.js development server
+CMD ["npm", "run", "dev"]

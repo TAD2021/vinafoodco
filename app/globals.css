@@ -32,7 +32,7 @@ h3,
 h4,
 h5,
 p,
-li {
+li,span, input, textarea {
   color: #000000;
 }
 
@@ -42,4 +42,11 @@ li {
 
 .slick-next {
   right: 0 !important; /* Adjust this value to move the button inside */
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  line-clamp: 2; 
+  overflow: hidden;
 }

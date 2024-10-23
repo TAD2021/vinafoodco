@@ -5,7 +5,8 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-3.0.x", "linux-musl-openssl-3.0.x"]
 }
 
 datasource db {
@@ -26,21 +27,45 @@ model User {
   payments Payment[] // Quan hệ với các thanh toán của người dùng
 }
 
+model Tag {
+  id       Int       @id @default(autoincrement())
+  name     String    @unique // Tên của thẻ
+  products Product[] @relation("ProductTags") // Quan hệ với sản phẩm
+}
+
 model Product {
-  id          Int         @id @default(autoincrement())
+  id          Int                @id @default(autoincrement())
   name        String
-  description String
+  description String             @db.Text
   price       Float
+  slug        String             @unique
   userId      Int
-  user        User        @relation(fields: [userId], references: [id])
+  user        User               @relation(fields: [userId], references: [id])
   categoryId  Int
-  category    Category    @relation(fields: [categoryId], references: [id])
+  category    Category           @relation(fields: [categoryId], references: [id])
   comments    Comment[] // Bình luận liên quan đến sản phẩm
   images      Image[] // Các hình ảnh liên quan đến sản phẩm
   cartItems   CartItem[] // Các mục trong giỏ hàng liên quan đến sản phẩm
   orderItems  OrderItem[] // Các mục trong đơn hàng liên quan đến sản phẩm
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
+  attributes  ProductAttribute[] // Các thuộc tính của sản phẩm
+  tags        Tag[]              @relation("ProductTags") // Quan hệ với thẻ
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+}
+
+enum DisplayType {
+  SINGLE_LINE // Kiểu hiển thị trên một dòng
+  LIST // Kiểu hiển thị dưới dạng danh sách
+}
+
+model ProductAttribute {
+  id             Int         @id @default(autoincrement())
+  productId      Int
+  attributeName  String
+  attributeValue String      @db.Text
+  sortOrder      Int? // Thêm thuộc tính sắp xếp
+  displayType    DisplayType @default(SINGLE_LINE)
+  product        Product     @relation(fields: [productId], references: [id])
 }
 
 model Category {
@@ -53,7 +78,7 @@ model Category {
 model Post {
   id        Int       @id @default(autoincrement())
   title     String
-  content   String
+  content   String    @db.Text
   authorId  Int
   author    User      @relation(fields: [authorId], references: [id])
   comments  Comment[] // Bình luận cho bài viết
@@ -63,14 +88,16 @@ model Post {
 
 model Comment {
   id        Int      @id @default(autoincrement())
-  content   String
-  userId    Int
-  user      User     @relation(fields: [userId], references: [id])
+  content   String   @db.Text
+  name      String // Thêm trường name để lưu tên người bình luận
   productId Int? // Bình luận có thể liên quan đến sản phẩm
   product   Product? @relation(fields: [productId], references: [id])
   postId    Int? // Bình luận có thể liên quan đến bài viết
   post      Post?    @relation(fields: [postId], references: [id])
+  rating    Int? // Thêm trường đánh giá sao
   createdAt DateTime @default(now())
+  User      User?    @relation(fields: [userId], references: [id])
+  userId    Int?
 }
 
 model Cart {

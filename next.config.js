@@ -17,8 +17,13 @@ const nextConfig = {
         hostname: "media.loveitopcdn.com",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "i.pinimg.com",
+        pathname: "/**",
+      }
     ],
-  },
+  }
 };
 
-export default nextConfig;
+module.exports = nextConfig;
