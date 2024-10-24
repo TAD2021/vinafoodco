@@ -5,8 +5,9 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { CiCalendar } from "react-icons/ci";
-import { FaEye } from "react-icons/fa";
 import Image from "next/image";
+import { formatDate } from "@/utils/formatDate";
+import Link from "next/link";
 
 const NewsSlider = ({ title, newsItems }) => {
   const settings = {
@@ -48,37 +49,36 @@ const NewsSlider = ({ title, newsItems }) => {
       <Slider {...settings}>
         {newsItems.map((news, index) => (
           <div key={index} className="p-4">
-            <article className="bg-white p-4 rounded-lg shadow h-full flex flex-col justify-between">
-              <div>
-                <Image
-                  alt={`News Image ${index + 1}`}
-                  width={160}
-                  height={160}
-                  className="w-full rounded-lg mb-2 object-cover h-40"
-                  src={news.imgSrc}
-                />
-                <h3 className="text-lg font-bold mb-2">{news.title}</h3>
-                <div className="text-gray-500 text-xs flex items-center mb-2">
-                  <CiCalendar />
-                  <span className="ml-1">{news.date}</span>
-                  <span className="mx-2">|</span>
-                  <FaEye />
-                  <span className="ml-1">{news.views}</span>
+            <Link href={`/${news.type}/${news.slug}`}>
+              <article className="bg-white p-4 rounded-lg shadow h-full flex flex-col justify-between">
+                <div>
+                  <Image
+                    alt={`News Image ${index + 1}`}
+                    width={160}
+                    height={160}
+                    className="w-full rounded-lg mb-2 object-cover h-40"
+                    src={news.thumbnail}
+                  />
+                  <h3 className="text-lg font-bold mb-2">{news.title}</h3>
+                  <div className="text-gray-500 text-xs flex items-center mb-2">
+                    <CiCalendar />
+                    <span className="ml-1">{formatDate(news.createdAt)}</span>
+                  </div>
                 </div>
-              </div>
-              <p
-                className="text-gray-600 text-sm flex-grow overflow-hidden"
-                style={{
-                  display: "-webkit-box",
-                  WebkitBoxOrient: "vertical",
-                  WebkitLineClamp: 3,
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                }}
-              >
-                {news.description}
-              </p>
-            </article>
+                <p
+                  className="text-gray-600 text-sm flex-grow overflow-hidden"
+                  style={{
+                    display: "-webkit-box",
+                    WebkitBoxOrient: "vertical",
+                    WebkitLineClamp: 3,
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                  }}
+                >
+                  {news.description}
+                </p>
+              </article>
+            </Link>
           </div>
         ))}
       </Slider>

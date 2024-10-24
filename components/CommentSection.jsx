@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { CiStar } from 'react-icons/ci';
 import { FaStar } from 'react-icons/fa';
 
-const CommentSection = ({ productSlug }) => {
+const CommentSection = ({ slug, type }) => { // Thêm type vào props
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState("");
     const [name, setName] = useState("");
@@ -14,7 +14,7 @@ const CommentSection = ({ productSlug }) => {
     // Fetch comments from API
     const fetchComments = useCallback(async () => {
         try {
-            const response = await fetch(`http://localhost:3000/api/comments/${productSlug}`, {
+            const response = await fetch(`/api/comments/${slug}?type=${type}&page=1&limit=5`, {
                 method: 'GET',
                 cache: 'no-store',
             });
@@ -26,7 +26,7 @@ const CommentSection = ({ productSlug }) => {
         } catch (error) {
             setError(error.message);
         }
-    }, [productSlug]);
+    }, [slug, type]);
 
     useEffect(() => {
         fetchComments(); // Fetch comments on component mount
@@ -45,7 +45,7 @@ const CommentSection = ({ productSlug }) => {
         if (newComment.trim() === "" || name.trim() === "") return; // Prevent empty comments
 
         try {
-            const response = await fetch(`http://localhost:3000/api/comments`, {
+            const response = await fetch(`/api/comments`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -53,8 +53,9 @@ const CommentSection = ({ productSlug }) => {
                 body: JSON.stringify({
                     content: newComment,
                     name: name,
-                    slug: productSlug,
+                    slug: slug,
                     rating: rating,
+                    type: type, // Thêm type vào body
                 }),
             });
 
@@ -111,7 +112,7 @@ const CommentSection = ({ productSlug }) => {
                         value={newComment}
                         onChange={handleCommentChange}
                     />
-                    < button className="bg-green-600 text-white py-2 px-6 rounded">
+                    <button className="bg-green-600 text-white py-2 px-6 rounded">
                         Gửi
                     </button>
                 </div>
@@ -119,7 +120,7 @@ const CommentSection = ({ productSlug }) => {
             <div className="mt-4">
                 {comments.length > 0 ? (
                     comments.map((comment, index) => (
-                        <div key={index} className="border-b py-4 mb-4 last:border-b-0">
+                        <div key={index } className="border-b py-4 mb-4 last:border-b-0">
                             <div className="flex items-center mb-2">
                                 <p className="font-bold text-lg">{comment.name}</p>
                                 <div className="flex ml-2">

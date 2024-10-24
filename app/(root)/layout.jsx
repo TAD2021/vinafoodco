@@ -3,6 +3,7 @@ import Footer from "@/components/Footer";
 import Navbar from "@/components/navbars/Navbar";
 import { Inter } from "next/font/google";
 import "../globals.css";
+import { ReduxProvider } from '@/redux/provider'
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -15,10 +16,12 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`antialiased bg-gray-100 ${inter.className}`}>
-        <Header />
-        <Navbar />
-        {children}
-        <Footer />
+        <ReduxProvider>
+          <Header />
+          <Navbar />
+          {children}
+          <Footer />
+        </ReduxProvider>
       </body>
     </html>
   );

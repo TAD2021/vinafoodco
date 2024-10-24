@@ -19,18 +19,24 @@ model User {
   email    String    @unique
   password String
   name     String
-  products Product[] // Quan hệ với các sản phẩm mà người dùng có thể tạo
-  posts    Post[] // Quan hệ với các bài viết mà người dùng có thể tạo
-  comments Comment[] // Quan hệ với các bình luận của người dùng
-  carts    Cart[] // Quan hệ với các giỏ hàng của người dùng
-  orders   Order[] // Quan hệ với các đơn hàng của người dùng
-  payments Payment[] // Quan hệ với các thanh toán của người dùng
+  products Product[] // Products created by the admin
+  posts    Post[] // Posts created by the admin
+  comments Comment[] // Comments made by the admin
+}
+
+model Customer {
+  id          Int       @id @default(autoincrement())
+  name        String // Name of the customer
+  email       String?   @unique // Optional email for the customer
+  phoneNumber String? // Optional phone number
+  orders      Order[] // Orders made by the customer
+  Payment     Payment[]
 }
 
 model Tag {
   id       Int       @id @default(autoincrement())
-  name     String    @unique // Tên của thẻ
-  products Product[] @relation("ProductTags") // Quan hệ với sản phẩm
+  name     String    @unique // Name of the tag
+  products Product[] @relation("ProductTags") // Relation with products
 }
 
 model Product {
@@ -43,19 +49,18 @@ model Product {
   user        User               @relation(fields: [userId], references: [id])
   categoryId  Int
   category    Category           @relation(fields: [categoryId], references: [id])
-  comments    Comment[] // Bình luận liên quan đến sản phẩm
-  images      Image[] // Các hình ảnh liên quan đến sản phẩm
-  cartItems   CartItem[] // Các mục trong giỏ hàng liên quan đến sản phẩm
-  orderItems  OrderItem[] // Các mục trong đơn hàng liên quan đến sản phẩm
-  attributes  ProductAttribute[] // Các thuộc tính của sản phẩm
-  tags        Tag[]              @relation("ProductTags") // Quan hệ với thẻ
+  comments    Comment[] // Comments related to the product
+  images      Image[] // Images related to the product
+  orderItems  OrderItem[] // Order items related to the product
+  attributes  ProductAttribute[] // Attributes of the product
+  tags        Tag[]              @relation("ProductTags") // Relation with tags
   createdAt   DateTime           @default(now())
   updatedAt   DateTime           @updatedAt
 }
 
 enum DisplayType {
-  SINGLE_LINE // Kiểu hiển thị trên một dòng
-  LIST // Kiểu hiển thị dưới dạng danh sách
+  SINGLE_LINE // Display type on a single line
+  LIST // Display type as a list
 }
 
 model ProductAttribute {
@@ -63,7 +68,7 @@ model ProductAttribute {
   productId      Int
   attributeName  String
   attributeValue String      @db.Text
-  sortOrder      Int? // Thêm thuộc tính sắp xếp
+  sortOrder      Int? // Optional sort order
   displayType    DisplayType @default(SINGLE_LINE)
   product        Product     @relation(fields: [productId], references: [id])
 }
@@ -73,48 +78,36 @@ model Category {
   name        String
   slug        String    @unique
   description String?
-  products    Product[] // Các sản phẩm thuộc danh mục này
+  products    Product[] // Products in this category
 }
 
 model Post {
-  id        Int       @id @default(autoincrement())
-  title     String
-  content   String    @db.Text
-  authorId  Int
-  author    User      @relation(fields: [authorId], references: [id])
-  comments  Comment[] // Bình luận cho bài viết
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  id          Int       @id @default(autoincrement())
+  title       String
+  description String?
+  content     String    @db.Text
+  thumbnail   String
+  slug        String    @unique
+  type        String
+  authorId    Int
+  author      User      @relation(fields: [authorId], references: [id])
+  comments    Comment[] // Comments for the post
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 }
 
 model Comment {
   id        Int      @id @default(autoincrement())
   content   String   @db.Text
-  name      String // Thêm trường name để lưu tên người bình luận
-  productId Int? // Bình luận có thể liên quan đến sản phẩm
+  name      String // Name of the commenter
+  productId Int? // Comment may relate to a product
   product   Product? @relation(fields: [productId], references: [id])
-  postId    Int? // Bình luận có thể liên quan đến bài viết
+  postId    Int? // Comment may relate to a post
   post      Post?    @relation(fields: [postId], references: [id])
-  rating    Int? // Thêm trường đánh giá sao
+  rating    Int? // Optional rating
   createdAt DateTime @default(now())
+  userId    Int? // Optional user ID for admin comments
   User      User?    @relation(fields: [userId], references: [id])
-  userId    Int?
-}
-
-model Cart {
-  id        Int        @id @default(autoincrement())
-  userId    Int
-  user      User       @relation(fields: [userId], references: [id])
-  cartItems CartItem[] // Quan hệ với các mục trong giỏ hàng
-}
-
-model CartItem {
-  id        Int     @id @default(autoincrement())
-  quantity  Int     @default(1)
-  productId Int
-  product   Product @relation(fields: [productId], references: [id])
-  cartId    Int
-  cart      Cart    @relation(fields: [cartId], references: [id])
 }
 
 enum OrderStatus {
@@ -124,15 +117,30 @@ enum OrderStatus {
   CANCELED
 }
 
+model Address {
+  id          Int     @id @default(autoincrement())
+  recipient   String // Name of the person receiving the order
+  phoneNumber String // Phone number of the recipient
+  street      String // Street address
+  ward        String // Ward
+  district    String // District
+  province    String // Province/City
+  orders      Order[] // Link to multiple Orders
+}
+
 model Order {
   id         Int         @id @default(autoincrement())
-  userId     Int
-  user       User        @relation(fields: [userId], references: [id])
-  orderItems OrderItem[] // Các mục trong đơn hàng
+  customerId Int? // Optional link to Customer
+  customer   Customer?   @relation(fields: [customerId], references: [id])
+  orderItems OrderItem[] // Relationship to OrderItem
   totalPrice Float
-  status     OrderStatus @default(PENDING) // Sử dụng Enum để quản lý trạng thái
+  status     OrderStatus @default(PENDING) // Order status
   createdAt  DateTime    @default(now())
-  payments   Payment[] // Các thanh toán liên quan đến đơn hàng
+  updatedAt  DateTime    @updatedAt
+  payments   Payment[] // Relationship to Payment
+  addressId  Int? // Optional link to Address
+  address    Address?    @relation(fields: [addressId], references: [id]) // Corrected relation
+  note       String? // Optional field for additional notes
 }
 
 model OrderItem {
@@ -142,7 +150,7 @@ model OrderItem {
   product   Product @relation(fields: [productId], references: [id])
   orderId   Int
   order     Order   @relation(fields: [orderId], references: [id])
-  price     Float // Giá tại thời điểm mua
+  price     Float // Price at the time of purchase
 }
 
 enum PaymentMethod {
@@ -160,20 +168,20 @@ enum PaymentStatus {
 }
 
 model Payment {
-  id        Int           @id @default(autoincrement())
-  userId    Int
-  user      User          @relation(fields: [userId], references: [id])
-  orderId   Int
-  order     Order         @relation(fields: [orderId], references: [id])
-  amount    Float
-  method    PaymentMethod // Sử dụng Enum để quản lý phương thức thanh toán
-  status    PaymentStatus @default(PENDING) // Sử dụng Enum để quản lý trạng thái thanh toán
-  createdAt DateTime      @default(now())
+  id         Int           @id @default(autoincrement())
+  orderId    Int
+  order      Order         @relation(fields: [orderId], references: [id])
+  amount     Float
+  method     PaymentMethod // Using Enum for payment method
+  status     PaymentStatus @default(PENDING) // Using Enum for payment status
+  createdAt  DateTime      @default(now())
+  customerId Int? // Optional link to Customer
+  customer   Customer?     @relation(fields: [customerId], references: [id])
 }
 
 model Image {
   id        Int      @id @default(autoincrement())
-  url       String // URL hoặc đường dẫn của hình ảnh
+  url       String // URL or path of the image
   productId Int
   product   Product  @relation(fields: [productId], references: [id])
   createdAt DateTime @default(now())

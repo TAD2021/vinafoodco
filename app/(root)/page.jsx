@@ -4,11 +4,16 @@ import NewsSlider from "../../components/sliders/NewsSlider";
 import { Fragment } from "react";
 
 const Home = async () => {
-  const response = await fetch('http://localhost:3000/api/products', {
+  const responseProduct = await fetch('http://localhost:3000/api/products', {
     method: 'GET',
     cache: 'no-store',
   });
-  const products = await response.json();
+  const products = await responseProduct.json() || [];
+  const responsePost = await fetch('http://localhost:3000/api/posts', {
+    method: 'GET',
+    cache: 'no-store',
+  });
+  const posts = await responsePost.json();
   const images = [
     "https://i.pinimg.com/564x/3c/7c/08/3c7c08fcdd19c3ce36dff50fd414d775.jpg",
     "https://i.pinimg.com/564x/f7/aa/fb/f7aafbee1aa1f8f34802f00a12f0089d.jpg",
@@ -30,7 +35,7 @@ const Home = async () => {
           {Object.keys(products).map(category => (
             <ProductSlider key={category} title={category} products={products[category]} />
           ))}
-          {/* <NewsSlider title="TIN TỨC" newsItems={newsItems} /> */}
+          <NewsSlider title="TIN TỨC" newsItems={posts} />
         </main>
       </div>
     </Fragment>

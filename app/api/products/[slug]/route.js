@@ -8,6 +8,7 @@ export async function GET(req, { params }) {
         const product = await prisma.product.findUnique({
             where: { slug: slug },
             select: {
+                id: true,
                 name: true,
                 description: true,
                 price: true,
@@ -38,6 +39,7 @@ export async function GET(req, { params }) {
 
         // Chỉ trả về các trường cần thiết
         const response = {
+            id: product.id,
             name: product.name,
             description: product.description,
             price: product.price,

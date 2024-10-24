@@ -1,9 +1,14 @@
+'use client'
+
 import Link from "next/link";
 import { CiShoppingCart } from "react-icons/ci";
 import Sidebar from "./sidebars/Sidebar";
 import Image from "next/image";
+import { useSelector } from 'react-redux';
 
 function Header() {
+  const cart = useSelector((state) => state.cart);
+
   return (
     <header className="bg-white shadow-md">
       <div className="container mx-auto flex justify-between items-center py-4 px-6">
@@ -25,9 +30,11 @@ function Header() {
             >
               <CiShoppingCart size={20} />
             </Link>
-            <span className="absolute -top-1/2 left-1/2 inline-block w-4 h-4 bg-red-600 text-white text-xs font-bold text-center rounded-full">
-              3
-            </span>
+            <Link href={'/cart'}>
+              <span className="absolute -top-1/2 left-1/2 inline-block w-4 h-4 bg-red-600 text-white text-xs font-bold text-center rounded-full">
+                {cart.items.length}
+              </span>
+            </Link>
           </div>
         </nav>
       </div>

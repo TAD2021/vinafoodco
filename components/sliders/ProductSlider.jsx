@@ -70,7 +70,7 @@ const ProductSlider = ({ title, products }) => {
                   alt={product.name}
                   width={160}
                   height={160}
-                  className="w-full rounded-lg mb-2 object-cover h-40"
+                  className="w-auto h-40 rounded-lg mb-2 object-cover" // Use 'w-auto' to maintain aspect ratio
                   src={product.image}
                 />
                 <div className="flex-grow">

@@ -1,7 +1,6 @@
-'use client'
+'use client';
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaCartPlus, FaFacebookF, FaLinkedinIn, FaPinterest, FaShoppingBasket, FaTwitter } from "react-icons/fa";
 import ImageGallery from "./ImageGallery";
@@ -9,15 +8,19 @@ import { formatCurrency } from "@/utils/formatCurrency";
 import { parseListItems } from "@/utils/parseListItems";
 import Button from "./Button";
 import CommentSection from "./CommentSection";
+import useSlug from "@/hooks/useSlug";
+import { useDispatch } from "react-redux";
+import { addToCart } from "@/redux/cartSlice";
 
 function ProductDetail() {
-    const pathName = usePathname();
-    const slug = pathName.split('/').pop();
-    
+    const slug = useSlug();
+    const dispatch = useDispatch(); // Khởi tạo dispatch
+
     const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-  
+    const [quantity, setQuantity] = useState(1); // State to manage quantity
+
     useEffect(() => {
         const fetchProduct = async () => {
             try {
@@ -37,24 +40,39 @@ function ProductDetail() {
         fetchProduct();
     }, [slug]);
 
-    console.log(product)
-  
-    if (loading) return <p>Loading...</p>;
-    if (error) return <p>Error: {error}</p>;
-
     const handleAddToCart = () => {
         // Logic để thêm sản phẩm vào giỏ hàng
-        console.log("Thêm vào giỏ hàng:", product);
+        dispatch(addToCart({ 
+            id: product.id, 
+            name: product.name, 
+            price: product.price, 
+            quantity: quantity, 
+            image: product.images[0] // Hoặc bất kỳ hình ảnh nào bạn muốn
+        }));
+        console.log("Thêm vào giỏ hàng:", { ...product, quantity });
     };
 
     const handleBuyNow = () => {
-        // Logic để mua ngay sản phẩm
-        console.log("Mua ngay:", product);
+        // Logic to buy the product immediately
+        console.log("Mua ngay:", { ...product, quantity });
+        // Redirect to checkout page with the product details
+        // For example: navigate to /checkout with product details
     };
-    
+
+    const increaseQuantity = () => {
+        setQuantity(prev => prev + 1);
+    };
+
+    const decreaseQuantity = () => {
+        setQuantity(prev => (prev > 1 ? prev - 1 : 1)); // Prevent quantity from going below 1
+    };
+
+    if (loading) return <p>Loading...</p>;
+    if (error) return <p>Error: {error}</p>;
+
     return (
         <div className="w-full lg:w-3/4 lg:mr-6">
-            <div className=" bg-white rounded shadow p-6 mb-6">
+            <div className="bg-white rounded shadow p-6 mb-6">
                 <div className="flex flex-col md:flex-row">
                     <div className="w-full md:w-1/3">
                         <ImageGallery images={product.images}/>
@@ -78,7 +96,7 @@ function ProductDetail() {
                                     <div key={attributeName}>
                                         <p className="mt-2"><strong>{attributeName}:</strong></p>
                                         <ul className="list-disc list-inside">
-                                            {parseListItems(attributeValue)} {/* Sử dụng hàm parseListItems */}
+                                            {parseListItems(attributeValue)}
                                         </ul>
                                     </div>
                                 );
@@ -88,9 +106,14 @@ function ProductDetail() {
                             <p><strong>Tình trạng:</strong> Còn hàng</p>
                             <div className="flex items-center mt-2">
                                 <span className="mr-2">Số lượng:</span>
-                                <button className="px-2 py-1 border">-</button>
-                                <input className="w-12 text-center border mx-2" type="text" value="1" />
-                                <button className="px-2 py-1 border">+</button>
+                                <button className="px-2" onClick={decreaseQuantity}>-</button >
+                                <input
+                                    className="w-8 text-center border-l border-r"
+                                    type="text"
+                                    value={quantity}
+                                    readOnly
+                                />
+                                <button className="px-2" onClick={increaseQuantity}>+</button>
                             </div>
                             <div className="flex space-x-4 mt-4">
                                 <Button 
@@ -125,14 +148,14 @@ function ProductDetail() {
                     </div>
                 )}
             </div>
-            <div className=" bg-white rounded shadow p-6 mb-6">
+            <div className="bg-white rounded shadow p-6 mb-6">
                 {/* <ProductSlider title="SẢN PHẨM TƯƠNG TỰ" products={teaProducts} /> */}
             </div>
             <div class="bg-white rounded shadow p-6">
-                <CommentSection productSlug={slug}/>
+                <CommentSection slug={slug} type='product'/>
             </div>
         </div>
     );
 }
 
-export default ProductDetail
+export default ProductDetail;
