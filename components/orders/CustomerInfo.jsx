@@ -1,15 +1,48 @@
-'use client';
 import { useEffect, useState } from 'react';
 
-export default function CustomerInfo() {
+export default function CustomerInfo({ setCustomerInfo }) {
   const [provinces, setProvinces] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [wards, setWards] = useState([]);
   const [selectedProvince, setSelectedProvince] = useState('');
   const [selectedDistrict, setSelectedDistrict] = useState('');
+  const [selectedWard, setSelectedWard] = useState('');
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setCustomerInfo((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleProvinceChange = (e) => {
+    const provinceCode = e.target.value;
+    const province = provinces.find(p => p.code == provinceCode);
+    
+    setSelectedProvince(provinceCode);
+    setDistricts([]); // Reset districts and wards when province changes
+    setWards([]);
+    setCustomerInfo(prev => ({ ...prev, province: province.name }));
+  };
+
+  const handleDistrictChange = (e) => {
+    const districtCode = e.target.value;
+    const district = districts.find(d => d.code == districtCode);
+
+    setSelectedDistrict(districtCode);
+    setWards([]); // Reset wards when district changes
+    setCustomerInfo(prev => ({ ...prev, district: district.name }));
+  };
+
+  const handleWardChange = (e) => {
+    const wardCode = e.target.value;
+    const ward = wards.find(w => w.code == wardCode);
+    console.log(wardCode, wards)
+
+    setSelectedWard(wardCode);
+    setCustomerInfo(prev => ({ ...prev, ward: ward.name }));
+  };
 
   useEffect(() => {
-    // Lấy danh sách tỉnh thành từ API
+    // Fetch provinces
     const fetchProvinces = async () => {
       try {
         const response = await fetch('https://provinces.open-api.vn/api/p');
@@ -24,7 +57,7 @@ export default function CustomerInfo() {
   }, []);
 
   useEffect(() => {
-    // Lấy danh sách quận huyện khi tỉnh thành được chọn
+    // Fetch districts
     const fetchDistricts = async () => {
       if (selectedProvince) {
         try {
@@ -35,7 +68,7 @@ export default function CustomerInfo() {
           console.error('Error fetching districts:', error);
         }
       } else {
-        setDistricts([]); // Reset districts if no province is selected
+        setDistricts([]);
       }
     };
 
@@ -43,7 +76,7 @@ export default function CustomerInfo() {
   }, [selectedProvince]);
 
   useEffect(() => {
-    // Lấy danh sách phường xã khi quận huyện được chọn
+    // Fetch wards
     const fetchWards = async () => {
       if (selectedDistrict) {
         try {
@@ -54,7 +87,7 @@ export default function CustomerInfo() {
           console.error('Error fetching wards:', error);
         }
       } else {
-        setWards([]); // Reset wards if no district is selected
+        setWards([]);
       }
     };
 
@@ -70,6 +103,8 @@ export default function CustomerInfo() {
             className="w-full p-2 border rounded"
             placeholder="Họ tên (*)"
             type="text"
+            name='name'
+            onChange={handleInputChange}
           />
         </div>
         <div className="mb-4">
@@ -77,6 +112,8 @@ export default function CustomerInfo() {
             className="w-full p-2 border rounded"
             placeholder="Email (*)"
             type="email"
+            name='email'
+            onChange={handleInputChange}
           />
         </div>
         <div className="mb-4">
@@ -84,16 +121,14 @@ export default function CustomerInfo() {
             className="w-full p-2 border rounded"
             placeholder="Số điện thoại (*)"
             type="text"
+            name='phone'
+            onChange={handleInputChange}
           />
         </div>
         <div className="mb-4">
           <select
             className="w-full p-2 border rounded"
-            onChange={(e) => {
-              setSelectedProvince(e.target.value);
-              setDistricts([]); // Reset districts and wards when province changes
-              setWards([]);
-            }}
+            onChange={handleProvinceChange}
           >
             <option value="">Tỉnh / Thành Phố (*)</option>
             {provinces.map((province) => (
@@ -106,10 +141,7 @@ export default function CustomerInfo() {
         <div className="mb-4">
           <select
             className="w-full p-2 border rounded"
-            onChange={(e) => {
-              setSelectedDistrict(e.target.value);
-              setWards([]); // Reset wards when district changes
-            }}
+            onChange={handleDistrictChange}
           >
             <option value="">Quận / Huyện (*)</option>
             {districts.map((district) => (
@@ -120,7 +152,10 @@ export default function CustomerInfo() {
           </select>
         </div>
         <div className="mb-4">
-          <select className="w-full p-2 border rounded">
+          <select
+            className="w-full p-2 border rounded"
+            onChange={handleWardChange}
+          >
             <option value="">Phường / Xã (*)</option>
             {wards.map((ward) => (
               <option key={ward.code} value={ward.code}>
@@ -134,12 +169,16 @@ export default function CustomerInfo() {
             className="w-full p-2 border rounded"
             placeholder="Địa chỉ (*)"
             type="text"
+            name='address'
+            onChange={handleInputChange}
           />
         </div>
         <div className="mb-4">
           <textarea
             className="w-full p-2 border rounded"
             placeholder="Ghi chú"
+            name='note'
+            onChange={handleInputChange}
           ></textarea>
         </div>
       </form>

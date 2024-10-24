@@ -1,7 +1,11 @@
 import Image from "next/image";
 import { FaMoneyCheck, FaMoneyBill } from "react-icons/fa";
 
-export default function OrderInfo() {
+export default function OrderInfo({ setPaymentMethod }) {
+  const handlePaymentChange = (e) => {
+    setPaymentMethod(e.target.value);
+  };
+
   return (
     <div className="w-full lg:w-1/3 bg-white p-4 rounded shadow mb-4 lg:mb-0 mx-0 lg:mx-4">
       <div className="flex items-center mb-4">
@@ -24,6 +28,8 @@ export default function OrderInfo() {
               id="bank-transfer"
               name="payment-method"
               type="radio"
+              value="bank-transfer"
+              onChange={handlePaymentChange}
             />
             <label className="flex items-center" htmlFor="bank-transfer">
               <FaMoneyCheck className="mr-1" />
@@ -44,6 +50,8 @@ export default function OrderInfo() {
               id="cod"
               name="payment-method"
               type="radio"
+              value="cod"
+              onChange={handlePaymentChange}
             />
             <label className="flex items-center" htmlFor="cod">
               <FaMoneyBill className="mr-1" />

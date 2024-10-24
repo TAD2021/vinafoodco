@@ -1,14 +1,16 @@
-'use client'
-
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import Image from 'next/image';
-import Link from 'next/link';
 import { formatCurrency } from '@/utils/formatCurrency';
+import { useEffect } from 'react';
 
-export default function CartItems() {
+export default function CartItems({ setCartItems, onOrderSubmit }) {
   const items = useSelector((state) => state.cart.items);
   const total = useSelector((state) => state.cart.total);
-  const dispatch = useDispatch();
+
+  // Cập nhật cart items mỗi khi items thay đổi
+  useEffect(() => {
+    setCartItems(items);
+  }, [items, setCartItems]);
 
   return (
     <div className="w-full lg:w-1/3 bg-white p-4 rounded shadow">
@@ -44,14 +46,9 @@ export default function CartItems() {
         </div>
       </div>
       <div className="mt-4">
-        <button className="w-full bg-blue-500 text-white p-2 rounded">
+        <button onClick={onOrderSubmit} className="w-full bg-blue-500 text-white p-2 rounded">
           Đặt mua
         </button>
-      </div>
-      <div className="mt-4 text-center">
-        <Link className="text-blue-500" href={'/cart'}>
-          Xem giỏ hàng
-        </Link>
       </div>
     </div>
   );
