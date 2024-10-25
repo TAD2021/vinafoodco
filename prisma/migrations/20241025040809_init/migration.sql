@@ -40,6 +40,7 @@ CREATE TABLE `Product` (
     `categoryId` INTEGER NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
+    `stock` INTEGER NOT NULL,
 
     UNIQUE INDEX `Product_slug_key`(`slug`),
     PRIMARY KEY (`id`)
@@ -100,19 +101,6 @@ CREATE TABLE `Comment` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `Address` (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `recipient` VARCHAR(191) NOT NULL,
-    `phoneNumber` VARCHAR(191) NOT NULL,
-    `street` VARCHAR(191) NOT NULL,
-    `ward` VARCHAR(191) NOT NULL,
-    `district` VARCHAR(191) NOT NULL,
-    `province` VARCHAR(191) NOT NULL,
-
-    PRIMARY KEY (`id`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- CreateTable
 CREATE TABLE `Order` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `customerId` INTEGER NULL,
@@ -120,7 +108,12 @@ CREATE TABLE `Order` (
     `status` ENUM('PENDING', 'SHIPPED', 'DELIVERED', 'CANCELED') NOT NULL DEFAULT 'PENDING',
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
-    `addressId` INTEGER NULL,
+    `recipient` VARCHAR(191) NOT NULL,
+    `phoneNumber` VARCHAR(191) NOT NULL,
+    `street` VARCHAR(191) NOT NULL,
+    `ward` VARCHAR(191) NOT NULL,
+    `district` VARCHAR(191) NOT NULL,
+    `province` VARCHAR(191) NOT NULL,
     `note` VARCHAR(191) NULL,
 
     PRIMARY KEY (`id`)
@@ -138,11 +131,21 @@ CREATE TABLE `OrderItem` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
+CREATE TABLE `PaymentMethod` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(191) NOT NULL,
+    `description` VARCHAR(191) NULL,
+
+    UNIQUE INDEX `PaymentMethod_name_key`(`name`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
 CREATE TABLE `Payment` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `orderId` INTEGER NOT NULL,
     `amount` DOUBLE NOT NULL,
-    `method` ENUM('CREDIT_CARD', 'PAYPAL', 'BANK_TRANSFER', 'CASH_ON_DELIVERY') NOT NULL,
+    `methodId` INTEGER NOT NULL,
     `status` ENUM('PENDING', 'COMPLETED', 'FAILED', 'REFUNDED') NOT NULL DEFAULT 'PENDING',
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `customerId` INTEGER NULL,
@@ -194,9 +197,6 @@ ALTER TABLE `Comment` ADD CONSTRAINT `Comment_userId_fkey` FOREIGN KEY (`userId`
 ALTER TABLE `Order` ADD CONSTRAINT `Order_customerId_fkey` FOREIGN KEY (`customerId`) REFERENCES `Customer`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Order` ADD CONSTRAINT `Order_addressId_fkey` FOREIGN KEY (`addressId`) REFERENCES `Address`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
 ALTER TABLE `OrderItem` ADD CONSTRAINT `OrderItem_productId_fkey` FOREIGN KEY (`productId`) REFERENCES `Product`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -204,6 +204,9 @@ ALTER TABLE `OrderItem` ADD CONSTRAINT `OrderItem_orderId_fkey` FOREIGN KEY (`or
 
 -- AddForeignKey
 ALTER TABLE `Payment` ADD CONSTRAINT `Payment_orderId_fkey` FOREIGN KEY (`orderId`) REFERENCES `Order`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `Payment` ADD CONSTRAINT `Payment_methodId_fkey` FOREIGN KEY (`methodId`) REFERENCES `PaymentMethod`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `Payment` ADD CONSTRAINT `Payment_customerId_fkey` FOREIGN KEY (`customerId`) REFERENCES `Customer`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;

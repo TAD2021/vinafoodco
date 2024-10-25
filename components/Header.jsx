@@ -25,16 +25,14 @@ function Header() {
         <nav className="flex items-center space-x-6">
           <div className="relative">
             <Link
-              href="#"
+              href="/cart"
               className="text-gray-700 hover:text-red-600 transition-colors duration-300"
             >
               <CiShoppingCart size={20} />
             </Link>
-            <Link href={'/cart'}>
-              <span className="absolute -top-1/2 left-1/2 inline-block w-4 h-4 bg-red-600 text-white text-xs font-bold text-center rounded-full">
-                {cart.items.length}
-              </span>
-            </Link>
+            <span className="absolute -top-1/2 left-1/2 inline-block w-4 h-4 bg-red-600 text-white text-xs font-bold text-center rounded-full">
+              {cart.items.length}
+            </span>
           </div>
         </nav>
       </div>

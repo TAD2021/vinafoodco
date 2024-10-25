@@ -1,57 +1,113 @@
-import { NextResponse } from 'next/server';
-import prisma from "@/lib/prisma";
+// pages/api/orders.js
 
-export async function POST(req) {
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient();
+
+export default async function handler(req, res) {
+  if (req.method === 'POST') {
+    const {
+      customerId,
+      name,
+      email,
+      orderItems,
+      totalPrice,
+      recipient,
+      phoneNumber,
+      street,
+      ward,
+      district,
+      province,
+      note,
+      paymentMethodId,
+      amount,
+    } = req.body;
+
     try {
-        const { userId, products, totalPrice } = req.body;
+      let finalCustomerId = customerId;
 
-        // Kiểm tra giá sản phẩm
-        const checkedPrices = await checkProductPrices(products);
-        if (!checkedPrices) {
-            return NextResponse.json({ error: 'Giá sản phẩm không chính xác' }, { status: 400 });
-        }
+      // Nếu customerId không có, tạo khách hàng mới
+      if (!finalCustomerId) {
+        const newCustomer = await prisma.customer.create({
+          data: {
+            name,
+            email,
+            phoneNumber,
+          },
+        });
+        finalCustomerId = newCustomer.id; // Lấy customerId từ bản ghi khách hàng mới
+      }
 
-        // Tạo order
-        const order = await prisma.order.create({
-        data: {
-            userId,
-            totalPrice,
-            orderItems: {
-            create: products.map((product) => ({
-                productId: product.id,
-                quantity: product.quantity,
-                price: product.price,
-            })),
-            },
-        },
+      // Kiểm tra giá và số lượng hàng tồn kho
+      for (const item of orderItems) {
+        const product = await prisma.product.findUnique({
+          where: { id: item.productId },
         });
 
-        return NextResponse.json({order}, { status: 201 });
-    } catch (error) {
-        console.error(error);
-        return NextResponse.json({ error: 'Failed to create order' }, { status: 500 });
-    }
-}
-
-async function checkProductPrices(products) {
-    const productPrices = await prisma.product.findMany({
-        where: {
-            id: {
-                in: products.map((product) => product.id),
-            },
-        },
-        select: {
-            id: true,
-            price: true,
-        },
-    });
-
-    for (const product of products) {
-        const productPrice = productPrices.find((price) => price.id === product.id);
-        if (!productPrice || productPrice.price !== product.price) {
-            return false;
+        // Kiểm tra xem sản phẩm có tồn tại không
+        if (!product) {
+          return res.status(404).json({ error: `Sản phẩm với ID ${item.productId} không tồn tại.` });
         }
-    }
 
-    return true;
+        // Kiểm tra giá
+        if (product.price !== item.price) {
+          return res.status(400).json({ error: `Giá sản phẩm không khớp với giá đã cho.` });
+        }
+
+        // Kiểm tra số lượng hàng tồn kho
+        if (product.stock < item.quantity) {
+          return res.status(400).json({ error: `Số lượng hàng tồn kho không đủ cho sản phẩm ${product.name}.` });
+        }
+      }
+
+      // Tạo đơn hàng
+      const order = await prisma.order.create({
+        data: {
+          customerId: finalCustomerId,
+          totalPrice,
+          recipient,
+          phoneNumber,
+          street,
+          ward,
+          district,
+          province,
+          note,
+          orderItems: {
+            create: orderItems.map(item => ({
+              quantity: item.quantity,
+              productId: item.productId,
+              price: item.price,
+            })),
+          },
+          payments: {
+            create: {
+              amount,
+              methodId: paymentMethodId,
+              status: 'PENDING',
+            },
+          },
+        },
+      });
+
+      // Cập nhật số lượng hàng tồn kho
+      for (const item of orderItems) {
+        await prisma.product.update({
+          where: { id: item.productId },
+          data: {
+            stock: {
+              decrement: item.quantity, // Giảm số lượng hàng tồn kho
+            },
+          },
+        });
+      }
+
+      return res.status(201).json(order);
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error: 'Đã xảy ra lỗi khi tạo đơn hàng.' });
+    }
+  } else {
+    res.setHeader('Allow', ['POST']);
+    return res.status(405).end(`Method ${req.method} Not Allowed`);
+  }
 }

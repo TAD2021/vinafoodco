@@ -6,6 +6,7 @@ import { Fragment } from "react";
 import { GrFormPreviousLink } from "react-icons/gr";
 import { useSelector, useDispatch } from 'react-redux';
 import { removeFromCart, incrementQuantity, decrementQuantity } from '@/redux/cartSlice'; // Import actions
+import { formatCurrency } from "@/utils/formatCurrency";
 
 export default function Cart() {
   const cart = useSelector((state) => state.cart);
@@ -57,7 +58,7 @@ export default function Cart() {
                   </div>
                 </div>
                 <div className="flex items-center space-x-4">
-                  <p className="text-lg">{item.price}đ</p>
+                  <p className="text-lg">{formatCurrency(item.price)}</p>
                   <div className="flex items-center border rounded">
                     <button className="px-2" onClick={() => handleDecrement(item.id)}>-</button>
                     <input
@@ -91,8 +92,8 @@ export default function Cart() {
               <p className="text-lg">Thành tiền:</p>
             </div>
             <div className="w-1/2 text-right">
-              <p className="text-lg">{cart.total}đ</p>
-              <p className="text-lg font-bold">{cart.total}đ</p>
+              <p className="text-lg">{formatCurrency(cart.total)}</p>
+              <p className="text-lg font-bold">{formatCurrency(cart.total)}</p>
             </div>
           </div>
         )}

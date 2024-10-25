@@ -71,6 +71,7 @@ const prisma = new PrismaClient();
 //           price: 200000,
 //           slug,
 //           userId: userId,
+//           stock: 100,
 //           categoryId: categoryId,
 //           tags: {
 //               connect: tags.map(tag => ({ id: tag.id })), // Kết nối với thẻ đã tìm thấy hoặc tạo mới
@@ -121,79 +122,107 @@ const prisma = new PrismaClient();
 
 
 
+// async function main() {
+//     // Create Posts
+//     const post1 = await prisma.post.create({
+//         data: {
+//             title: 'First Post',
+//             content: `<Image
+//               alt="Hội nghị đánh giá và xếp hạng sản phẩm OCOP"
+//               className="w-full mb-4"
+//               height="400"
+//               src="https://storage.googleapis.com/a1aa/image/xstACz8PTH5EGNt9BuLlIk05xeEwLCiUNJPMnhU5FheOTTmTA.jpg"
+//               width="800"
+//             />
+//             <p className="text-sm text-center text-gray-600 mb-4">
+//               Các đại biểu tham dự hội nghị
+//             </p>
+//             <p className="mb-4">
+//               Tại hội nghị, sau khi nghe các báo cáo, đánh giá và kết quả chấm
+//               điểm của Hội đồng đánh giá và xếp hạng sản phẩm OCOP cấp quận,
+//               huyện, các thành viên Hội đồng cấp thành phố đã tham gia đánh giá,
+//               thảo luận, góp ý để giúp các chủ thể hoàn thiện sản phẩm. Đồng
+//               thời, tiến hành chấm điểm, xếp hạng sao cho các sản phẩm.
+//             </p>
+//             <p className="mb-4">
+//               Kết quả, 6 sản phẩm của Cơ sở Thuận Hòa được Hội đồng OCOP thành
+//               phố chấm điểm đạt từ 80,5-81 điểm, đủ điều được xếp hạng sản phẩm
+//               OCOP 4 sao. Sản phẩm trà hòa tan dinh dưỡng Hằng Ngày của Công ty
+//               TNHH một thành viên Hygie &amp; Panacee đạt 92 điểm, trà hòa tan
+//               tốt cho Huyết áp đạt 94 điểm. 2 sản phẩm này được Hội đồng OCOP
+//               thành phố công nhận sản phẩm OCOP 4 sao và Hội đồng thành phố
+//               thống nhất sẽ làm hồ sơ gửi về Hội đồng OCOP Trung ương để đề nghị
+//               đánh giá, xếp hạng sản phẩm OCOP 5 sao cho 2 sản phẩm này. Riêng 6
+//               sản phẩm của huyện Cờ Đỏ, được Hội đồng OCOP thành phố đề nghị
+//               chỉnh sửa nhằm nâng mức độ bổ sung, hoàn thiện hồ sơ để đánh giá,
+//               xếp hạng đợt sau.
+//             </p>
+//             <p className="mb-4">Tin, ảnh: KHÁNH TRUNG</p>`,
+//             thumbnail: 'https://i.pinimg.com/564x/d7/40/ff/d740ffcfed14385c70b70c326cfe7d0d.jpg',
+//             slug: slugify('First Post', { lower: true }),
+//             type: 'tin-tuc',
+//             authorId: 1,
+//         },
+//     });
+
+//     const post2 = await prisma.post.create({
+//         data: {
+//             title: 'Second Post',
+//             content: 'This is the content of the second post.',
+//             thumbnail: 'https://i.pinimg.com/enabled_hi/564x/90/dd/3f/90dd3f2ef158e6c34afa09ff68729ddb.jpg',
+//             slug: slugify('Second Post', { lower: true }),
+//             type: 'gioi-thieu',
+//             authorId: 1,
+//         },
+//     });
+
+//     const post3 = await prisma.post.create({
+//         data: {
+//             title: 'Third Post',
+//             content: 'This is the content of the third post.',
+//             thumbnail: 'https://i.pinimg.com/enabled_hi/564x/2d/81/7f/2d817f94a758568b07c69faa5c9e5e7e.jpg',
+//             slug: slugify('Third Post'),
+//             type: 'tin-tuc',
+//             authorId: 1,
+//         },
+//     });
+
+//     console.log({ post1, post2, post3 });
+// }
+
+// main()
+//     .catch(e => {
+//         console.error(e);
+//         process.exit(1);
+//     })
+//     .finally(async () => {
+//         await prisma.$disconnect();
+//     });
+
+
+
+
 async function main() {
-    // Create Posts
-    const post1 = await prisma.post.create({
-        data: {
-            title: 'First Post',
-            content: `<Image
-              alt="Hội nghị đánh giá và xếp hạng sản phẩm OCOP"
-              className="w-full mb-4"
-              height="400"
-              src="https://storage.googleapis.com/a1aa/image/xstACz8PTH5EGNt9BuLlIk05xeEwLCiUNJPMnhU5FheOTTmTA.jpg"
-              width="800"
-            />
-            <p className="text-sm text-center text-gray-600 mb-4">
-              Các đại biểu tham dự hội nghị
-            </p>
-            <p className="mb-4">
-              Tại hội nghị, sau khi nghe các báo cáo, đánh giá và kết quả chấm
-              điểm của Hội đồng đánh giá và xếp hạng sản phẩm OCOP cấp quận,
-              huyện, các thành viên Hội đồng cấp thành phố đã tham gia đánh giá,
-              thảo luận, góp ý để giúp các chủ thể hoàn thiện sản phẩm. Đồng
-              thời, tiến hành chấm điểm, xếp hạng sao cho các sản phẩm.
-            </p>
-            <p className="mb-4">
-              Kết quả, 6 sản phẩm của Cơ sở Thuận Hòa được Hội đồng OCOP thành
-              phố chấm điểm đạt từ 80,5-81 điểm, đủ điều được xếp hạng sản phẩm
-              OCOP 4 sao. Sản phẩm trà hòa tan dinh dưỡng Hằng Ngày của Công ty
-              TNHH một thành viên Hygie &amp; Panacee đạt 92 điểm, trà hòa tan
-              tốt cho Huyết áp đạt 94 điểm. 2 sản phẩm này được Hội đồng OCOP
-              thành phố công nhận sản phẩm OCOP 4 sao và Hội đồng thành phố
-              thống nhất sẽ làm hồ sơ gửi về Hội đồng OCOP Trung ương để đề nghị
-              đánh giá, xếp hạng sản phẩm OCOP 5 sao cho 2 sản phẩm này. Riêng 6
-              sản phẩm của huyện Cờ Đỏ, được Hội đồng OCOP thành phố đề nghị
-              chỉnh sửa nhằm nâng mức độ bổ sung, hoàn thiện hồ sơ để đánh giá,
-              xếp hạng đợt sau.
-            </p>
-            <p className="mb-4">Tin, ảnh: KHÁNH TRUNG</p>`,
-            thumbnail: 'https://i.pinimg.com/564x/d7/40/ff/d740ffcfed14385c70b70c326cfe7d0d.jpg',
-            slug: slugify('First Post', { lower: true }),
-            type: 'tin-tuc',
-            authorId: 1,
-        },
-    });
+  const paymentMethods = [
+    { name: "Chuyển Khoản Qua Ngân Hàng", code: "BANK_TRANSFER", description: `Bạn chuyển khoản qua các ngân hàng dưới đây, nội dung chuyển khoản: tên - số điện thoại - mã đơn hàng.
+        Chủ tài khoản: Trần Quang Hiển, Ngân hàng Sacombank, số tài khoản 2726259373- phòng giao dịch Bình Hoà.` },
+    { name: "Thu Tiền Tận Nơi - COD", code: "COD", description: `Chúng tôi giao hàng và thu tiền tận nơi của bạn.` },
+  ];
 
-    const post2 = await prisma.post.create({
-        data: {
-            title: 'Second Post',
-            content: 'This is the content of the second post.',
-            thumbnail: 'https://i.pinimg.com/enabled_hi/564x/90/dd/3f/90dd3f2ef158e6c34afa09ff68729ddb.jpg',
-            slug: slugify('Second Post', { lower: true }),
-            type: 'gioi-thieu',
-            authorId: 1,
-        },
+  for (const method of paymentMethods) {
+    await prisma.paymentMethod.create({
+      data: method,
     });
+  }
 
-    const post3 = await prisma.post.create({
-        data: {
-            title: 'Third Post',
-            content: 'This is the content of the third post.',
-            thumbnail: 'https://i.pinimg.com/enabled_hi/564x/2d/81/7f/2d817f94a758568b07c69faa5c9e5e7e.jpg',
-            slug: slugify('Third Post'),
-            type: 'tin-tuc',
-            authorId: 1,
-        },
-    });
-
-    console.log({ post1, post2, post3 });
+  console.log("Các phương thức thanh toán đã được thêm thành công!");
 }
 
 main()
-    .catch(e => {
-        console.error(e);
-        process.exit(1);
-    })
-    .finally(async () => {
-        await prisma.$disconnect();
-    });
+  .catch(e => {
+    console.error(e);
+    process.exit(1);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
+  });

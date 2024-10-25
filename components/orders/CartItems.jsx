@@ -40,6 +40,16 @@ export default function CartItems({ setCartItems, onOrderSubmit }) {
           <p>Tạm tính</p>
           <p>{formatCurrency(total)}</p>
         </div>
+        <div className="mb-4">
+          <div>
+            <span className="text-gray-600">Phí vận chuyển</span>
+          </div>
+          <div className="mt-1">
+            <span className="text-red-500 border border-dashed border-red-500 rounded-md py-2 px-3 inline-block">
+              Shop sẽ báo phí vận chuyển khi xác nhận đơn hàng
+            </span>
+          </div>
+        </div>
         <div className="flex justify-between font-bold text-lg">
           <p>Thành tiền</p>
           <p>{formatCurrency(total)}</p>

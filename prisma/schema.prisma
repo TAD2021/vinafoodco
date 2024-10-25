@@ -56,6 +56,7 @@ model Product {
   tags        Tag[]              @relation("ProductTags") // Relation with tags
   createdAt   DateTime           @default(now())
   updatedAt   DateTime           @updatedAt
+  stock       Int // Stock related to the product
 }
 
 enum DisplayType {
@@ -117,30 +118,23 @@ enum OrderStatus {
   CANCELED
 }
 
-model Address {
-  id          Int     @id @default(autoincrement())
-  recipient   String // Name of the person receiving the order
-  phoneNumber String // Phone number of the recipient
-  street      String // Street address
-  ward        String // Ward
-  district    String // District
-  province    String // Province/City
-  orders      Order[] // Link to multiple Orders
-}
-
 model Order {
-  id         Int         @id @default(autoincrement())
-  customerId Int? // Optional link to Customer
-  customer   Customer?   @relation(fields: [customerId], references: [id])
-  orderItems OrderItem[] // Relationship to OrderItem
-  totalPrice Float
-  status     OrderStatus @default(PENDING) // Order status
-  createdAt  DateTime    @default(now())
-  updatedAt  DateTime    @updatedAt
-  payments   Payment[] // Relationship to Payment
-  addressId  Int? // Optional link to Address
-  address    Address?    @relation(fields: [addressId], references: [id]) // Corrected relation
-  note       String? // Optional field for additional notes
+  id          Int         @id @default(autoincrement())
+  customerId  Int? // Liên kết tùy chọn đến Customer
+  customer    Customer?   @relation(fields: [customerId], references: [id])
+  orderItems  OrderItem[] // Liên kết đến OrderItem
+  totalPrice  Float
+  status      OrderStatus @default(PENDING) // Trạng thái đơn hàng
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  payments    Payment[] // Liên kết đến Payment
+  recipient   String // Tên người nhận
+  phoneNumber String // Số điện thoại người nhận
+  street      String // Địa chỉ đường
+  ward        String // Phường
+  district    String // Quận
+  province    String // Tỉnh/Thành phố
+  note        String? // Ghi chú tùy chọn cho đơn hàng
 }
 
 model OrderItem {
@@ -153,18 +147,12 @@ model OrderItem {
   price     Float // Price at the time of purchase
 }
 
-enum PaymentMethod {
-  CREDIT_CARD
-  PAYPAL
-  BANK_TRANSFER
-  CASH_ON_DELIVERY
-}
-
-enum PaymentStatus {
-  PENDING
-  COMPLETED
-  FAILED
-  REFUNDED
+model PaymentMethod {
+  id          Int       @id @default(autoincrement())
+  name        String    @unique // Tên phương thức thanh toán
+  code        String    @unique
+  description String?   @db.VarChar(255) // Mô tả phương thức thanh toán (nếu cần)
+  payments    Payment[] // Quan hệ một-nhiều với Payment
 }
 
 model Payment {
@@ -172,11 +160,19 @@ model Payment {
   orderId    Int
   order      Order         @relation(fields: [orderId], references: [id])
   amount     Float
-  method     PaymentMethod // Using Enum for payment method
-  status     PaymentStatus @default(PENDING) // Using Enum for payment status
+  methodId   Int // Thay đổi từ method sang methodId
+  method     PaymentMethod @relation(fields: [methodId], references: [id]) // Quan hệ với PaymentMethod
+  status     PaymentStatus @default(PENDING)
   createdAt  DateTime      @default(now())
   customerId Int? // Optional link to Customer
   customer   Customer?     @relation(fields: [customerId], references: [id])
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
 }
 
 model Image {
