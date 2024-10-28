@@ -202,27 +202,27 @@ const prisma = new PrismaClient();
 
 
 
-async function main() {
-  const paymentMethods = [
-    { name: "Chuyển Khoản Qua Ngân Hàng", code: "BANK_TRANSFER", description: `Bạn chuyển khoản qua các ngân hàng dưới đây, nội dung chuyển khoản: tên - số điện thoại - mã đơn hàng.
-        Chủ tài khoản: Trần Quang Hiển, Ngân hàng Sacombank, số tài khoản 2726259373- phòng giao dịch Bình Hoà.` },
-    { name: "Thu Tiền Tận Nơi - COD", code: "COD", description: `Chúng tôi giao hàng và thu tiền tận nơi của bạn.` },
-  ];
+// async function main() {
+//   const paymentMethods = [
+//     { name: "Chuyển Khoản Qua Ngân Hàng", code: "BANK_TRANSFER", description: `Bạn chuyển khoản qua các ngân hàng dưới đây, nội dung chuyển khoản: tên - số điện thoại - mã đơn hàng.
+//         Chủ tài khoản: Trần Quang Hiển, Ngân hàng Sacombank, số tài khoản 2726259373- phòng giao dịch Bình Hoà.` },
+//     { name: "Thu Tiền Tận Nơi - COD", code: "COD", description: `Chúng tôi giao hàng và thu tiền tận nơi của bạn.` },
+//   ];
 
-  for (const method of paymentMethods) {
-    await prisma.paymentMethod.create({
-      data: method,
-    });
-  }
+//   for (const method of paymentMethods) {
+//     await prisma.paymentMethod.create({
+//       data: method,
+//     });
+//   }
 
-  console.log("Các phương thức thanh toán đã được thêm thành công!");
-}
+//   console.log("Các phương thức thanh toán đã được thêm thành công!");
+// }
 
-main()
-  .catch(e => {
-    console.error(e);
-    process.exit(1);
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
+// main()
+//   .catch(e => {
+//     console.error(e);
+//     process.exit(1);
+//   })
+//   .finally(async () => {
+//     await prisma.$disconnect();
+//   });

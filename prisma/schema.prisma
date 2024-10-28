@@ -31,6 +31,8 @@ model Customer {
   phoneNumber String? // Optional phone number
   orders      Order[] // Orders made by the customer
   Payment     Payment[]
+
+  @@index([email]) // Tạo chỉ mục cho trường email
 }
 
 model Tag {

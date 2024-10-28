@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { FaMoneyCheck, FaMoneyBill } from "react-icons/fa";
+import { FaMoneyBill, FaCreditCard } from "react-icons/fa";
 
 export default function OrderInfo({ paymentMethod, paymentMethods, setPaymentMethod }) {  
   const handlePaymentChange = (e) => {
@@ -33,7 +33,7 @@ export default function OrderInfo({ paymentMethod, paymentMethods, setPaymentMet
                 onChange={handlePaymentChange}
               />
               <label className="flex items-center" htmlFor={method.code}>
-                {method.code === 'bank-transfer' ? <FaMoneyCheck className="mr-1" /> : <FaMoneyBill className="mr-1" />}
+                {method.code === 'bank-transfer' ? <FaCreditCard className="mr-1" /> : <FaMoneyBill className="mr-1" />}
                 {method.name}
               </label>
             </div>
