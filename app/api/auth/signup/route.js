@@ -8,8 +8,10 @@ import { NextResponse } from 'next/server';
 export const POST = errorHandler(async (req) => {
   const requestBody = await req.json();
   const result = signUpSchema.safeParse(requestBody);
-  if (!result.success)
+
+  if (!result.success) {
     throw new BadRequestError(result.error.errors.map((err) => err.message));
+  }
 
   const userData = result.data;
   const { metadata } = await signUp(userData);

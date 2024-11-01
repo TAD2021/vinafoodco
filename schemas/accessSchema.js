@@ -7,12 +7,7 @@ export const signUpSchema = z.object({
   password: z.string().min(1, 'Password is required'),
 });
 
-// Hàm để xác thực dữ liệu
-export const validateOrderData = (data) => {
-  try {
-    signUpSchema.parse(data); // Kiểm tra dữ liệu
-    return { valid: true }; // Nếu hợp lệ
-  } catch (error) {
-    return { valid: false, errors: error.errors }; // Nếu không hợp lệ
-  }
-};
+export const loginSchema = z.object({
+  email: z.string().email('Invalid email format'),
+  password: z.string().min(1, 'Password is required'),
+});

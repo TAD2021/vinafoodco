@@ -9,7 +9,7 @@ export default function Login() {
           <div className="mb-4">
             <input
               type="text"
-              placeholder="username"
+              placeholder="email"
               className="w-full p-3 rounded bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-teal-500"
             />
           </div>
