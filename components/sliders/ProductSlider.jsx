@@ -1,11 +1,12 @@
-"use client";
+'use client';
 
-import React from "react";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import Image from "next/image";
-import Link from "next/link";
+import React from 'react';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+import Image from 'next/image';
+import Link from 'next/link';
+import { formatCurrency } from '@/utils/formatCurrency';
 
 const ProductSlider = ({ title, products }) => {
   const repeatedProducts = [...products];
@@ -60,7 +61,9 @@ const ProductSlider = ({ title, products }) => {
 
   return (
     <section className="mb-6">
-      <h2 className="text-xl font-bold text-center mb-4">{title.toUpperCase()}</h2>
+      <h2 className="text-xl font-bold text-center mb-4">
+        {title.toUpperCase()}
+      </h2>
       <Slider {...settings}>
         {displayProducts.map((product, index) => (
           <div key={index} className="p-4">
@@ -70,14 +73,17 @@ const ProductSlider = ({ title, products }) => {
                   alt={product.name}
                   width={160}
                   height={160}
-                  className="w-auto h-40 rounded-lg mb-2 object-cover" // Use 'w-auto' to maintain aspect ratio
+                  className="w-auto h-40 rounded-lg mb-2 object-cover"
                   src={product.image}
                 />
                 <div className="flex-grow">
                   <h3 className="text-center line-clamp-2">{product.name}</h3>
+                  <p className="text-center text-gray-700 line-clamp-3">
+                    {product.description}
+                  </p>
                 </div>
                 <p className="text-center text-yellow-500 font-bold">
-                  {product.price} VNĐ
+                  {formatCurrency(product.price)}
                 </p>
               </article>
             </Link>

@@ -1,4 +1,4 @@
-const { PrismaClient, DisplayType } = require('@prisma/client')
+const { PrismaClient, DisplayType } = require('@prisma/client');
 const slugify = require('slugify');
 
 const prisma = new PrismaClient();
@@ -120,14 +120,12 @@ const prisma = new PrismaClient();
 //       await prisma.$disconnect();
 //   });
 
-
-
 // async function main() {
-//     // Create Posts
-//     const post1 = await prisma.post.create({
-//         data: {
-//             title: 'First Post',
-//             content: `<Image
+//   // Create Posts
+//   const post1 = await prisma.post.create({
+//     data: {
+//       title: 'First Post',
+//       content: `<Image
 //               alt="Hội nghị đánh giá và xếp hạng sản phẩm OCOP"
 //               className="w-full mb-4"
 //               height="400"
@@ -158,55 +156,63 @@ const prisma = new PrismaClient();
 //               xếp hạng đợt sau.
 //             </p>
 //             <p className="mb-4">Tin, ảnh: KHÁNH TRUNG</p>`,
-//             thumbnail: 'https://i.pinimg.com/564x/d7/40/ff/d740ffcfed14385c70b70c326cfe7d0d.jpg',
-//             slug: slugify('First Post', { lower: true }),
-//             type: 'tin-tuc',
-//             authorId: 1,
-//         },
-//     });
+//       thumbnail:
+//         'https://i.pinimg.com/564x/d7/40/ff/d740ffcfed14385c70b70c326cfe7d0d.jpg',
+//       slug: slugify('First Post', { lower: true }),
+//       type: 'tin-tuc',
+//       authorId: 1,
+//     },
+//   });
 
-//     const post2 = await prisma.post.create({
-//         data: {
-//             title: 'Second Post',
-//             content: 'This is the content of the second post.',
-//             thumbnail: 'https://i.pinimg.com/enabled_hi/564x/90/dd/3f/90dd3f2ef158e6c34afa09ff68729ddb.jpg',
-//             slug: slugify('Second Post', { lower: true }),
-//             type: 'gioi-thieu',
-//             authorId: 1,
-//         },
-//     });
+//   const post2 = await prisma.post.create({
+//     data: {
+//       title: 'Second Post',
+//       content: 'This is the content of the second post.',
+//       thumbnail:
+//         'https://i.pinimg.com/enabled_hi/564x/90/dd/3f/90dd3f2ef158e6c34afa09ff68729ddb.jpg',
+//       slug: slugify('Second Post', { lower: true }),
+//       type: 'gioi-thieu',
+//       authorId: 1,
+//     },
+//   });
 
-//     const post3 = await prisma.post.create({
-//         data: {
-//             title: 'Third Post',
-//             content: 'This is the content of the third post.',
-//             thumbnail: 'https://i.pinimg.com/enabled_hi/564x/2d/81/7f/2d817f94a758568b07c69faa5c9e5e7e.jpg',
-//             slug: slugify('Third Post'),
-//             type: 'tin-tuc',
-//             authorId: 1,
-//         },
-//     });
+//   const post3 = await prisma.post.create({
+//     data: {
+//       title: 'Third Post',
+//       content: 'This is the content of the third post.',
+//       thumbnail:
+//         'https://i.pinimg.com/enabled_hi/564x/2d/81/7f/2d817f94a758568b07c69faa5c9e5e7e.jpg',
+//       slug: slugify('Third Post'),
+//       type: 'tin-tuc',
+//       authorId: 1,
+//     },
+//   });
 
-//     console.log({ post1, post2, post3 });
+//   console.log({ post1, post2, post3 });
 // }
 
 // main()
-//     .catch(e => {
-//         console.error(e);
-//         process.exit(1);
-//     })
-//     .finally(async () => {
-//         await prisma.$disconnect();
-//     });
-
-
-
+//   .catch((e) => {
+//     console.error(e);
+//     process.exit(1);
+//   })
+//   .finally(async () => {
+//     await prisma.$disconnect();
+//   });
 
 // async function main() {
 //   const paymentMethods = [
-//     { name: "Chuyển Khoản Qua Ngân Hàng", code: "BANK_TRANSFER", description: `Bạn chuyển khoản qua các ngân hàng dưới đây, nội dung chuyển khoản: tên - số điện thoại - mã đơn hàng.
-//         Chủ tài khoản: Trần Quang Hiển, Ngân hàng Sacombank, số tài khoản 2726259373- phòng giao dịch Bình Hoà.` },
-//     { name: "Thu Tiền Tận Nơi - COD", code: "COD", description: `Chúng tôi giao hàng và thu tiền tận nơi của bạn.` },
+//     {
+//       name: 'Chuyển Khoản Qua Ngân Hàng',
+//       code: 'BANK_TRANSFER',
+//       description: `Bạn chuyển khoản qua các ngân hàng dưới đây, nội dung chuyển khoản: tên - số điện thoại - mã đơn hàng.
+//         Chủ tài khoản: Trần Quang Hiển, Ngân hàng Sacombank, số tài khoản 2726259373- phòng giao dịch Bình Hoà.`,
+//     },
+//     {
+//       name: 'Thu Tiền Tận Nơi - COD',
+//       code: 'COD',
+//       description: `Chúng tôi giao hàng và thu tiền tận nơi của bạn.`,
+//     },
 //   ];
 
 //   for (const method of paymentMethods) {
@@ -215,11 +221,11 @@ const prisma = new PrismaClient();
 //     });
 //   }
 
-//   console.log("Các phương thức thanh toán đã được thêm thành công!");
+//   console.log('Các phương thức thanh toán đã được thêm thành công!');
 // }
 
 // main()
-//   .catch(e => {
+//   .catch((e) => {
 //     console.error(e);
 //     process.exit(1);
 //   })
