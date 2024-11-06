@@ -15,13 +15,23 @@ datasource db {
 }
 
 model User {
-  id       Int       @id @default(autoincrement())
-  email    String    @unique
-  password String
-  name     String
-  products Product[] // Products created by the admin
-  posts    Post[] // Posts created by the admin
-  comments Comment[] // Comments made by the admin
+  id        Int        @id @default(autoincrement())
+  email     String     @unique
+  password  String
+  name      String
+  products  Product[] // Products created by the admin
+  posts     Post[] // Posts created by the admin
+  comments  Comment[] // Comments made by the admin
+  keyTokens KeyToken[] // Mối quan hệ với KeyToken
+}
+
+model KeyToken {
+  id           Int     @id @default(autoincrement())
+  userId       Int // Liên kết đến User
+  privateKey   String // Khóa riêng
+  publicKey    String // Khóa công khai
+  refreshToken String? @db.Text
+  user         User    @relation(fields: [userId], references: [id])
 }
 
 model Customer {

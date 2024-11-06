@@ -26,16 +26,6 @@ body {
   }
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-p,
-li,span, input, textarea, button, label, select{
-  color: #000000;
-}
-
 .slick-prev {
   left: 0 !important; /* Adjust this value to move the button inside */
 }
@@ -47,6 +37,6 @@ li,span, input, textarea, button, label, select{
 .line-clamp-2 {
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  line-clamp: 2; 
+  line-clamp: 2;
   overflow: hidden;
 }
