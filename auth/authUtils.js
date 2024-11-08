@@ -4,7 +4,6 @@ import { findByUserId } from '@/services/keyTokenService';
 import JWT from 'jsonwebtoken';
 
 const HEADER = {
-  API_KEY: 'x-api-key',
   CLIENT_ID: 'x-client-id',
   AUTHORIZATION: 'authorization',
   REFRESHTOKEN: 'refreshToken',
@@ -35,8 +34,8 @@ export const createTokenPair = async (payload, publicKey, privateKey) => {
   }
 };
 
-export const authentication = errorHandler(async (req) => {
-  const userId = req.headers.get(HEADER.CLIENT_ID);
+export const authentication = async (req) => {
+  const userId = parseInt(req.headers.get(HEADER.CLIENT_ID), 10);
   if (!userId) throw new AuthFailureError('Invalid Request');
 
   const keyStore = await findByUserId(userId);
@@ -49,7 +48,6 @@ export const authentication = errorHandler(async (req) => {
       if (userId !== decodeUser.userId) {
         throw new AuthFailureError('Invalid userid');
       }
-
       req.keyStore = keyStore;
       req.user = decodeUser;
       req.refreshToken = refreshToken;
@@ -64,15 +62,16 @@ export const authentication = errorHandler(async (req) => {
 
   try {
     const decodeUser = JWT.verify(accessToken, keyStore.publicKey);
-    if (userId !== decodeUser.userId)
+    if (userId !== decodeUser.userId) {
       throw new AuthFailureError('Invalid userid');
+    }
     req.user = decodeUser;
     req.keyStore = keyStore;
     return; // Thoát nếu xác thực thành công
   } catch (error) {
     throw error; // Quăng lỗi nếu không xác thực
   }
-});
+}
 
 export const verifyJWT = async (token, keySecret) => {
   return JWT.verify(token, keySecret);

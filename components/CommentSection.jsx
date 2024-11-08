@@ -14,7 +14,7 @@ const CommentSection = ({ slug, type }) => { // Thêm type vào props
     // Fetch comments from API
     const fetchComments = useCallback(async () => {
         try {
-            const response = await fetch(`/api/comments/${slug}?type=${type}&page=1&limit=5`, {
+            const response = await fetch(`http://localhost:3000/api/comments/${slug}?type=${type}&page=1&limit=5`, {
                 method: 'GET',
                 cache: 'no-store',
             });
@@ -45,7 +45,7 @@ const CommentSection = ({ slug, type }) => { // Thêm type vào props
         if (newComment.trim() === "" || name.trim() === "") return; // Prevent empty comments
 
         try {
-            const response = await fetch(`/api/comments`, {
+            const response = await fetch(`http://localhost:3000/api/comments`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

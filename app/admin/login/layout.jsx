@@ -1,5 +1,6 @@
 import { Inter } from 'next/font/google';
 import '../../globals.css';
+import { ReduxProvider } from '@/redux/provider';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -9,7 +10,9 @@ export default function RootLayout({ children }) {
       <body
         className={`bg-gray-900 flex items-center justify-center min-h-screen ${inter.className}`}
       >
-        {children}
+        <ReduxProvider>
+          {children}
+        </ReduxProvider>
       </body>
     </html>
   );

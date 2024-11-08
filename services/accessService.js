@@ -1,5 +1,5 @@
 import { AuthFailureError, BadRequestError } from '@/core/error.response';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';  
 import prisma from '@/lib/prisma';
 import crypto from 'crypto';
 import {
@@ -76,7 +76,7 @@ export const login = async ({ email, password, refreshToken = null }) => {
   const foundUser = await prisma.user.findUnique({
     where: { email },
   });
-  if (!foundUser) throw new BadRequestError('Shop not registered');
+  if (!foundUser) throw new BadRequestError('User not registered');
 
   const match = await bcrypt.compare(password, foundUser.password);
   if (!match) throw new AuthFailureError('Authentication error');

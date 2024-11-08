@@ -30,7 +30,7 @@ export default function Checkout() {
   useEffect(() => {
     const fetchPaymentMethods = async () => {
       try {
-        const response = await fetch('/api/paymentMethods');
+        const response = await fetch('http://localhost:3000/api/paymentMethods');
         const data = await response.json();
         setPaymentMethods(data.paymentMethods);        
         // Nếu có phương thức thanh toán, đặt phương thức đầu tiên làm mặc định
@@ -75,7 +75,7 @@ export default function Checkout() {
     console.log(orderData);
   
     try {
-      const response = await fetch('/api/orders', {
+      const response = await fetch('http://localhost:3000/api/orders', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -19,7 +19,7 @@ function Category() {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch('/api/categories');
+        const response = await fetch('http://localhost:3000/api/categories');
         const data = await response.json();
         setCategories(data);
       } catch (error) {

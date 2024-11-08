@@ -1,9 +1,9 @@
 export default function Lienhe() {
   return (
-    <main class="container mx-auto mt-8 px-4 md:px-0">
-      <div class="flex flex-col md:flex-row">
-        <div class="w-full md:w-2/3 pr-0 md:pr-4">
-          <div class="border p-4">
+    <main className="container mx-auto mt-8 px-4 md:px-0">
+      <div className="flex flex-col md:flex-row">
+        <div className="w-full md:w-2/3 pr-0 md:pr-4">
+          <div className="border p-4">
             <iframe
               allowfullscreen=""
               height="450"
@@ -13,53 +13,53 @@ export default function Lienhe() {
               width="100%"
             ></iframe>
           </div>
-          <div class="mt-4 p-4">
-            <h2 class="text-lg font-semibold">Liên hệ ngay để được tư vấn</h2>
-            <p class="mt-2">
-              <i class="fas fa-map-marker-alt"></i>
+          <div className="mt-4 p-4">
+            <h2 className="text-lg font-semibold">Liên hệ ngay để được tư vấn</h2>
+            <p className="mt-2">
+              <i className="fas fa-map-marker-alt"></i>
               28 Phú Thọ, Phường 2, Quận 11, TP. HCM
             </p>
-            <p class="mt-2">
-              <i class="fas fa-phone"></i>
+            <p className="mt-2">
+              <i className="fas fa-phone"></i>
               0977 608 680
             </p>
-            <p class="mt-2">
-              <i class="fas fa-envelope"></i>
+            <p className="mt-2">
+              <i className="fas fa-envelope"></i>
               info@thuanhoafood.com
             </p>
           </div>
         </div>
-        <div class="w-full md:w-1/3 pl-0 md:pl-4 mt-8 md:mt-0">
-          <div class="bg-gray-100 p-4">
-            <h2 class="text-lg font-semibold">Form liên hệ</h2>
-            <form class="mt-4">
-              <div class="mb-4">
-                <label class="block text-gray-700">Họ tên *</label>
+        <div className="w-full md:w-1/3 pl-0 md:pl-4 mt-8 md:mt-0">
+          <div className="bg-gray-100 p-4">
+            <h2 className="text-lg font-semibold">Form liên hệ</h2>
+            <form className="mt-4">
+              <div className="mb-4">
+                <label className="block text-gray-700">Họ tên *</label>
                 <input
-                  class="w-full p-2 border border-gray-300 rounded"
+                  className="w-full p-2 border border-gray-300 rounded"
                   type="text"
                 />
               </div>
-              <div class="mb-4">
-                <label class="block text-gray-700">Email *</label>
+              <div className="mb-4">
+                <label className="block text-gray-700">Email *</label>
                 <input
-                  class="w-full p-2 border border-gray-300 rounded"
+                  className="w-full p-2 border border-gray-300 rounded"
                   type="email"
                 />
               </div>
-              <div class="mb-4">
-                <label class="block text-gray-700">Số điện thoại *</label>
+              <div className="mb-4">
+                <label className="block text-gray-700">Số điện thoại *</label>
                 <input
-                  class="w-full p-2 border border-gray-300 rounded"
+                  className="w-full p-2 border border-gray-300 rounded"
                   type="text"
                 />
               </div>
-              <div class="mb-4">
-                <label class="block text-gray-700">Tin nhắn *</label>
-                <textarea class="w-full p-2 border border-gray-300 rounded"></textarea>
+              <div className="mb-4">
+                <label className="block text-gray-700">Tin nhắn *</label>
+                <textarea className="w-full p-2 border border-gray-300 rounded"></textarea>
               </div>
               <button
-                class="bg-green-700 text-white px-4 py-2 rounded"
+                className="bg-green-700 text-white px-4 py-2 rounded"
                 type="submit"
               >
                 Gửi

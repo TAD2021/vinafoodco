@@ -6,10 +6,9 @@ import { NextResponse } from 'next/server';
 
 export const POST = errorHandler(async (req) => {
   await authentication(req);
-  const requestBody = await req.json();
 
   // Gọi handlerRefreshToken với refreshToken
-  const tokenMetadata = await handlerRefreshToken(requestBody.refreshToken);
+  const tokenMetadata = await handlerRefreshToken(req.refreshToken);
 
   return new SuccessResponse({
     message: 'Get token success!',

@@ -185,7 +185,7 @@ function ProductDetail() {
       <div className="bg-white rounded shadow p-6 mb-6">
         {/* <ProductSlider title="SẢN PHẨM TƯƠNG TỰ" products={teaProducts} /> */}
       </div>
-      <div class="bg-white rounded shadow p-6">
+      <div className="bg-white rounded shadow p-6">
         <CommentSection slug={slug} type="product" />
       </div>
     </div>

@@ -4,8 +4,8 @@ import { errorHandler } from '@/middleware/errorHandler';
 import { logout } from '@/services/accessService';
 import { NextResponse } from 'next/server';
 
-export const POST = errorHandler(async (req, res) => {
-  //await authentication(req, res, () => {});
+export const POST = errorHandler(async (req) => {
+  await authentication(req);
   return new SuccessResponse({
     message: 'Logout success',
     metadata: await logout(req.keyStore),

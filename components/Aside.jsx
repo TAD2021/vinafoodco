@@ -15,7 +15,7 @@ function Aside() {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch('/api/categories');
+        const response = await fetch('http://localhost:3000/api/categories');
         const data = await response.json();
         setCategories(data);
       } catch (error) {
@@ -25,7 +25,7 @@ function Aside() {
 
     const fetchNewProducts = async () => {
       try {
-        const response = await fetch('/api/products?new=true');
+        const response = await fetch('http://localhost:3000/api/products?new=true');
         const data = await response.json();
         setNewProducts(data);
       } catch (error) {
@@ -35,7 +35,7 @@ function Aside() {
 
     const fetchLatestPosts = async () => {
       try {
-        const response = await fetch('/api/posts');
+        const response = await fetch('http://localhost:3000/api/posts');
         const data = await response.json();
         setLatestPosts(data);
       } catch (error) {
