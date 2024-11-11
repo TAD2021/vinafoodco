@@ -12,6 +12,7 @@ services:
       - mysql_data:/var/lib/mysql
     ports:
       - '3306:3306'
+
   web:
     build: .
     ports:
@@ -25,5 +26,6 @@ services:
     command: npm run dev
     depends_on:
       - mysql
+
 volumes:
   mysql_data:

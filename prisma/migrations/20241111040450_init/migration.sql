@@ -10,6 +10,17 @@ CREATE TABLE `User` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
+CREATE TABLE `KeyToken` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `userId` INTEGER NOT NULL,
+    `privateKey` VARCHAR(191) NOT NULL,
+    `publicKey` VARCHAR(191) NOT NULL,
+    `refreshToken` TEXT NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
 CREATE TABLE `Customer` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(191) NOT NULL,
@@ -17,6 +28,7 @@ CREATE TABLE `Customer` (
     `phoneNumber` VARCHAR(191) NULL,
 
     UNIQUE INDEX `Customer_email_key`(`email`),
+    INDEX `Customer_email_idx`(`email`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -173,6 +185,9 @@ CREATE TABLE `_ProductTags` (
     UNIQUE INDEX `_ProductTags_AB_unique`(`A`, `B`),
     INDEX `_ProductTags_B_index`(`B`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- AddForeignKey
+ALTER TABLE `KeyToken` ADD CONSTRAINT `KeyToken_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `Product` ADD CONSTRAINT `Product_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
