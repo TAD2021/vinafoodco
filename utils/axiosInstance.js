@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Create an Axios instance
 const axiosInstance = axios.create({
-  baseURL: '/', // Use the root URL for the same domain
+  baseURL: process.env.NEXT_PUBLIC_BASE_URL || '/', // Sử dụng biến môi trường cho baseURL
   timeout: 10000, // Set a timeout for requests
 });
 

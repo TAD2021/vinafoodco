@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/navigation'; // Import useRouter
-import { setCredentials } from '@/redux/authSlice';
+import { login } from '@/redux/authSlice';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -35,7 +35,7 @@ export default function Login() {
 
       // Lưu thông tin người dùng vào Redux
       dispatch(
-        setCredentials({
+        login({
           name: data.metadata.user.name,
           email: data.metadata.user.email,
           accessToken: data.metadata.tokens.accessToken,
