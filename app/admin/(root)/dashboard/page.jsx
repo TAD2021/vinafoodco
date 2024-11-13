@@ -6,7 +6,7 @@ import { StatsCard } from '@/components/admin/dashboard/StatsCard';
 import { WeeklyRecap } from '@/components/admin/dashboard/WeeklyRecap';
 import { Fragment } from 'react';
 
-export default function Admin() {
+export default function Dashboard() {
   return (
     <Fragment>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">

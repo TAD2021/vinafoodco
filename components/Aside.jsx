@@ -1,11 +1,12 @@
 'use client';
 
-import { formatCurrency } from "@/utils/formatCurrency";
-import { formatDate } from "@/utils/formatDate";
-import Image from "next/image";
-import Link from "next/link";
-import { useEffect, useState } from "react";
-import { CiCalendar } from "react-icons/ci";
+import axiosInstance from '@/utils/axiosInstance';
+import { formatCurrency } from '@/utils/formatCurrency';
+import { formatDate } from '@/utils/formatDate';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { CiCalendar } from 'react-icons/ci';
 
 function Aside() {
   const [categories, setCategories] = useState([]);
@@ -19,17 +20,16 @@ function Aside() {
         const data = await response.json();
         setCategories(data);
       } catch (error) {
-        console.error("Error fetching categories:", error);
+        console.error('Error fetching categories:', error);
       }
     };
 
     const fetchNewProducts = async () => {
       try {
-        const response = await fetch('http://localhost:3000/api/products?new=true');
-        const data = await response.json();
-        setNewProducts(data);
+        const response = await axiosInstance.get('/api/products?new=true');
+        setNewProducts(response.data?.metadata?.products);
       } catch (error) {
-        console.error("Error fetching new products:", error);
+        console.error('Error fetching new products:', error);
       }
     };
 
@@ -39,7 +39,7 @@ function Aside() {
         const data = await response.json();
         setLatestPosts(data);
       } catch (error) {
-        console.error("Error fetching latest news:", error);
+        console.error('Error fetching latest news:', error);
       }
     };
 
@@ -54,7 +54,10 @@ function Aside() {
         <h3 className="text-lg font-bold text-gray-800 mb-4">SHOP</h3>
         <ul className="space-y-4">
           {categories.map((category) => (
-            <li key={category.id} className="flex justify-between items-center border-b border-orange-300 pb-2 last:border-b-0">
+            <li
+              key={category.id}
+              className="flex justify-between items-center border-b border-orange-300 pb-2 last:border-b-0"
+            >
               <Link href={category.slug} passHref>
                 <span className="text-gray-700">{category.name}</span>
               </Link>
@@ -63,7 +66,9 @@ function Aside() {
         </ul>
       </div>
       <div className="bg-white p-4 shadow rounded mb-6">
-        <h3 className="text-lg font-bold text-gray-800 mb-4">SẢN PHẨM MỚI NHẤT</h3>
+        <h3 className="text-lg font-bold text-gray-800 mb-4">
+          SẢN PHẨM MỚI NHẤT
+        </h3>
         <ul className="space-y-4">
           {newProducts.map((product) => (
             <Link key={product.slug} href={`/san-pham/${product.slug}`}>
@@ -71,13 +76,15 @@ function Aside() {
                 <Image
                   alt={product.name}
                   className="w-16 h-16 object-cover rounded mr-4"
-                  src={product.image || "/placeholder-image.png"}
+                  src={product.image || '/placeholder-image.png'}
                   width={60}
                   height={60}
                 />
                 <div>
                   <p className="text-gray-700">{product.name}</p>
-                  <p className="text-green-600">{formatCurrency(product.price)}</p>
+                  <p className="text-green-600">
+                    {formatCurrency(product.price)}
+                  </p>
                 </div>
               </li>
             </Link>
@@ -93,7 +100,7 @@ function Aside() {
                 <Image
                   alt={post.title}
                   className="w-16 h-16 object-cover rounded mr-4"
-                  src={post.thumbnail || "/placeholder-image.png"}
+                  src={post.thumbnail || '/placeholder-image.png'}
                   width={60}
                   height={60}
                 />

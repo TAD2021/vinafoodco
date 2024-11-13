@@ -5,11 +5,11 @@ import { Fragment } from 'react';
 import axiosInstance from '@/utils/axiosInstance';
 
 const Home = async () => {
-  const productsResponse = await axiosInstance.get('/api/products');
+  const productsResponse = await axiosInstance.get('/api/products-by-category');
   const postsResponse = await axiosInstance.get('/api/posts');
 
   // Extract data from the responses
-  const products = productsResponse.data;
+  const products = productsResponse.data?.metadata;
   const posts = postsResponse.data;
 
   const images = [

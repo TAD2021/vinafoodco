@@ -28,7 +28,7 @@ export default function RootLayout({ children }) {
   // Determine the title based on the pathname
   const getTitle = () => {
     switch (pathname) {
-      case '/admin':
+      case '/admin/dashboard':
         return 'Dashboard';
       case '/admin/users':
         return 'Users';

@@ -43,9 +43,9 @@ export const Sidebar = ({ isOpen, toggleSidebar, currentPath }) => {
           <li className="mb-4">
             <a
               className={`flex items-center p-2 ${
-                currentPath === '/admin/' ? 'bg-gray-700' : ''
+                currentPath === '/admin/dashboard' ? 'bg-gray-700' : ''
               }`}
-              href="/admin/"
+              href="/admin/dashboard"
             >
               <FaTachometerAlt className="mr-3" />
               Dashboard
