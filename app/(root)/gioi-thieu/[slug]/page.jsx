@@ -22,7 +22,7 @@ export default function PostDetail() {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/api/posts/${slug}`);
+        const response = await fetch(`/api/posts/${slug}`);
         const data = await response.json();
         setPost(data);
       } catch (error) {
@@ -32,6 +32,7 @@ export default function PostDetail() {
 
     fetchPost();
   }, [slug]);
+  
 
   if (!post) {
     return <div>Loading...</div>;

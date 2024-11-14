@@ -1,8 +1,37 @@
+'use client';
+
 import Image from 'next/image';
-import { Fragment } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { FaSearch } from 'react-icons/fa';
+import axiosInstance from '@/utils/axiosInstance'; // Adjust the path accordingly
+import { formatDate } from '@/utils/formatDate';
+import { formatCurrency } from '@/utils/formatCurrency';
 
 export default function Products() {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await axiosInstance.get(
+          '/api/products?page=1&limit=5'
+        ); // Use the axios instance
+        setProducts(response.data?.metadata?.products);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
+
   return (
     <Fragment>
       <div className="container mx-auto p-4">
@@ -24,7 +53,6 @@ export default function Products() {
             <thead>
               <tr className="text-gray-400">
                 <th className="py-2">Title</th>
-                <th className="py-2">Description</th>
                 <th className="py-2">Price</th>
                 <th className="py-2">Created at</th>
                 <th className="py-2">Stock</th>
@@ -32,58 +60,34 @@ export default function Products() {
               </tr>
             </thead>
             <tbody>
-              <tr className="border-b border-gray-700">
-                <td className="py-2 flex items-center">
-                  <Image
-                    alt="Product image"
-                    className="w-10 h-10 rounded-full mr-2"
-                    height={100}
-                    src="https://st4.depositphotos.com/14953852/24787/v/450/depositphotos_247872612-stock-illustration-no-image-available-icon-vector.jpg"
-                    width={100}
-                  />
-                  iphone
-                </td>
-                <td className="py-2">
-                  sdfjhkasdjhfkjashfkashdfkahsdfkhaskdfh...
-                </td>
-                <td className="py-2">$123</td>
-                <td className="py-2">Oct 29 2023</td>
-                <td className="py-2">34</td>
-                <td className="py-2">
-                  <button className="bg-green-600 text-white px-2 py-1 rounded mr-2">
-                    View
-                  </button>
-                  <button className="bg-red-600 text-white px-2 py-1 rounded">
-                    Delete
-                  </button>
-                </td>
-              </tr>
-              <tr className="border-b border-gray-700">
-                <td className="py-2 flex items-center">
-                  <img
-                    alt="Product image"
-                    className="w-10 h-10 rounded-full mr-2"
-                    height="100"
-                    src="https://st4.depositphotos.com/14953852/24787/v/450/depositphotos_247872612-stock-illustration-no-image-available-icon-vector.jpg"
-                    width="100"
-                  />
-                  lg monitor
-                </td>
-                <td className="py-2">
-                  sdfjhkasdjhfkjashfkashdfkahsdfkhaskdfh...
-                </td>
-                <td className="py-2">$123</td>
-                <td className="py-2">Oct 29 2023</td>
-                <td className="py-2">34</td>
-                <td className="py-2">
-                  <button className="bg-green-600 text-white px-2 py-1 rounded mr-2">
-                    View
-                  </button>
-                  <button className="bg-red-600 text-white px-2 py-1 rounded">
-                    Delete
-                  </button>
-                </td>
-              </tr>
+              {products.map((product) => (
+                <tr key={product.id} className="border-b border-gray-700">
+                  <td className="py-2 flex items-center">
+                    <Image
+                      alt="Product image"
+                      className="w-10 h-10 rounded-full mr-2"
+                      height={100}
+                      src={
+                        product.image ||
+                        'https://st4.depositphotos.com/14953852/24787/v/450/depositphotos_247872612-stock-illustration-no-image-available-icon-vector.jpg'
+                      }
+                      width={100}
+                    />
+                    {product.name}
+                  </td>
+                  <td className="py-2">{formatCurrency(product.price)}</td>
+                  <td className="py-2">{formatDate(product.updatedAt)}</td>
+                  <td className="py-2">{product.stock}</td>
+                  <td className="py-2">
+                    <button className="bg-green-600 text-white px-2 py-1 rounded mr-2">
+                      View
+                    </button>
+                    <button className="bg-red-600 text-white px-2 py-1 rounded">
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
           <div className="flex justify-between items-center mt-4">

@@ -1,78 +1,25 @@
 import { NextResponse } from 'next/server';
-import prisma from '@/lib/prisma';
+import { SuccessResponse } from '@/core/success.response';
+import { errorHandler } from '@/middleware/errorHandler';
+import { getProductByPages, getToTalProducts } from '@/services/productService';
+import { BadRequestError } from '@/core/error.response';
 
-export async function GET(req) {
-  const { searchParams } = new URL(req.url); // Get the query parameters from the request URL
-  const isNew = searchParams.get('new');
+export const GET = errorHandler(async (req) => {
+  const searchParams = req.nextUrl.searchParams;
+  const page = searchParams.get('page') || 1;
+  const limit = searchParams.get('limit') || 10;
 
-  try {
-    let products;
-    if (isNew === 'true') {
-      products = await prisma.product.findMany({
-        orderBy: {
-          createdAt: 'desc',
-        },
-        take: 5,
-        select: {
-          name: true,
-          price: true,
-          slug: true,
-          images: {
-            take: 1, // Chỉ lấy 1 hình ảnh mỗi sản phẩm
-            select: {
-              url: true,
-            },
-          },
-        },
-      });
-      // Chuyển đổi cấu trúc dữ liệu để trả về hình ảnh là một trường duy nhất (thay vì mảng)
-      const formattedProducts = products.map((product) => ({
-        name: product.name,
-        price: product.price,
-        slug: product.slug,
-        image: product.images.length > 0 ? product.images[0].url : null, // Lấy URL của hình ảnh đầu tiên nếu tồn tại
-      }));
-      return NextResponse.json(formattedProducts); // Trả về phản hồi JSON
-    }
-    products = await prisma.product.findMany({
-      select: {
-        name: true, // Chỉ lấy tên sản phẩm
-        price: true, // Chỉ lấy giá sản phẩm
-        slug: true, // Thêm slug vào truy vấn
-        images: {
-          take: 1, // Lấy 1 hình ảnh cho mỗi sản phẩm
-          select: {
-            url: true, // Chỉ lấy URL của hình ảnh
-          },
-        },
-        category: {
-          select: {
-            name: true, // Lấy tên danh mục
-          },
-        },
-      },
-    });
+  const pageNum = parseInt(page);
+  const pageSize = parseInt(limit);
 
-    // Tổ chức sản phẩm theo danh mục
-    const productsByCategory = products.reduce((acc, product) => {
-      const categoryName = product.category.name; // Lấy tên danh mục
-      const productData = {
-        name: product.name,
-        price: product.price,
-        slug: product.slug, // Thêm slug vào dữ liệu sản phẩm
-        image: product.images.length > 0 ? product.images[0].url : null, // Lấy URL hình ảnh hoặc null nếu không có
-      };
-
-      if (!acc[categoryName]) {
-        acc[categoryName] = []; // Khởi tạo mảng nếu chưa có
-      }
-      acc[categoryName].push(productData); // Thêm sản phẩm vào danh mục
-      return acc;
-    }, {});
-
-    return NextResponse.json(productsByCategory); // Trả về phản hồi JSON
-  } catch (error) {
-    console.error(error);
-    return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
+  if (isNaN(pageNum) || isNaN(pageSize) || pageNum < 1 || pageSize < 1) {
+    throw new BadRequestError('Invalid page or limit');
   }
-}
+
+  const data = await getProductByPages(pageNum, pageSize);
+
+  return new SuccessResponse({
+    message: 'Get products success',
+    metadata: data,
+  }).send(NextResponse);
+});
