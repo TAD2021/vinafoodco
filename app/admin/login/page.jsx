@@ -6,15 +6,18 @@ import { useRouter } from 'next/navigation'; // Import useRouter
 import { login } from '@/redux/authSlice';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import LoadingIcon from '@/components/LoadingIcon';
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const router = useRouter(); // Khởi tạo router
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true); // Bắt đầu loading
 
     try {
       const response = await fetch('/api/auth/login', {
@@ -46,6 +49,8 @@ export default function Login() {
     } catch (error) {
       console.error('Login failed:', error);
       toast.error(error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -78,8 +83,16 @@ export default function Login() {
           <button
             type="submit"
             className="w-full p-3 rounded bg-teal-600 text-white font-bold hover:bg-teal-700"
+            disabled={loading} // Vô hiệu hóa nút khi loading
           >
-            Login
+            {loading ? (
+              <div className="flex items-center justify-center">
+                <LoadingIcon />
+                Đang đăng nhập...
+              </div>
+            ) : (
+              'Login'
+            )}
           </button>
         </form>
       </div>

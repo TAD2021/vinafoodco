@@ -6,6 +6,7 @@ import { FaSearch } from 'react-icons/fa';
 import axiosInstance from '@/utils/axiosInstance'; // Adjust the path accordingly
 import { formatDate } from '@/utils/formatDate';
 import { formatCurrency } from '@/utils/formatCurrency';
+import Link from 'next/link';
 
 export default function Products() {
   const [products, setProducts] = useState([]);
@@ -44,9 +45,11 @@ export default function Products() {
             />
             <FaSearch className="absolute left-3 top-3 text-gray-400" />
           </div>
-          <button className="bg-purple-600 text-white px-4 py-2 rounded">
-            Add New
-          </button>
+          <Link href="products/add">
+            <button className="bg-purple-600 text-white px-4 py-2 rounded">
+              Add New
+            </button>
+          </Link>
         </div>
         <div className="bg-gray-800 rounded-lg p-4 overflow-x-auto">
           <table className="w-full text-left">
