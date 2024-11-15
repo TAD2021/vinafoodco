@@ -39,6 +39,7 @@ export default function Login() {
       // Lưu thông tin người dùng vào Redux
       dispatch(
         login({
+          id: data.metadata.user.id,
           name: data.metadata.user.name,
           email: data.metadata.user.email,
           accessToken: data.metadata.tokens.accessToken,

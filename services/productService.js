@@ -114,3 +114,48 @@ export const getProductByPages = async (pageNum, pageSize) => {
     currentPage: pageNum,
   };
 };
+
+export const createProduct = async ({
+  name,
+  description,
+  price,
+  stock,
+  slug,
+  categoryId,
+  userId,
+  tags,
+  images,
+  attributes,
+}) => {
+  return await prisma.product.create({
+    data: {
+      name,
+      description,
+      price,
+      stock,
+      slug,
+      userId,
+      categoryId,
+      tags: {
+        connect: Array.isArray(tags)
+          ? tags.map((tagId) => ({ id: tagId }))
+          : [], // Kiểm tra tags
+      },
+      images: {
+        create: Array.isArray(images)
+          ? images.map((image) => ({ url: image }))
+          : [], // Kiểm tra images
+      },
+      attributes: {
+        create: Array.isArray(attributes)
+          ? attributes.map((attribute) => ({
+              attributeName: attribute.attributeName,
+              attributeValue: attribute.attributeValue,
+              sortOrder: attribute.sortOrder,
+              displayType: attribute.displayType,
+            }))
+          : [], // Kiểm tra attributes
+      },
+    },
+  });
+};

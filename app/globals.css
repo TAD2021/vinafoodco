@@ -60,3 +60,37 @@ body {
     transform: rotate(360deg);
   }
 }
+
+/* styles/quill.css */
+
+.ql-toolbar.ql-snow {
+  background: #1f2937; /* Màu nền của thanh công cụ */
+}
+
+.ql-toolbar.ql-snow .ql-stroke {
+  stroke: white; /* Màu icon */
+}
+
+.ql-toolbar.ql-snow .ql-fill {
+  fill: white; /* Màu icon */
+}
+
+.ql-toolbar.ql-snow .ql-picker-options {
+  background: #1f2937; /* Màu nền của các tùy chọn */
+}
+
+.ql-toolbar.ql-snow .ql-picker-label {
+  color: white; /* Màu chữ của các tùy chọn */
+}
+
+.ql-toolbar.ql-snow .ql-picker-item {
+  color: white; /* Màu chữ của các mục trong menu */
+}
+
+.ql-toolbar.ql-snow .ql-picker-item:hover {
+  background: #4b5563; /* Màu nền khi hover */
+}
+
+.ql-toolbar.ql-snow .ql-button:hover {
+  background: #4b5563; /* Màu nền khi hover trên các nút */
+}

@@ -2,23 +2,28 @@
 
 import axiosInstance from '@/utils/axiosInstance';
 import { Fragment, useState, useEffect } from 'react';
-import ReactQuill from 'react-quill'; // Định nghĩa ReactQuill từ thư viện
+import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import { useSelector } from 'react-redux';
+import slugify from 'slugify'; // Nhập slugify
 
 export default function Add() {
+  const userId = useSelector((state) => state.auth.id); // Lấy id từ Redux
   const [attributes, setAttributes] = useState([
     { attributeName: '', attributeValues: [''], displayType: 'SINGLE_LINE' },
   ]);
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('');
   const [productName, setProductName] = useState('');
+  const [slug, setSlug] = useState(''); // Thêm state cho slug
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('');
   const [stock, setStock] = useState('');
-  const [imageFiles, setImageFiles] = useState([]); // Trạng thái để quản lý nhiều file hình ảnh
-  const [imagePreviews, setImagePreviews] = useState([]); // Trạng thái để lưu trữ URL hình ảnh đã chọn
-  const [tags, setTags] = useState([]); // Trạng thái để lưu trữ danh sách các tag
-  const [selectedTags, setSelectedTags] = useState([]); // Trạng thái để lưu trữ các tag đã chọn
+  const [imageFiles, setImageFiles] = useState([]);
+  const [imagePreviews, setImagePreviews] = useState([]);
+  const [tags, setTags] = useState([]);
+  const [selectedTags, setSelectedTags] = useState([]);
+
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -36,7 +41,7 @@ export default function Add() {
 
     const fetchTags = async () => {
       try {
-        const response = await axiosInstance.get('/api/tags'); // Thay đổi endpoint nếu cần
+        const response = await axiosInstance.get('/api/tags');
         if (response.data.status === 200) {
           setTags(response.data.metadata);
         }
@@ -48,6 +53,11 @@ export default function Add() {
     fetchTags();
     fetchCategories();
   }, []);
+
+  const handleProductNameChange = (name) => {
+    setProductName(name);
+    setSlug(slugify(name, { lower: true })); // Tạo slug từ tên sản phẩm
+  };
 
   const handleAddAttribute = () => {
     setAttributes([
@@ -82,8 +92,6 @@ export default function Add() {
   const handleImageUpload = (e) => {
     const files = Array.from(e.target.files);
     setImageFiles(files);
-
-    // Tạo URL cho từng file và lưu vào imagePreviews
     const previews = files.map((file) => URL.createObjectURL(file));
     setImagePreviews(previews);
   };
@@ -133,24 +141,50 @@ export default function Add() {
     // Prepare the data to send
     const productData = {
       name: productName,
+      slug: slug, // Thêm slug vào dữ liệu sản phẩm
+      userId: userId,
       description: description,
       price: parsedPrice,
       stock: parsedStock,
       categoryId: selectedCategory,
       attributes: formattedAttributes,
-      tags: selectedTags, // Assuming selectedTags contains the IDs of the selected tags
-      // Note: You can handle image uploads separately, as they typically require a different approach (e.g., FormData)
+      tags: selectedTags,
     };
 
     console.log('Product data to be sent:', productData);
 
-    // Send the data to the API
+    // Upload images to Cloudinary
     try {
+      const uploadPromises = imageFiles.map((file) => {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append(
+          'upload_preset',
+          process.env.NEXT_PUBLIC_CLOUDINARY_PRESET_NAME
+        );
+        return axiosInstance.post(
+          `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
+          formData
+        );
+      });
+
+      const uploadResponses = await Promise.all(uploadPromises);
+      const imageUrls = uploadResponses.map(
+        (response) => response.data.secure_url
+      );
+
+      console.log(imageUrls);
+
+      // Thêm URL hình ảnh vào dữ liệu sản phẩm
+      productData.images = imageUrls;
+
+      // Send the data to the API
       const response = await axiosInstance.post('/api/products', productData);
       if (response.data.status === 200) {
         alert('Product created successfully!');
         // Reset form if needed
         setProductName('');
+        setSlug(''); // Reset slug
         setDescription('');
         setPrice('');
         setStock('');
@@ -186,7 +220,7 @@ export default function Add() {
                 className="w-full p-2 bg-gray-700 rounded"
                 type="text"
                 value={productName}
-                onChange={(e) => setProductName(e.target.value)}
+                onChange={(e) => handleProductNameChange(e.target.value)} // Sử dụng hàm mới
               />
             </div>
             <div>
@@ -230,6 +264,16 @@ export default function Add() {
                   style={{ height: 'calc(100% - 40px)' }}
                   theme="snow"
                   value={description}
+                  modules={{
+                    toolbar: [
+                      [{ header: [1, 2, false] }],
+                      ['bold', 'italic', 'underline'],
+                      [{ align: [] }],
+                      ['link', 'image'],
+                      [{ list: 'ordered' }, { list: 'bullet' }],
+                      ['clean'], // Remove formatting button
+                    ],
+                  }}
                   onChange={setDescription}
                 />
               </div>
@@ -342,7 +386,7 @@ export default function Add() {
                       key={index}
                       src={preview}
                       alt={`Preview ${index + 1}`}
-                      className="w-32 h-32 object-cover rounded-lg border border-gray-600" // Điều chỉnh kích thước ảnh
+                      className="w-32 h-32 object-cover rounded-lg border border-gray-600"
                     />
                   ))}
                 </div>
@@ -354,20 +398,20 @@ export default function Add() {
                 {tags.map((tag) => (
                   <button
                     key={tag.id}
+                    type="button"
                     className={`mr-4 mb-2 px-4 py-2 rounded border transition-colors duration-300 
-          ${
-            selectedTags.includes(tag.id)
-              ? 'bg-teal-600 text-white border-teal-600'
-              : 'bg-gray-700 text-gray-300 border-gray-600'
-          }
-          hover:bg-teal-500 hover:text-white hover:border-teal-500`}
+        ${
+          selectedTags.includes(tag.id)
+            ? 'bg-teal-600 text-white border-teal-600'
+            : 'bg-gray-700 text-gray- 300 border-gray-600'
+        }
+        hover:bg-teal-500 hover:text-white hover:border-teal-500`}
                     onClick={() => {
                       const value = tag.id;
-                      setSelectedTags(
-                        (prev) =>
-                          prev.includes(value)
-                            ? prev.filter((id) => id !== value) // Bỏ chọn tag
-                            : [...prev, value] // Chọn tag
+                      setSelectedTags((prev) =>
+                        prev.includes(value)
+                          ? prev.filter((id) => id !== value)
+                          : [...prev, value]
                       );
                     }}
                   >
