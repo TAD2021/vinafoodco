@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { SuccessResponse } from '@/core/success.response';
 import { errorHandler } from '@/middleware/errorHandler';
-import { getProductByPages, getToTalProducts } from '@/services/productService';
+import { createProduct, getProductByPages } from '@/services/productService';
 import { BadRequestError } from '@/core/error.response';
 
 export const GET = errorHandler(async (req) => {
@@ -21,5 +21,13 @@ export const GET = errorHandler(async (req) => {
   return new SuccessResponse({
     message: 'Get products success',
     metadata: data,
+  }).send(NextResponse);
+});
+
+export const POST = errorHandler(async (req) => {
+  const requestBody = await req.json();
+  return new SuccessResponse({
+    message: 'Create a product success',
+    metadata: createProduct(requestBody),
   }).send(NextResponse);
 });

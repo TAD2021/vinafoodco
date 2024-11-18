@@ -69,6 +69,7 @@ model Product {
   createdAt   DateTime           @default(now())
   updatedAt   DateTime           @updatedAt
   stock       Int // Stock related to the product
+  isDeleted   Boolean            @default(false) // New field to check if the product is deleted
 }
 
 enum DisplayType {

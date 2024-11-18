@@ -40,3 +40,57 @@ body {
   line-clamp: 2;
   overflow: hidden;
 }
+
+/* styles.css hoặc một tệp CSS module */
+.spinner {
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  border-top: 4px solid #ffffff;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin: auto; /* Giữa */
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* styles/quill.css */
+
+.ql-toolbar.ql-snow {
+  background: #1f2937; /* Màu nền của thanh công cụ */
+}
+
+.ql-toolbar.ql-snow .ql-stroke {
+  stroke: white; /* Màu icon */
+}
+
+.ql-toolbar.ql-snow .ql-fill {
+  fill: white; /* Màu icon */
+}
+
+.ql-toolbar.ql-snow .ql-picker-options {
+  background: #1f2937; /* Màu nền của các tùy chọn */
+}
+
+.ql-toolbar.ql-snow .ql-picker-label {
+  color: white; /* Màu chữ của các tùy chọn */
+}
+
+.ql-toolbar.ql-snow .ql-picker-item {
+  color: white; /* Màu chữ của các mục trong menu */
+}
+
+.ql-toolbar.ql-snow .ql-picker-item:hover {
+  background: #4b5563; /* Màu nền khi hover */
+}
+
+.ql-toolbar.ql-snow .ql-button:hover {
+  background: #4b5563; /* Màu nền khi hover trên các nút */
+}

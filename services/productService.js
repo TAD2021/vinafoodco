@@ -114,3 +114,68 @@ export const getProductByPages = async (pageNum, pageSize) => {
     currentPage: pageNum,
   };
 };
+
+const generateUniqueSlug = async (slug) => {
+  let uniqueSlug = slug;
+  let count = 1;
+
+  // Kiểm tra slug có tồn tại hay không
+  while (await prisma.product.findUnique({ where: { slug: uniqueSlug } })) {
+    uniqueSlug = `${slug}-${count}`; // Thêm số đếm vào cuối slug
+    count++;
+  }
+
+  return uniqueSlug; // Trả về slug duy nhất
+};
+
+export const createProduct = async ({
+  name,
+  description,
+  price,
+  stock,
+  slug,
+  categoryId,
+  userId,
+  tags,
+  images,
+  attributes,
+}) => {
+  const uniqueSlug = await generateUniqueSlug(slug);
+
+  return await prisma.product.create({
+    data: {
+      name,
+      slug: uniqueSlug,
+      userId,
+      description,
+      price,
+      stock,
+      categoryId,
+      images: {
+        create: images.map((url) => ({ url })),
+      },
+      attributes: {
+        create: attributes.flatMap((attr) => {
+          // Nếu displayType là LIST, tạo một bản ghi cho mỗi giá trị
+          if (attr.displayType === 'LIST') {
+            return attr.attributeValues.map((value) => ({
+              attributeName: attr.attributeName,
+              attributeValue: value,
+              displayType: attr.displayType,
+            }));
+          } else {
+            // Nếu không, chỉ tạo một bản ghi cho giá trị đầu tiên
+            return {
+              attributeName: attr.attributeName,
+              attributeValue: attr.attributeValues[0],
+              displayType: attr.displayType,
+            };
+          }
+        }),
+      },
+      tags: {
+        connect: tags.map((tagId) => ({ id: tagId })),
+      },
+    },
+  });
+};

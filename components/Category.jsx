@@ -1,17 +1,18 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
-import { FaBars } from "react-icons/fa";
+import axiosInstance from '@/utils/axiosInstance';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { FaBars } from 'react-icons/fa';
 
 function Category() {
   const pathname = usePathname();
-  const [menuOpen, setMenuOpen] = useState(pathname === "/" ? true : false);
+  const [menuOpen, setMenuOpen] = useState(pathname === '/' ? true : false);
   const [categories, setCategories] = useState([]);
 
   const toggleMenu = () => {
-    if (pathname !== "/") {
+    if (pathname !== '/') {
       setMenuOpen(!menuOpen);
     }
   };
@@ -19,16 +20,16 @@ function Category() {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch('http://localhost:3000/api/categories');
-        const data = await response.json();
+        const response = await axiosInstance.get('/api/categories');
+        const data = response.data?.metadata;
         setCategories(data);
       } catch (error) {
-        console.error("Error fetching categories:", error);
+        console.error('Error fetching categories:', error);
       }
     };
 
     fetchCategories();
-  },[])
+  }, []);
 
   return (
     <div className="w-64 relative">
@@ -41,7 +42,7 @@ function Category() {
       </div>
       <div
         id="menu"
-        className={`bg-white absolute w-full ${menuOpen ? "block" : "hidden"}`}
+        className={`bg-white absolute w-full ${menuOpen ? 'block' : 'hidden'}`}
       >
         <ul>
           {categories.map((category) => (
