@@ -47,6 +47,7 @@ export const updateProductStock = async (cartItems, prismaClient = prisma) => {
 
 const getFormattedProducts = (products) => {
   return products.map((product) => ({
+    id: product.id,
     name: product.name,
     price: product.price,
     slug: product.slug,
@@ -58,6 +59,7 @@ const getFormattedProducts = (products) => {
 
 // Common product selection fields
 const commonSelect = {
+  id: true,
   name: true,
   price: true,
   slug: true,
@@ -73,6 +75,9 @@ const commonSelect = {
 
 export const getProductByCategory = async () => {
   const products = await prisma.product.findMany({
+    where: {
+      isDeleted: false, // Only select products that are not deleted
+    },
     select: {
       ...commonSelect,
       category: {
@@ -100,12 +105,19 @@ export const getProductByCategory = async () => {
 
 export const getProductByPages = async (pageNum, pageSize) => {
   const products = await prisma.product.findMany({
+    where: {
+      isDeleted: false, // Only select products that are not deleted
+    },
     skip: (pageNum - 1) * pageSize, // Bỏ qua số lượng sản phẩm đã có
     take: pageSize, // Lấy số lượng sản phẩm theo limit
     select: commonSelect,
   });
 
-  const totalProducts = await prisma.product.count();
+  const totalProducts = await prisma.product.count({
+    where: {
+      isDeleted: false, // Count only products that are not deleted
+    },
+  });
 
   return {
     products: getFormattedProducts(products),
@@ -177,5 +189,12 @@ export const createProduct = async ({
         connect: tags.map((tagId) => ({ id: tagId })),
       },
     },
+  });
+};
+
+export const deleteProduct = async (id) => {
+  return await prisma.product.update({
+    where: { id: Number(id) },
+    data: { isDeleted: true },
   });
 };

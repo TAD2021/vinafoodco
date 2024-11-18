@@ -3,23 +3,26 @@
 import Image from 'next/image';
 import { Fragment, useEffect, useState } from 'react';
 import { FaSearch } from 'react-icons/fa';
-import axiosInstance from '@/utils/axiosInstance'; // Adjust the path accordingly
+import axiosInstance from '@/utils/axiosInstance';
 import { formatDate } from '@/utils/formatDate';
 import { formatCurrency } from '@/utils/formatCurrency';
 import Link from 'next/link';
+import { DeleteModal } from '@/components/DeleteModal';
+import LoadingIcon from '@/components/LoadingIcon';
 
 export default function Products() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [productToDelete, setProductToDelete] = useState(null);
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const response = await axiosInstance.get(
           '/api/products?page=1&limit=5'
-        ); // Use the axios instance
-        console.log(response);
+        );
         setProducts(response.data?.metadata?.products);
       } catch (err) {
         setError(err.message);
@@ -31,7 +34,25 @@ export default function Products() {
     fetchProducts();
   }, []);
 
-  if (loading) return <div>Loading...</div>;
+  const handleDeleteClick = (product) => {
+    setProductToDelete(product);
+    setIsModalOpen(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    try {
+      await axiosInstance.delete(`/api/products/${productToDelete.id}`);
+      setProducts(
+        products.filter((product) => product.id !== productToDelete.id)
+      );
+      setIsModalOpen(false);
+      setProductToDelete(null);
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  if (loading) return <LoadingIcon />;
   if (error) return <div>Error: {error}</div>;
 
   return (
@@ -86,7 +107,10 @@ export default function Products() {
                     <button className="bg-green-600 text-white px-2 py-1 rounded mr-2">
                       View
                     </button>
-                    <button className="bg-red-600 text-white px-2 py-1 rounded">
+                    <button
+                      className="bg-red-600 text-white px-2 py-1 rounded"
+                      onClick={() => handleDeleteClick(product)}
+                    >
                       Delete
                     </button>
                   </td>
@@ -110,6 +134,13 @@ export default function Products() {
       <footer className="text-center mt-4">
         <p className="text-gray-400">© All rights reserved.</p>
       </footer>
+
+      <DeleteModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onConfirm={handleConfirmDelete}
+        productName={productToDelete?.name}
+      />
     </Fragment>
   );
 }
