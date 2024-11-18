@@ -26,7 +26,9 @@ function Aside() {
 
     const fetchNewProducts = async () => {
       try {
-        const response = await axiosInstance.get('/api/products?new=true');
+        const response = await axiosInstance.get(
+          '/api/products?page=1&limit=5'
+        );
         setNewProducts(response.data?.metadata?.products);
       } catch (error) {
         console.error('Error fetching new products:', error);
@@ -70,9 +72,13 @@ function Aside() {
           SẢN PHẨM MỚI NHẤT
         </h3>
         <ul className="space-y-4">
+          {' '}
+          {/* Giữ space-y-4 để có khoảng cách giữa các sản phẩm */}
           {newProducts.map((product) => (
             <Link key={product.slug} href={`/san-pham/${product.slug}`}>
-              <li className="flex items-center">
+              <li className="flex items-center mb-4">
+                {' '}
+                {/* Thêm margin-bottom cho mỗi sản phẩm */}
                 <Image
                   alt={product.name}
                   className="w-16 h-16 object-cover rounded mr-4"

@@ -27,6 +27,11 @@ const nextConfig = {
         hostname: 'st4.depositphotos.com',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'res.cloudinary.com',
+        pathname: '/**',
+      },
     ],
   },
 };

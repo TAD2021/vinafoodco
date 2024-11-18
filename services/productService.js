@@ -115,6 +115,19 @@ export const getProductByPages = async (pageNum, pageSize) => {
   };
 };
 
+const generateUniqueSlug = async (slug) => {
+  let uniqueSlug = slug;
+  let count = 1;
+
+  // Kiểm tra slug có tồn tại hay không
+  while (await prisma.product.findUnique({ where: { slug: uniqueSlug } })) {
+    uniqueSlug = `${slug}-${count}`; // Thêm số đếm vào cuối slug
+    count++;
+  }
+
+  return uniqueSlug; // Trả về slug duy nhất
+};
+
 export const createProduct = async ({
   name,
   description,
@@ -127,34 +140,41 @@ export const createProduct = async ({
   images,
   attributes,
 }) => {
+  const uniqueSlug = await generateUniqueSlug(slug);
+
   return await prisma.product.create({
     data: {
       name,
+      slug: uniqueSlug,
+      userId,
       description,
       price,
       stock,
-      slug,
-      userId,
       categoryId,
-      tags: {
-        connect: Array.isArray(tags)
-          ? tags.map((tagId) => ({ id: tagId }))
-          : [], // Kiểm tra tags
-      },
       images: {
-        create: Array.isArray(images)
-          ? images.map((image) => ({ url: image }))
-          : [], // Kiểm tra images
+        create: images.map((url) => ({ url })),
       },
       attributes: {
-        create: Array.isArray(attributes)
-          ? attributes.map((attribute) => ({
-              attributeName: attribute.attributeName,
-              attributeValue: attribute.attributeValue,
-              sortOrder: attribute.sortOrder,
-              displayType: attribute.displayType,
-            }))
-          : [], // Kiểm tra attributes
+        create: attributes.flatMap((attr) => {
+          // Nếu displayType là LIST, tạo một bản ghi cho mỗi giá trị
+          if (attr.displayType === 'LIST') {
+            return attr.attributeValues.map((value) => ({
+              attributeName: attr.attributeName,
+              attributeValue: value,
+              displayType: attr.displayType,
+            }));
+          } else {
+            // Nếu không, chỉ tạo một bản ghi cho giá trị đầu tiên
+            return {
+              attributeName: attr.attributeName,
+              attributeValue: attr.attributeValues[0],
+              displayType: attr.displayType,
+            };
+          }
+        }),
+      },
+      tags: {
+        connect: tags.map((tagId) => ({ id: tagId })),
       },
     },
   });

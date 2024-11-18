@@ -12,7 +12,6 @@ import {
 } from 'react-icons/fa';
 import ImageGallery from './ImageGallery';
 import { formatCurrency } from '@/utils/formatCurrency';
-import { parseListItems } from '@/utils/parseListItems';
 import Button from './Button';
 import CommentSection from './CommentSection';
 import useSlug from '@/hooks/useSlug';
@@ -81,6 +80,18 @@ function ProductDetail() {
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
 
+  // Tổ chức lại thuộc tính để hiển thị
+  const organizedAttributes = product.attributes.reduce((acc, attribute) => {
+    const { attributeName, attributeValue, displayType } = attribute;
+
+    // Nếu thuộc tính đã có trong acc, thêm giá trị vào mảng
+    if (!acc[attributeName]) {
+      acc[attributeName] = { displayType, values: [] };
+    }
+    acc[attributeName].values.push(attributeValue);
+    return acc;
+  }, {});
+
   return (
     <div className="w-full lg:w-3/4 lg:mr-6">
       <div className="bg-white rounded shadow p-6 mb-6">
@@ -93,17 +104,13 @@ function ProductDetail() {
             <p className="text-green-600 text-xl font-semibold">
               {formatCurrency(product.price)}
             </p>
-            {product.attributes
-              .sort((a, b) => a.sortOrder - b.sortOrder)
-              .map((attribute) => {
-                const { attributeName, attributeValue, displayType } =
-                  attribute;
-
+            {Object.entries(organizedAttributes).map(
+              ([attributeName, { displayType, values }]) => {
                 if (displayType === 'SINGLE_LINE') {
                   return (
                     <div key={attributeName}>
                       <p className="mt-2">
-                        <strong>{attributeName}:</strong> {attributeValue}
+                        <strong>{attributeName}:</strong> {values[0]}
                       </p>
                     </div>
                   );
@@ -116,12 +123,15 @@ function ProductDetail() {
                         <strong>{attributeName}:</strong>
                       </p>
                       <ul className="list-disc list-inside">
-                        {parseListItems(attributeValue)}
+                        {values.map((value, index) => (
+                          <li key={index}>{value}</li>
+                        ))}
                       </ul>
                     </div>
                   );
                 }
-              })}
+              }
+            )}
             <div className="mt-4">
               <p>
                 <strong>Tình trạng:</strong> Còn hàng
@@ -156,6 +166,25 @@ function ProductDetail() {
                 />
               </div>
             </div>
+            {/* Hiển thị tag sản phẩm */}
+            {product.tags && product.tags.length > 0 && (
+              <div className="mt-4">
+                <div className="flex items-center">
+                  <h2 className="font-semibold mr-2">Từ khoá:</h2>
+                  {/* Giảm cỡ chữ tiêu đề và thêm khoảng cách */}
+                  <div className="flex flex-wrap">
+                    {product.tags.map((tag, index) => (
+                      <span
+                        key={index}
+                        className="bg-gray-200 text-gray-700 text-sm px-2 py-1 rounded mr-2 mb-2" // Giảm cỡ chữ cho tag
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
             <div className="mt-4">
               <div className="flex">
                 <span className="mr-2">Chia sẻ:</span>
@@ -178,7 +207,7 @@ function ProductDetail() {
         {product.description && (
           <div className="mt-8">
             <h2 className="text-xl font-bold">Mô tả</h2>
-            {product.description}
+            <div dangerouslySetInnerHTML={{ __html: product.description }} />
           </div>
         )}
       </div>

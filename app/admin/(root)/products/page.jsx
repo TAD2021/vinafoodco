@@ -19,6 +19,7 @@ export default function Products() {
         const response = await axiosInstance.get(
           '/api/products?page=1&limit=5'
         ); // Use the axios instance
+        console.log(response);
         setProducts(response.data?.metadata?.products);
       } catch (err) {
         setError(err.message);
