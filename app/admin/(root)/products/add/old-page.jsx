@@ -1,10 +1,5 @@
 'use client';
 
-import { ImageUpload } from '@/components/admin/products/ImageUpload';
-import { InputText } from '@/components/admin/products/InputText';
-import { ProductAttributes } from '@/components/admin/products/ProductAttributes';
-import { SelectCategory } from '@/components/admin/products/SelectCategory';
-import { TagSelection } from '@/components/admin/products/TagSection';
 import axiosInstance from '@/utils/axiosInstance';
 import { Fragment, useState, useEffect } from 'react';
 import ReactQuill from 'react-quill';
@@ -219,26 +214,48 @@ export default function Add() {
           onSubmit={handleSubmit}
         >
           <div className="grid grid-cols-2 gap-4">
-            <InputText
-              label="Product Name"
-              value={productName}
-              onChange={(e) => handleProductNameChange(e.target.value)}
-            />
-            <SelectCategory
-              categories={categories}
-              selectedCategory={selectedCategory}
-              onChange={(e) => setSelectedCategory(e.target.value)}
-            />
-            <InputText
-              label="Price"
-              value={price}
-              onChange={(e) => setPrice(e.target.value)}
-            />
-            <InputText
-              label="Stock"
-              value={stock}
-              onChange={(e) => setStock(e.target.value)}
-            />
+            <div>
+              <label className="block mb-2">Product Name</label>
+              <input
+                className="w-full p-2 bg-gray-700 rounded"
+                type="text"
+                value={productName}
+                onChange={(e) => handleProductNameChange(e.target.value)} // Sử dụng hàm mới
+              />
+            </div>
+            <div>
+              <label className="block mb-2">Category</label>
+              <select
+                className="w-full p-2 bg-gray-700 rounded"
+                value={selectedCategory}
+                onChange={(e) => setSelectedCategory(e.target.value)}
+              >
+                <option value="">Select a category</option>
+                {categories.map((category) => (
+                  <option key={category.id} value={category.id}>
+                    {category.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="block mb-2">Price</label>
+              <input
+                className="w-full p-2 bg-gray-700 rounded"
+                type="text"
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
+              />
+            </div>
+            <div>
+              <label className="block mb-2">Stock</label>
+              <input
+                className="w-full p-2 bg-gray-700 rounded"
+                type="text"
+                value={stock}
+                onChange={(e) => setStock(e.target.value)}
+              />
+            </div>
             <div className="col-span-2">
               <label className="block mb-2">Description</label>
               <div className="bg-gray-700 rounded h-48">
@@ -254,36 +271,155 @@ export default function Add() {
                       [{ align: [] }],
                       ['link', 'image'],
                       [{ list: 'ordered' }, { list: 'bullet' }],
-                      ['clean'],
+                      ['clean'], // Remove formatting button
                     ],
                   }}
                   onChange={setDescription}
                 />
               </div>
             </div>
-            <ProductAttributes
-              attributes={attributes}
-              handleAttributeChange={handleAttributeChange}
-              handleValueChange={handleValueChange}
-              handleAddAttribute={handleAddAttribute}
-              handleRemoveAttribute={handleRemoveAttribute}
-              handleAddValue={handleAddValue}
-            />
-            <ImageUpload
-              onChange={handleImageUpload}
-              imagePreviews={imagePreviews}
-            />
-            <TagSelection
-              tags={tags}
-              selectedTags={selectedTags}
-              onTagClick={(tagId) => {
-                setSelectedTags((prev) =>
-                  prev.includes(tagId)
-                    ? prev.filter((id) => id !== tagId)
-                    : [...prev, tagId]
-                );
-              }}
-            />
+            <div className="col-span-2">
+              <label className="block mb-4 text-lg font-semibold">
+                Product Attributes
+              </label>
+              {attributes.map((attr, index) => (
+                <div
+                  key={index}
+                  className="border p-4 rounded-lg mb-4 bg-gray-800"
+                >
+                  <div className="flex space-x-2 mb-2">
+                    <input
+                      className="w-1/2 p-2 bg-gray-700 rounded"
+                      type="text"
+                      placeholder="Attribute Name"
+                      value={attr.attributeName}
+                      onChange={(e) =>
+                        handleAttributeChange(
+                          index,
+                          'attributeName',
+                          e.target.value
+                        )
+                      }
+                    />
+                    <select
+                      className="w-1/2 p-2 bg-gray-700 rounded"
+                      value={attr.displayType}
+                      onChange={(e) =>
+                        handleAttributeChange(
+                          index,
+                          'displayType',
+                          e.target.value
+                        )
+                      }
+                    >
+                      <option value="SINGLE_LINE">Single Line</option>
+                      <option value="LIST">List</option>
+                    </select>
+                  </div>
+                  <div className="flex flex-col space-y-2">
+                    {attr.displayType === 'SINGLE_LINE' ? (
+                      <input
+                        className="w-full p-2 bg-gray-700 rounded"
+                        type="text"
+                        placeholder="Attribute Value"
+                        value={attr.attributeValues[0]}
+                        onChange={(e) =>
+                          handleValueChange(index, 0, e.target.value)
+                        }
+                      />
+                    ) : (
+                      attr.attributeValues.map((value, valueIndex) => (
+                        <input
+                          key={valueIndex}
+                          className="w-full p-2 bg-gray-700 rounded"
+                          type="text"
+                          placeholder="Attribute Value"
+                          value={value}
+                          onChange={(e) =>
+                            handleValueChange(index, valueIndex, e.target.value)
+                          }
+                        />
+                      ))
+                    )}
+                    {attr.displayType === 'LIST' && (
+                      <button
+                        type="button"
+                        className="mt-2 p-2 bg-teal-600 text-white rounded"
+                        onClick={() => handleAddValue(index)}
+                      >
+                        + Add Value
+                      </button>
+                    )}
+                  </div>
+                  {attributes.length > 1 && (
+                    <button
+                      type="button"
+                      className="mt-2 text-red-600"
+                      onClick={() => handleRemoveAttribute(index)}
+                    >
+                      - Remove Attribute
+                    </button>
+                  )}
+                </div>
+              ))}
+              <button
+                type="button"
+                className="mt-2 p-2 bg-teal-600 text-white rounded"
+                onClick={handleAddAttribute}
+              >
+                + Add Attribute
+              </button>
+            </div>
+            <div className="col-span-2">
+              <label className="block mb-2">Upload Images</label>
+              <input
+                type="file"
+                accept="image/*"
+                multiple
+                onChange={handleImageUpload}
+                className="w-full p-2 bg-gray-700 rounded"
+              />
+              {imagePreviews.length > 0 && (
+                <div className="mt-4 grid grid-cols-2 gap-4">
+                  {imagePreviews.map((preview, index) => (
+                    <img
+                      key={index}
+                      src={preview}
+                      alt={`Preview ${index + 1}`}
+                      className="w-32 h-32 object-cover rounded-lg border border-gray-600"
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
+            <div className="col-span-2">
+              <label className="block mb-2">Select Tags</label>
+              <div className="flex flex-wrap">
+                {tags.map((tag) => (
+                  <button
+                    key={tag.id}
+                    type="button"
+                    className={`mr-4 mb-2 px-4 py-2 rounded border transition-colors duration-300 
+        ${
+          selectedTags.includes(tag.id)
+            ? 'bg-teal-600 text-white border-teal-600'
+            : 'bg-gray-700 text-gray- 300 border-gray-600'
+        }
+        hover:bg-teal-500 hover:text-white hover:border-teal-500`}
+                    onClick={() => {
+                      const value = tag.id;
+                      setSelectedTags((prev) =>
+                        prev.includes(value)
+                          ? prev.filter((id) => id !== value)
+                          : [...prev, value]
+                      );
+                    }}
+                  >
+                    {tag.name}
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
           <div className="mt-6">
             <button
