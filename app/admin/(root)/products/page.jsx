@@ -104,9 +104,11 @@ export default function Products() {
                   <td className="py-2">{formatDate(product.updatedAt)}</td>
                   <td className="py-2">{product.stock}</td>
                   <td className="py-2">
-                    <button className="bg-green-600 text-white px-2 py-1 rounded mr-2">
-                      View
-                    </button>
+                    <Link href={`products/${product.slug}`}>
+                      <button className="bg-green-600 text-white px-2 py-1 rounded mr-2">
+                        View
+                      </button>
+                    </Link>
                     <button
                       className="bg-red-600 text-white px-2 py-1 rounded"
                       onClick={() => handleDeleteClick(product)}

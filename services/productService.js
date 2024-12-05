@@ -1,5 +1,5 @@
 import { metadata } from '@/app/(root)/layout';
-import { BadRequestError } from '@/core/error.response';
+import { BadRequestError, NotFoundError } from '@/core/error.response';
 import prisma from '@/lib/prisma';
 
 export const getProductById = async (productId, prismaClient = prisma) => {
@@ -187,6 +187,69 @@ export const createProduct = async ({
       },
       tags: {
         connect: tags.map((tagId) => ({ id: tagId })),
+      },
+    },
+  });
+};
+
+export const updateProduct = async (
+  slug,
+  {
+    name,
+    description,
+    price,
+    stock,
+    categoryId,
+    userId,
+    tags,
+    images,
+    attributes,
+  }
+) => {
+  const existingProduct = await prisma.product.findUnique({
+    where: { slug: slug },
+  });
+
+  if (!existingProduct) {
+    throw new NotFoundError('Product not found');
+  }
+
+  return await prisma.product.update({
+    where: { slug: slug },
+    data: {
+      name,
+      description,
+      price,
+      slug,
+      userId,
+      categoryId,
+      stock,
+      attributes: {
+        deleteMany: {}, // Xóa tất cả thuộc tính cũ (nếu cần)
+        create: attributes
+          ? attributes.flatMap((attr) => {
+              if (attr.displayType === 'LIST') {
+                return attr.attributeValues.map((value) => ({
+                  attributeName: attr.attributeName,
+                  attributeValue: value,
+                  displayType: attr.displayType,
+                }));
+              } else {
+                return {
+                  attributeName: attr.attributeName,
+                  attributeValue: attr.attributeValues[0],
+                  displayType: attr.displayType,
+                };
+              }
+            })
+          : [],
+      },
+      tags: {
+        set: tags.map((tagId) => ({ id: tagId })),
+      },
+      images: {
+        deleteMany: {}, // Xóa tất cả hình ảnh cũ (nếu cần)
+        create: images ? images.map((url) => ({ url })) : [], // Tạo các hình ảnh mới nếu có
       },
     },
   });
