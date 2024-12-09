@@ -1,0 +1,17 @@
+npx prisma migrate deploy
+npx prisma db seed
+
+1. Danh sách Đơn Hàng
+Hiển thị danh sách tất cả các đơn hàng với các thông tin cơ bản như mã đơn hàng, tên khách hàng, tổng giá trị, trạng thái và ngày tạo.
+2. Tìm kiếm Đơn Hàng
+Cho phép admin tìm kiếm đơn hàng theo mã đơn hàng hoặc tên khách hàng để dễ dàng truy cập thông tin.
+3. Lọc Đơn Hàng
+Cung cấp tùy chọn lọc đơn hàng theo trạng thái (ví dụ: "PENDING", "SHIPPED", "DELIVERED", "CANCELED") để dễ dàng quản lý.
+4. Chi tiết Đơn Hàng
+Cho phép xem chi tiết đơn hàng khi nhấp vào mã đơn hàng, bao gồm thông tin khách hàng, địa chỉ giao hàng, danh sách sản phẩm và ghi chú.
+5. Cập nhật Trạng Thái Đơn Hàng
+Cho phép admin cập nhật trạng thái đơn hàng (ví dụ: từ "PENDING" sang "SHIPPED") thông qua một dropdown hoặc button.
+6. Hủy Đơn Hàng
+Cung cấp tùy chọn để hủy đơn hàng và ghi chú lý do hủy, với xác nhận trước khi thực hiện hành động này.
+7. Phân Trang
+Cung cấp tính năng phân trang để hiển thị một số lượng đơn hàng

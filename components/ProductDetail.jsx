@@ -176,9 +176,10 @@ function ProductDetail() {
                     {product.tags.map((tag, index) => (
                       <span
                         key={index}
-                        className="bg-gray-200 text-gray-700 text-sm px-2 py-1 rounded mr-2 mb-2" // Giảm cỡ chữ cho tag
+                        className="bg-gray-200 text-gray-700 text-xs px-3 py-1 rounded mr-2 mb-2"
                       >
-                        {tag}
+                        {tag.name}{' '}
+                        {/* Assuming tag is an object and the name is the key */}
                       </span>
                     ))}
                   </div>

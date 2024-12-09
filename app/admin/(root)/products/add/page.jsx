@@ -13,7 +13,7 @@ import { useSelector } from 'react-redux';
 import slugify from 'slugify'; // Nhập slugify
 
 export default function Add() {
-  const userId = useSelector((state) => state.auth.id); // Lấy id từ Redux
+  const userId = useSelector((state) => state.auth.id);
   const [attributes, setAttributes] = useState([
     { attributeName: '', attributeValues: [''], displayType: 'SINGLE_LINE' },
   ]);
