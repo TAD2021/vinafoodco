@@ -78,8 +78,6 @@ export const PATCH = errorHandler(async (req) => {
   const requestBody = await req.json();
   const pathParts = req.nextUrl.pathname.split('/');
   const slug = pathParts[3];
-  console.log(slug);
-  console.log(requestBody);
 
   return new SuccessResponse({
     message: 'Create a product success',

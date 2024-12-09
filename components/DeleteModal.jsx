@@ -1,17 +1,19 @@
-export const DeleteModal = ({ isOpen, onClose, onConfirm, productName }) => {
+export const DeleteModal = ({
+  isOpen,
+  onClose,
+  onConfirm,
+  itemName,
+  itemType,
+}) => {
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
       <div className="bg-white rounded-lg p-4">
-        <h2 className="text-lg font-bold text-black">Confirm Deletion</h2>{' '}
-        {/* Changed color to black */}
+        <h2 className="text-lg font-bold text-black">Confirm Deletion</h2>
         <p className="text-black">
-          {' '}
-          {/* Changed color to black */}
-          Are you sure you want to delete this product:
-          <strong className="text-black">{productName}</strong>{' '}
-          {/* Changed color to black */}?
+          Are you sure you want to delete this {itemType}:
+          <strong className="text-black">{itemName}</strong>?
         </p>
         <div className="flex justify-end mt-4">
           <button

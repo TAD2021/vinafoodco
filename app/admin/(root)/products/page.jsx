@@ -141,7 +141,8 @@ export default function Products() {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onConfirm={handleConfirmDelete}
-        productName={productToDelete?.name}
+        itemName={productToDelete?.name}
+        itemType="product"
       />
     </Fragment>
   );

@@ -126,8 +126,8 @@ model Comment {
 
 enum OrderStatus {
   PENDING
-  SHIPPED
-  DELIVERED
+  PROCESSING
+  COMPLETED
   CANCELED
 }
 
@@ -148,6 +148,7 @@ model Order {
   district    String // Quận
   province    String // Tỉnh/Thành phố
   note        String? // Ghi chú tùy chọn cho đơn hàng
+  isDeleted   Boolean     @default(false) // Trường đánh dấu đã xóa
 }
 
 model OrderItem {
