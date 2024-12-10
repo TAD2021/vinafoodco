@@ -2,16 +2,16 @@
 import Image from 'next/image';
 import {
   FaExchangeAlt,
-  FaFileAlt,
   FaCogs,
   FaSignOutAlt,
   FaQuestionCircle,
   FaUserCog,
-  FaChartLine,
   FaBox,
   FaTachometerAlt,
   FaUsers,
+  FaTags,
 } from 'react-icons/fa';
+import { TbCategoryFilled } from 'react-icons/tb';
 
 export const Sidebar = ({ isOpen, toggleSidebar, currentPath }) => {
   return (
@@ -87,23 +87,23 @@ export const Sidebar = ({ isOpen, toggleSidebar, currentPath }) => {
           <li className="mb-4">
             <a
               className={`flex items-center p-2 ${
-                currentPath === '/admin/revenue' ? 'bg-gray-700' : ''
+                currentPath === '/admin/tags' ? 'bg-gray-700' : ''
               }`}
-              href="/admin/revenue"
+              href="/admin/tags"
             >
-              <FaChartLine className="mr-3" />
-              Revenue
+              <FaTags className="mr-3" />
+              Tags
             </a>
           </li>
           <li className="mb-4">
             <a
               className={`flex items-center p-2 ${
-                currentPath === '/admin/reports' ? 'bg-gray-700' : ''
+                currentPath === '/admin/categories' ? 'bg-gray-700' : ''
               }`}
-              href="/admin/reports"
+              href="/admin/categories"
             >
-              <FaFileAlt className="mr-3" />
-              Reports
+              <TbCategoryFilled className="mr-3" />
+              Categories
             </a>
           </li>
           <li className="mb-4">
