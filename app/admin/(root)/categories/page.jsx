@@ -7,25 +7,25 @@ import axiosInstance from '@/utils/axiosInstance';
 import LoadingIcon from '@/components/LoadingIcon';
 import AddItemModal from '@/components/AddItemModal';
 
-export default function TagsAdmin() {
-  const [tags, setTags] = useState([]);
+export default function CategoriesAdmin() {
+  const [categories, setCategories] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [tagToDelete, setTagToDelete] = useState(null);
+  const [categoryToDelete, setCategoryToDelete] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetchTags();
+    fetchCategories();
   }, []);
 
-  const fetchTags = async () => {
+  const fetchCategories = async () => {
     setLoading(true);
     try {
-      const response = await axiosInstance.get('/api/tags');
+      const response = await axiosInstance.get('/api/categories');
       if (response.data.status === 200) {
-        setTags(response.data.metadata);
+        setCategories(response.data.metadata);
       }
     } catch (err) {
       setError(err.message);
@@ -34,35 +34,39 @@ export default function TagsAdmin() {
     }
   };
 
-  const handleAddTag = async (tag) => {
+  const handleAddCategory = async (categoryData) => {
     try {
-      // Chỉ truyền giá trị chuỗi cho trường name
-      const response = await axiosInstance.post('/api/tags', { name: tag.name });
+      const response = await axiosInstance.post(
+        '/api/categories',
+        categoryData
+      );
       if (response.status === 201) {
-        fetchTags();
+        fetchCategories();
         setIsModalOpen(false);
       }
     } catch (error) {
-      console.error('Error creating tag:', error);
-      setError('Error creating tag');
+      console.error('Error creating category:', error);
+      setError('Error creating category');
     }
   };
 
-  const filteredTags = tags.filter((tag) =>
-    tag.name.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredCategories = categories.filter((category) =>
+    category.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const handleDeleteClick = (tag) => {
-    setTagToDelete(tag);
+  const handleDeleteClick = (category) => {
+    setCategoryToDelete(category);
     setIsDeleteModalOpen(true);
   };
 
   const handleConfirmDelete = async () => {
     try {
-      await axiosInstance.delete(`/api/tags/${tagToDelete.id}`);
-      setTags(tags.filter((tag) => tag.id !== tagToDelete.id));
+      await axiosInstance.delete(`/api/categories/${categoryToDelete.id}`);
+      setCategories(
+        categories.filter((category) => category.id !== categoryToDelete.id)
+      );
       setIsDeleteModalOpen(false);
-      setTagToDelete(null);
+      setCategoryToDelete(null);
     } catch (err) {
       setError(err.message);
     }
@@ -78,7 +82,7 @@ export default function TagsAdmin() {
           <div className="relative w-full md:w-auto mb-4 md:mb-0">
             <input
               className="bg-gray-800 text-gray-400 rounded-full pl-10 pr-4 py-2 w-full md:w-auto focus:outline-none"
-              placeholder="Search for a tag"
+              placeholder="Search for a category"
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -87,7 +91,7 @@ export default function TagsAdmin() {
           </div>
           <button
             className="bg-purple-600 text-white px-4 py-2 rounded"
-            onClick={() => setIsModalOpen(true)} // Mở modal thêm tag
+            onClick={() => setIsModalOpen(true)} // Mở modal thêm danh mục
           >
             Add New
           </button>
@@ -96,18 +100,22 @@ export default function TagsAdmin() {
           <table className="w-full text-left">
             <thead>
               <tr className="text-gray-400">
-                <th className="py-2">Tag Name</th>
+                <th className="py-2">Category Name</th>
+                <th className="py-2">Slug</th>
+                <th className="py-2">Description</th>
                 <th className="py-2">Action</th>
               </tr>
             </thead>
             <tbody>
-              {filteredTags.map((tag) => (
-                <tr key={tag.id} className="border-b border-gray-700">
-                  <td className="py-2">{tag.name}</td>
+              {filteredCategories.map((category) => (
+                <tr key={category.id} className="border-b border-gray-700">
+                  <td className="py-2">{category.name}</td>
+                  <td className="py-2">{category.slug}</td>
+                  <td className="py-2">{category.description || 'N/A'}</td>
                   <td className="py-2">
                     <button
                       className="bg-red-600 text-white px-2 py-1 rounded"
-                      onClick={() => handleDeleteClick(tag)}
+                      onClick={() => handleDeleteClick(category)}
                     >
                       Delete
                     </button>
@@ -132,18 +140,19 @@ export default function TagsAdmin() {
       <footer className="text-center mt-4">
         <p className="text-gray-400">© All rights reserved.</p>
       </footer>
+
       <AddItemModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        onAdd={handleAddTag}
-        itemType="tag"
+        onAdd={handleAddCategory}
+        itemType="category"
       />
       <DeleteModal
         isOpen={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}
         onConfirm={handleConfirmDelete}
-        itemName={tagToDelete?.name}
-        itemType="tag"
+        itemName={categoryToDelete?.name}
+        itemType="category"
       />
     </Fragment>
   );
