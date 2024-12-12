@@ -36,10 +36,10 @@ export default function RootLayout({ children }) {
         return 'Products';
       case '/admin/transactions':
         return 'Transactions';
-      case '/admin/revenue':
-        return 'Revenue';
-      case '/admin/reports':
-        return 'Reports';
+      case '/admin/tags':
+        return 'Tags';
+      case '/admin/categories':
+        return 'Categories';
       case '/admin/teams':
         return 'Teams';
       case '/admin/settings':

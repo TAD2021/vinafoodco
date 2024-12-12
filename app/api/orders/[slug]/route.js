@@ -8,9 +8,6 @@ export const PUT = errorHandler(async (req) => {
   const { status } = await req.json();
   const pathParts = req.nextUrl.pathname.split('/');
   const id = pathParts[3];
-
-  console.log(status);
-  // Validate the status
   if (
     !status ||
     !['PENDING', 'PROCESSING', 'COMPLETED', 'CANCELED'].includes(status)
