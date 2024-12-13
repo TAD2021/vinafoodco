@@ -1,31 +1,19 @@
 import { NextResponse } from 'next/server';
-import prisma from "@/lib/prisma";
+import { SuccessResponse } from '@/core/success.response';
+import { errorHandler } from '@/middleware/errorHandler';
+import { createPost, getPosts } from '@/services/postService';
 
-export async function GET() {
-    try {
-        const posts = await prisma.post.findMany({
-            take: 3, // Lấy 3 tin tức mới nhất
-            orderBy: { createdAt: 'desc' }, // Sắp xếp theo thời gian tạo mới nhất
-            select: { // Chọn các trường cần lấy
-                id: true,
-                title: true,
-                content: true,
-                thumbnail: true,
-                slug: true,
-                type: true,
-                author: {
-                    select: {
-                        id: true,
-                        name: true, // Giả sử bạn có trường 'name' trong model User
-                    },
-                },
-                createdAt: true,
-            },
-        });
+export const GET = errorHandler(async () => {
+  return new SuccessResponse({
+    message: 'Get posts success',
+    metadata: await getPosts(),
+  }).send(NextResponse);
+});
 
-        return NextResponse.json(posts, { status: 200 });
-    } catch (error) {
-        console.error(error);
-        return NextResponse.json({message: 'Internal server error'}, { status: 500 });
-    }
-}
+export const POST = errorHandler(async (req) => {
+  const reqBody = await req.json();
+  return new SuccessResponse({
+    message: 'Create post success',
+    metadata: await createPost(reqBody),
+  }).send(NextResponse);
+});

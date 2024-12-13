@@ -1,20 +1,14 @@
 import { NextResponse } from 'next/server';
-import prisma from "@/lib/prisma";
+import { SuccessResponse } from '@/core/success.response';
+import { errorHandler } from '@/middleware/errorHandler';
+import { getPost } from '@/services/postService';
 
-export async function GET(req, {params}) {
-    const { slug } = params;
-    try {
-        const post = await prisma.post.findUnique({
-            where: { slug: slug },
-        });
+export const GET = errorHandler(async (req) => {
+  const pathParts = req.nextUrl.pathname.split('/');
+  const slug = pathParts[3];
 
-        if (!post) {
-            return NextResponse.json({message: 'Post not found'}, { status: 404 });
-        }
-
-        return NextResponse.json(post, { status: 200 });
-    } catch (error) {
-        console.error(error);
-        return NextResponse.json({message: 'Internal server error'}, { status: 500 });
-    }
-}
+  return new SuccessResponse({
+    message: 'Get categories success',
+    metadata: await getPost(slug),
+  }).send(NextResponse);
+});

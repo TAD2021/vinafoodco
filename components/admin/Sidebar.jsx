@@ -2,7 +2,6 @@
 import Image from 'next/image';
 import {
   FaExchangeAlt,
-  FaCogs,
   FaSignOutAlt,
   FaQuestionCircle,
   FaBox,
@@ -12,6 +11,7 @@ import {
 } from 'react-icons/fa';
 import { TbCategoryFilled } from 'react-icons/tb';
 import { MdPayments } from 'react-icons/md';
+import { GrArticle } from 'react-icons/gr';
 
 export const Sidebar = ({ isOpen, toggleSidebar, currentPath }) => {
   return (
@@ -120,12 +120,12 @@ export const Sidebar = ({ isOpen, toggleSidebar, currentPath }) => {
           <li className="mb-4">
             <a
               className={`flex items-center p-2 ${
-                currentPath === '/admin/settings' ? 'bg-gray-700' : ''
+                currentPath === '/admin/posts' ? 'bg-gray-700' : ''
               }`}
-              href="/admin/settings"
+              href="/admin/posts"
             >
-              <FaCogs className="mr-3" />
-              Settings
+              <GrArticle className="mr-3" />
+              Posts
             </a>
           </li>
           <li className="mb-4">

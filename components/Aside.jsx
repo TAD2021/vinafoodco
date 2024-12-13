@@ -37,8 +37,8 @@ function Aside() {
 
     const fetchLatestPosts = async () => {
       try {
-        const response = await fetch('http://localhost:3000/api/posts');
-        const data = await response.json();
+        const response = await axiosInstance.get(`/api/posts`);
+        const data = response.data?.metadata;
         setLatestPosts(data);
       } catch (error) {
         console.error('Error fetching latest news:', error);

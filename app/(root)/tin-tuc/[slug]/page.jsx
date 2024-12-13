@@ -3,10 +3,10 @@
 import Aside from '@/components/Aside';
 import CommentSection from '@/components/CommentSection';
 import useSlug from '@/hooks/useSlug';
+import axiosInstance from '@/utils/axiosInstance';
 import { formatDate } from '@/utils/formatDate';
 import { useEffect, useState } from 'react';
 import { CiCalendar, CiStar } from 'react-icons/ci';
-import { FaEye } from 'react-icons/fa';
 
 export default function PostDetail() {
   const slug = useSlug();
@@ -16,8 +16,8 @@ export default function PostDetail() {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const response = await fetch(`/api/posts/${slug}`);
-        const data = await response.json();
+        const response = await axiosInstance.get(`/api/posts/${slug}`);
+        const data = response.data?.metadata;
         setPost(data);
       } catch (error) {
         setError(error.message);

@@ -10,7 +10,7 @@ const Home = async () => {
 
   // Extract data from the responses
   const products = productsResponse.data?.metadata;
-  const posts = postsResponse.data;
+  const posts = postsResponse.data?.metadata;
 
   const images = [
     'https://i.pinimg.com/564x/3c/7c/08/3c7c08fcdd19c3ce36dff50fd414d775.jpg',

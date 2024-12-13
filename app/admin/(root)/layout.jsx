@@ -42,8 +42,8 @@ export default function RootLayout({ children }) {
         return 'Categories';
       case '/admin/payments':
         return 'Payments';
-      case '/admin/settings':
-        return 'Settings';
+      case '/admin/posts':
+        return 'Posts';
       case '/admin/help':
         return 'Help';
       case '/admin/logout':
