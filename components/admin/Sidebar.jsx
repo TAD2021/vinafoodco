@@ -5,13 +5,13 @@ import {
   FaCogs,
   FaSignOutAlt,
   FaQuestionCircle,
-  FaUserCog,
   FaBox,
   FaTachometerAlt,
   FaUsers,
   FaTags,
 } from 'react-icons/fa';
 import { TbCategoryFilled } from 'react-icons/tb';
+import { MdPayments } from 'react-icons/md';
 
 export const Sidebar = ({ isOpen, toggleSidebar, currentPath }) => {
   return (
@@ -109,12 +109,12 @@ export const Sidebar = ({ isOpen, toggleSidebar, currentPath }) => {
           <li className="mb-4">
             <a
               className={`flex items-center p-2 ${
-                currentPath === '/admin/teams' ? 'bg-gray-700' : ''
+                currentPath === '/admin/payments' ? 'bg-gray-700' : ''
               }`}
-              href="/admin/teams"
+              href="/admin/payments"
             >
-              <FaUserCog className="mr-3" />
-              Teams
+              <MdPayments className="mr-3" />
+              Payments
             </a>
           </li>
           <li className="mb-4">

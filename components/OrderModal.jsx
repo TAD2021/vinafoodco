@@ -6,16 +6,9 @@ const OrderModal = ({ isOpen, onClose, order }) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
       <div className="bg-white rounded-lg p-8 w-11/12 md:w-2/3 lg:w-1/2">
-        {' '}
-        {/* Thay đổi kích thước modal */}
-        <h2 className="text-2xl font-bold mb-4 text-black">
-          Order Details
-        </h2>{' '}
-        {/* Thay đổi màu chữ */}
+        <h2 className="text-2xl font-bold mb-4 text-black">Order Details</h2>
         {order && (
           <div className="text-black">
-            {' '}
-            {/* Thay đổi màu chữ cho toàn bộ nội dung */}
             <p>
               <strong>Order ID:</strong> {order.id}
             </p>

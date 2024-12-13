@@ -1,14 +1,11 @@
 import { NextResponse } from 'next/server';
-import prisma from "@/lib/prisma";
+import { SuccessResponse } from '@/core/success.response';
+import { errorHandler } from '@/middleware/errorHandler';
+import { getPayments } from '@/services/paymentService';
 
-export async function GET() {
-    try {
-        const paymentMethods = await prisma.paymentMethod.findMany();
-        return NextResponse.json({paymentMethods}, { status: 200 });
-    } catch (error) {
-        console.error('Error fetching payment methods:', error);
-        return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
-    } finally {
-        await prisma.$disconnect();
-    }
-}
+export const GET = errorHandler(async () => {
+  return new SuccessResponse({
+    message: 'Get payment methods success',
+    metadata: await getPayments(),
+  }).send(NextResponse);
+});
