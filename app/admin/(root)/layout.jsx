@@ -27,33 +27,20 @@ export default function RootLayout({ children }) {
 
   // Determine the title based on the pathname
   const getTitle = () => {
-    switch (pathname) {
-      case '/admin/dashboard':
-        return 'Dashboard';
-      case '/admin/users':
-        return 'Users';
-      case '/admin/products':
-        return 'Products';
-      case '/admin/transactions':
-        return 'Transactions';
-      case '/admin/tags':
-        return 'Tags';
-      case '/admin/categories':
-        return 'Categories';
-      case '/admin/payments':
-        return 'Payments';
-      case '/admin/posts':
-        return 'Posts';
-      case '/admin/help':
-        return 'Help';
-      case '/admin/logout':
-        return 'Logout';
-      default:
-        return 'Dashboard';
-    }
+    const titles = {
+      '/admin/dashboard': 'Dashboard',
+      '/admin/users': 'Users',
+      '/admin/products': 'Products',
+      '/admin/transactions': 'Transactions',
+      '/admin/tags': 'Tags',
+      '/admin/categories': 'Categories',
+      '/admin/payments': 'Payments',
+      '/admin/posts': 'Posts',
+      '/admin/help': 'Help',
+    };
+    return titles[pathname] || 'Dashboard';
   };
 
-  // Render the component only on the client side
   return (
     <html lang="en">
       <body className={`bg-gray-900 text-white ${inter.className}`}>
@@ -73,6 +60,8 @@ export default function RootLayout({ children }) {
                 <div
                   className="fixed top-0 left-0 w-full h-full bg-gray-800 opacity-50 backdrop"
                   onClick={handleBackdropClick}
+                  role="button"
+                  aria-label="Close sidebar"
                 ></div>
               )}
             </div>

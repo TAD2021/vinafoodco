@@ -36,6 +36,15 @@ export const createPost = async ({
     throw new BadRequestError('Missing required fields');
   }
 
+  // Kiểm tra xem slug đã tồn tại hay chưa
+  const existingPost = await prisma.post.findUnique({
+    where: { slug },
+  });
+
+  if (existingPost) {
+    throw new BadRequestError('Slug must be unique');
+  }
+
   return await prisma.post.create({
     data: {
       title,
@@ -45,5 +54,38 @@ export const createPost = async ({
       slug,
       type,
     },
+  });
+};
+
+export const updatePost = async (
+  id,
+  { title, description, content, thumbnail, slug, type }
+) => {
+  // Fetch the existing post
+  const existingPost = await prisma.post.findUnique({
+    where: { id: Number(id) },
+  });
+
+  if (!existingPost) {
+    return res.status(404).json({ error: 'Post not found' });
+  }
+
+  // Update the post, keeping the old thumbnail if no new one is provided
+  return await prisma.post.update({
+    where: { id: Number(id) },
+    data: {
+      title,
+      description,
+      content,
+      thumbnail: thumbnail || existingPost.thumbnail, // Use old thumbnail if not updated
+      slug,
+      type,
+    },
+  });
+};
+
+export const deletePost = async (id) => {
+  return await prisma.post.delete({
+    where: { id: Number(id) },
   });
 };

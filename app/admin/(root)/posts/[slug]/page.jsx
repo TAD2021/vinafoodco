@@ -2,22 +2,44 @@
 
 import { useState, useEffect, Fragment } from 'react';
 import axios from 'axios';
-import slugify from 'slugify';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import useSlug from '@/hooks/useSlug';
+import axiosInstance from '@/utils/axiosInstance';
 
-export default function AddPost() {
+export default function UpdatePost() {
+  const target = useSlug();
+  const [id, setId] = useState('');
   const [title, setTitle] = useState('');
   const [slug, setSlug] = useState('');
   const [description, setDescription] = useState('');
   const [content, setContent] = useState('');
   const [thumbnail, setThumbnail] = useState('');
-  const [type, setType] = useState(''); // Có thể là 'blog', 'news', v.v.
-  const [imageFile, setImageFile] = useState(null); // State cho thumbnail
+  const [type, setType] = useState('');
+  const [imageFile, setImageFile] = useState(null);
 
   useEffect(() => {
-    setSlug(slugify(title, { lower: true })); // Tạo slug từ tiêu đề
-  }, [title]);
+    if (target) {
+      // Lấy thông tin bài viết từ API
+      const fetchPost = async () => {
+        try {
+          const response = await axiosInstance.get(`/api/posts/${target}`);
+          const post = response.data?.metadata;
+          setId(post.id);
+          setTitle(post.title);
+          setSlug(post.slug);
+          setDescription(post.description);
+          setContent(post.content);
+          setThumbnail(post.thumbnail);
+          setType(post.type);
+        } catch (error) {
+          console.error('Error fetching post:', error);
+        }
+      };
+
+      fetchPost();
+    }
+  }, [target]);
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
@@ -25,22 +47,20 @@ export default function AddPost() {
       setImageFile(file);
       const reader = new FileReader();
       reader.onloadend = () => {
-        setThumbnail(reader.result); // Lưu URL hình ảnh vào state
+        setThumbnail(reader.result);
       };
-      reader.readAsDataURL(file); // Đọc file và tạo URL
+      reader.readAsDataURL(file);
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validate required fields
     if (!title || !description || !content || !thumbnail) {
       alert('All fields are required.');
       return;
     }
 
-    // Prepare the data to send
     const postData = {
       title,
       slug,
@@ -50,39 +70,31 @@ export default function AddPost() {
       type,
     };
 
-    // Upload thumbnail to Cloudinary
     try {
-      const formData = new FormData();
-      formData.append('file', imageFile);
-      formData.append(
-        'upload_preset',
-        process.env.NEXT_PUBLIC_CLOUDINARY_PRESET_NAME
-      );
+      if (imageFile) {
+        const formData = new FormData();
+        formData.append('file', imageFile);
+        formData.append(
+          'upload_preset',
+          process.env.NEXT_PUBLIC_CLOUDINARY_PRESET_NAME
+        );
 
-      const uploadResponse = await axios.post(
-        `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
-        formData
-      );
+        const uploadResponse = await axios.post(
+          `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
+          formData
+        );
 
-      // Lưu URL thumbnail vào postData
-      postData.thumbnail = uploadResponse.data.secure_url;
+        postData.thumbnail = uploadResponse.data.secure_url;
+      }
 
-      // Gửi dữ liệu đến API
-      const response = await axios.post('/api/posts', postData);
+      // Gửi dữ liệu đến API để cập nhật bài viết
+      const response = await axios.put(`/api/posts/${id}`, postData);
       if (response.data.status === 200) {
-        alert('Post created successfully!');
-        // Reset form if needed
-        setTitle('');
-        setSlug('');
-        setDescription('');
-        setContent('');
-        setThumbnail('');
-        setType('');
-        setImageFile(null);
+        alert('Post updated successfully!');
       }
     } catch (error) {
-      console.error('Error creating post:', error);
-      alert('Failed to create post.');
+      console.error('Error updating post:', error);
+      alert('Failed to update post.');
     }
   };
 
@@ -93,7 +105,7 @@ export default function AddPost() {
           className="bg-gray-800 p-8 rounded-lg w-full max-w-full"
           onSubmit={handleSubmit}
         >
-          <h2 className="text-2xl font-bold text-white mb-4">Add New Post</h2>
+          <h2 className="text-2xl font-bold text-white mb-4">Update Post</h2>
           <div className="mb-4">
             <label className="block text-white mb-2">Title</label>
             <input
@@ -114,7 +126,7 @@ export default function AddPost() {
               required
             />
           </div>
-          <div className="mb-4">
+          <div className="mb- 4">
             <label className="block text-white mb-2">Content</label>
             <ReactQuill
               theme="snow"
@@ -130,7 +142,6 @@ export default function AddPost() {
               accept="image/*"
               onChange={handleImageUpload}
               className="w-full p-2 rounded bg-gray-700 text-white"
-              required
             />
             {thumbnail && (
               <img
@@ -154,7 +165,7 @@ export default function AddPost() {
             </select>
           </div>
           <button type="submit" className="bg-blue-500 text-white p-2 rounded">
-            Create Post
+            Update Post
           </button>
         </form>
       </div>
