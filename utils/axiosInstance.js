@@ -9,7 +9,6 @@ const axiosInstance = axios.create({
 // Request interceptor
 axiosInstance.interceptors.request.use(
   (config) => {
-    // Bạn có thể thêm các header khác nếu cần
     return config;
   },
   (error) => {
@@ -23,7 +22,6 @@ axiosInstance.interceptors.response.use(
     return response;
   },
   (error) => {
-    // Xử lý lỗi toàn cục
     return Promise.reject(error);
   }
 );

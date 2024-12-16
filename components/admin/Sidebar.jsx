@@ -16,6 +16,7 @@ import { GrArticle } from 'react-icons/gr';
 import { useRouter } from 'next/navigation'; // Import useRouter from next/navigation
 import axiosInstance from '@/utils/axiosInstance';
 import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '@/redux/authSlice';
 
 export const Sidebar = ({ isOpen, toggleSidebar, currentPath }) => {
   const dispatch = useDispatch();
@@ -25,16 +26,19 @@ export const Sidebar = ({ isOpen, toggleSidebar, currentPath }) => {
   const handleLogout = async () => {
     try {
       // Send user information with the logout request
-      await axiosInstance.post('/api/auth/logout', null, {
-        headers: {
-          [HEADER.CLIENT_ID]: user.id, // Include CLIENT_ID
-          [HEADER.REFRESHTOKEN]: user.refreshToken, // Include refreshToken
-          [HEADER.AUTHORIZATION]: `Bearer ${user.accessToken}`, // Include accessToken
-        },
-      });
+      await axiosInstance.post(
+        '/api/auth/logout',
+        {},
+        {
+          headers: {
+            'x-client-id': user.id, // Client ID from user object
+            Authorization: user.accessToken, // Access token
+          },
+        }
+      );
 
       // Dispatch the logout action to update Redux state
-      dispatch(logoutAction());
+      dispatch(logout());
 
       // Redirect to the login page
       router.push('/login');

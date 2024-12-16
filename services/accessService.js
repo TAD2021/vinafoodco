@@ -1,5 +1,5 @@
 import { AuthFailureError, BadRequestError } from '@/core/error.response';
-import bcrypt from 'bcryptjs';  
+import bcrypt from 'bcryptjs';
 import prisma from '@/lib/prisma';
 import crypto from 'crypto';
 import {
@@ -48,8 +48,6 @@ export const signUp = async ({ email, password, name }) => {
         publicKey,
         privateKey
       );
-
-      console.log(`Created Token success`, tokens);
 
       return {
         metadata: {

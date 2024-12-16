@@ -71,7 +71,7 @@ export const authentication = async (req) => {
   } catch (error) {
     throw error; // Quăng lỗi nếu không xác thực
   }
-}
+};
 
 export const verifyJWT = async (token, keySecret) => {
   return JWT.verify(token, keySecret);
