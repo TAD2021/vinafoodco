@@ -40,8 +40,8 @@ export default function RootLayout({ children }) {
         return 'Tags';
       case '/admin/categories':
         return 'Categories';
-      case '/admin/teams':
-        return 'Teams';
+      case '/admin/payment':
+        return 'Payment Methods';
       case '/admin/settings':
         return 'Settings';
       case '/admin/help':

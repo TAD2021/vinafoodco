@@ -17,6 +17,7 @@ import CommentSection from './CommentSection';
 import useSlug from '@/hooks/useSlug';
 import { useDispatch } from 'react-redux';
 import { addToCart } from '@/redux/cartSlice';
+import axiosInstance from '@/utils/axiosInstance';
 
 function ProductDetail() {
   const slug = useSlug();
@@ -30,13 +31,8 @@ function ProductDetail() {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await fetch(
-          `http://localhost:3000/api/products/${slug}`
-        );
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        const data = await response.json();
+        const response = await axiosInstance.get(`/api/products/${slug}`);
+        const data = await response.data;
         setProduct(data);
       } catch (error) {
         setError(error.message);

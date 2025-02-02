@@ -152,7 +152,7 @@ async function createPost() {
       thumbnail:
         'https://i.pinimg.com/564x/d7/40/ff/d740ffcfed14385c70b70c326cfe7d0d.jpg',
       slug: slugify('First Post', { lower: true }),
-      type: 'tin-tuc'
+      type: 'tin-tuc',
     },
   });
 
@@ -163,7 +163,7 @@ async function createPost() {
       thumbnail:
         'https://i.pinimg.com/enabled_hi/564x/90/dd/3f/90dd3f2ef158e6c34afa09ff68729ddb.jpg',
       slug: slugify('Second Post', { lower: true }),
-      type: 'gioi-thieu'
+      type: 'gioi-thieu',
     },
   });
 
@@ -174,7 +174,7 @@ async function createPost() {
       thumbnail:
         'https://i.pinimg.com/enabled_hi/564x/2d/81/7f/2d817f94a758568b07c69faa5c9e5e7e.jpg',
       slug: slugify('Third Post'),
-      type: 'tin-tuc'
+      type: 'tin-tuc',
     },
   });
 
@@ -224,9 +224,9 @@ async function tag() {
 }
 
 async function main() {
-  //await createCategories();
-  //await createUser('admin@gmail.com', 'password123', 'John Doe');
-  //await createProduct();
+  await createCategories();
+  await createUser('admin@gmail.com', 'password123', 'John Doe');
+  await createProduct();
   await createPost();
   await createPaymentMethod();
   await tag();
