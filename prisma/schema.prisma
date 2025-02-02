@@ -20,7 +20,6 @@ model User {
   password  String
   name      String
   products  Product[] // Products created by the admin
-  posts     Post[] // Posts created by the admin
   comments  Comment[] // Comments made by the admin
   keyTokens KeyToken[] // Mối quan hệ với KeyToken
 }
@@ -103,8 +102,6 @@ model Post {
   thumbnail   String
   slug        String    @unique
   type        String
-  authorId    Int
-  author      User      @relation(fields: [authorId], references: [id])
   comments    Comment[] // Comments for the post
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt

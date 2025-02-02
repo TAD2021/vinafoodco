@@ -1,4 +1,4 @@
-npx prisma migrate deploy
+npx prisma migrate dev --name init
 npx prisma db seed
 
 1. Danh sách Đơn Hàng
