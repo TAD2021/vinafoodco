@@ -1,10 +1,9 @@
-// components/Sidebar.js
+'use client';
 import Image from 'next/image';
 import {
   FaExchangeAlt,
   FaCogs,
   FaSignOutAlt,
-  FaQuestionCircle,
   FaBox,
   FaTachometerAlt,
   FaUsers,
@@ -12,8 +11,38 @@ import {
   FaMoneyBill,
 } from 'react-icons/fa';
 import { TbCategoryFilled } from 'react-icons/tb';
+import { useDispatch, useSelector } from 'react-redux';
+import { useRouter } from 'next/navigation';
+import axiosInstance from '@/utils/axiosInstance';
+import { logout } from '@/redux/authSlice';
 
 export const Sidebar = ({ isOpen, toggleSidebar, currentPath }) => {
+  const dispatch = useDispatch(); // Sử dụng useDispatch để dispatch action
+  const router = useRouter();
+  const { id, accessToken } = useSelector((state) => state.auth);
+
+  const handleLogoutClick = async () => {
+    try {
+      await axiosInstance.post(
+        '/api/auth/logout',
+        {},
+        {
+          headers: {
+            'x-client-id': id,
+            Authorization: accessToken,
+          },
+        }
+      );
+
+      dispatch(logout());
+
+      // Chuyển hướng đến trang login
+      router.push('/login');
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
+  };
+
   return (
     <div
       className={`fixed left-0 top-0 h-full bg-gray-800 p-4 transition-transform duration-300 ${
@@ -128,23 +157,12 @@ export const Sidebar = ({ isOpen, toggleSidebar, currentPath }) => {
               Settings
             </a>
           </li>
-          <li className="mb-4">
-            <a
-              className={`flex items-center p-2 ${
-                currentPath === '/admin/help' ? 'bg-gray-700' : ''
-              }`}
-              href="/admin/help"
-            >
-              <FaQuestionCircle className="mr-3" />
-              Help
-            </a>
-          </li>
-          <li className="mb-4">
+          <li className="mb-4" onClick={handleLogoutClick}>
             <a
               className={`flex items-center p-2 ${
                 currentPath === '/admin/logout' ? 'bg-gray-700' : ''
               }`}
-              href="/admin/logout"
+              href="#"
             >
               <FaSignOutAlt className="mr-3" />
               Logout

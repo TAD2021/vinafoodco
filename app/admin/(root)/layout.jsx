@@ -8,7 +8,6 @@ import '../../globals.css';
 import { usePathname } from 'next/navigation';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import { ReduxProvider } from '@/redux/provider';
-
 const inter = Inter({ subsets: ['latin'] });
 
 export default function RootLayout({ children }) {
@@ -44,8 +43,6 @@ export default function RootLayout({ children }) {
         return 'Payment Methods';
       case '/admin/settings':
         return 'Settings';
-      case '/admin/help':
-        return 'Help';
       case '/admin/logout':
         return 'Logout';
       default:
