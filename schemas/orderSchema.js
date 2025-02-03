@@ -23,8 +23,8 @@ export const customerInfoSchema = z.object({
 // Định nghĩa schema cho toàn bộ dữ liệu
 export const orderSchema = z.object({
   customerInfo: customerInfoSchema,
-  paymentMethod: z.enum(['BANK_TRANSFER', 'CREDIT_CARD', 'CASH']), // Giả sử các phương thức thanh toán
-  cartItems: z.array(cartItemSchema), // cartItems là mảng các cart item
+  paymentMethod: z.enum(['BANK_TRANSFER', 'COD']),
+  cartItems: z.array(cartItemSchema),
 });
 
 // Hàm để xác thực dữ liệu

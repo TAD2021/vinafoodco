@@ -7,7 +7,6 @@ import { BadRequestError } from '@/core/error.response';
 
 export const POST = errorHandler(async (req) => {
   const requestBody = await req.json();
-
   const result = orderSchema.safeParse(requestBody);
   if (!result.success) {
     throw new BadRequestError(result.error.errors.map((err) => err.message));
