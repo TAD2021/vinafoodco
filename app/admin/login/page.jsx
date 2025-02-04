@@ -7,6 +7,7 @@ import { login } from '@/redux/authSlice';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import LoadingIcon from '@/components/LoadingIcon';
+import Link from 'next/link';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -96,6 +97,14 @@ export default function Login() {
             )}
           </button>
         </form>
+        <div className="mt-4 text-center">
+          <Link
+            href="/forgot-password"
+            className="text-teal-500 hover:underline"
+          >
+            Forgot Password?
+          </Link>
+        </div>
       </div>
     </>
   );
