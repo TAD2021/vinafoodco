@@ -19,6 +19,8 @@ model User {
   email     String     @unique
   password  String
   name      String
+  resetPasswordToken  String?
+  resetPasswordExpires DateTime?
   products  Product[] // Products created by the admin
   comments  Comment[] // Comments made by the admin
   keyTokens KeyToken[] // Mối quan hệ với KeyToken
