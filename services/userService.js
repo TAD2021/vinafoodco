@@ -2,6 +2,7 @@ import bcrypt from 'bcryptjs';
 import {
   AuthFailureError,
   BadRequestError,
+  ForbiddenError,
   NotFoundError,
 } from '@/core/error.response';
 import prisma from '@/lib/prisma';
@@ -79,5 +80,38 @@ export const resetPassword = async ({ token, newPassword }) => {
       resetPasswordToken: null,
       resetPasswordExpires: null,
     },
+  });
+};
+
+export const getUsers = async () => {
+  return await prisma.user.findMany();
+};
+
+export const createUser = async ({ name, email }) => {
+  const foundUser = await prisma.user.findUnique({
+    where: { email },
+  });
+
+  if (foundUser) {
+    throw new BadRequestError('Email đã được sử dụng');
+  }
+
+  const hashedPassword = await bcrypt.hash(process.env.INITIAL_PASS, 10);
+
+  return await prisma.user.create({
+    data: {
+      email,
+      name,
+      password: hashedPassword,
+    },
+  });
+};
+
+export const deleteUser = async (id) => {
+  return await prisma.user.update({
+    where: {
+      id: parseInt(id),
+    },
+    data: { isDeleted: true },
   });
 };

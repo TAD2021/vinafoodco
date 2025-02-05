@@ -21,6 +21,7 @@ model User {
   name      String
   resetPasswordToken  String?
   resetPasswordExpires DateTime?
+  isDeleted Boolean @default(false)
   products  Product[] // Products created by the admin
   comments  Comment[] // Comments made by the admin
   keyTokens KeyToken[] // Mối quan hệ với KeyToken
