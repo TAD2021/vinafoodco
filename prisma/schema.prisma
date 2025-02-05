@@ -97,6 +97,12 @@ model Category {
   products    Product[] // Products in this category
 }
 
+enum PostType {
+  INTRODUCE
+  NEWS
+  PROMOTION
+}
+
 model Post {
   id          Int       @id @default(autoincrement())
   title       String
@@ -104,8 +110,8 @@ model Post {
   content     String    @db.Text
   thumbnail   String
   slug        String    @unique
-  type        String
-  comments    Comment[] // Comments for the post
+  type        PostType
+  comments    Comment[]
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 }

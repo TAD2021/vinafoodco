@@ -1,6 +1,6 @@
 'use client';
 
-import { ImageUpload } from '@/components/admin/products/ImageUpload';
+import { ImageUpload } from '@/components/admin/ImageUpload';
 import { InputText } from '@/components/admin/products/InputText';
 import { ProductAttributes } from '@/components/admin/products/ProductAttributes';
 import { SelectCategory } from '@/components/admin/products/SelectCategory';
@@ -99,6 +99,13 @@ export default function Add() {
     setImageFiles(files);
     const previews = files.map((file) => URL.createObjectURL(file));
     setImagePreviews(previews);
+  };
+
+  const handleRemoveImage = (index) => {
+    setImageFiles((prevFiles) => prevFiles.filter((_, i) => i !== index));
+    setImagePreviews((prevPreviews) =>
+      prevPreviews.filter((_, i) => i !== index)
+    );
   };
 
   const handleSubmit = async (e) => {
@@ -272,6 +279,7 @@ export default function Add() {
             <ImageUpload
               onChange={handleImageUpload}
               imagePreviews={imagePreviews}
+              onRemoveImage={handleRemoveImage}
             />
             <TagSelection
               tags={tags}

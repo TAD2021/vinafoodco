@@ -33,6 +33,8 @@ export default function RootLayout({ children }) {
         return 'Users';
       case '/admin/products':
         return 'Products';
+      case '/admin/posts':
+        return 'Posts';
       case '/admin/transactions':
         return 'Transactions';
       case '/admin/tags':

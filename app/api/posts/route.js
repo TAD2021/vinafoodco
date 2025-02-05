@@ -1,29 +1,33 @@
 import { NextResponse } from 'next/server';
-import prisma from '@/lib/prisma';
+import { SuccessResponse } from '@/core/success.response';
+import { errorHandler } from '@/middleware/errorHandler';
+import { BadRequestError } from '@/core/error.response';
+import { getPosts, createPost } from '@/services/postService';
 
-export async function GET() {
-  try {
-    const posts = await prisma.post.findMany({
-      take: 3, // Lấy 3 tin tức mới nhất
-      orderBy: { createdAt: 'desc' }, // Sắp xếp theo thời gian tạo mới nhất
-      select: {
-        // Chọn các trường cần lấy
-        id: true,
-        title: true,
-        content: true,
-        thumbnail: true,
-        slug: true,
-        type: true,
-        createdAt: true,
-      },
-    });
+export const GET = errorHandler(async (req) => {
+  const searchParams = req.nextUrl.searchParams;
+  const page = searchParams.get('page') || 1;
+  const limit = searchParams.get('limit') || 5;
+  const type = searchParams.get('type') || '';
 
-    return NextResponse.json(posts, { status: 200 });
-  } catch (error) {
-    console.error(error);
-    return NextResponse.json(
-      { message: 'Internal server error' },
-      { status: 500 }
-    );
+  const pageNum = parseInt(page);
+  const pageSize = parseInt(limit);
+
+  if (isNaN(pageNum) || isNaN(pageSize) || pageNum < 1 || pageSize < 1) {
+    throw new BadRequestError('Invalid page or limit');
   }
-}
+
+  return new SuccessResponse({
+    message: 'Get post list',
+    metadata: await getPosts({ pageNum, pageSize, type }),
+  }).send(NextResponse);
+});
+
+export const POST = errorHandler(async (req) => {
+  const reqBody = await req.json();
+  console.log(reqBody);
+  return new SuccessResponse({
+    message: 'Create post success',
+    metadata: await createPost(reqBody),
+  }).send(NextResponse);
+});

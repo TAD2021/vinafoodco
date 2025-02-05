@@ -4,6 +4,9 @@ CREATE TABLE `User` (
     `email` VARCHAR(191) NOT NULL,
     `password` VARCHAR(191) NOT NULL,
     `name` VARCHAR(191) NOT NULL,
+    `resetPasswordToken` VARCHAR(191) NULL,
+    `resetPasswordExpires` DATETIME(3) NULL,
+    `isDeleted` BOOLEAN NOT NULL DEFAULT false,
 
     UNIQUE INDEX `User_email_key`(`email`),
     PRIMARY KEY (`id`)
@@ -90,8 +93,7 @@ CREATE TABLE `Post` (
     `content` TEXT NOT NULL,
     `thumbnail` VARCHAR(191) NOT NULL,
     `slug` VARCHAR(191) NOT NULL,
-    `type` VARCHAR(191) NOT NULL,
-    `authorId` INTEGER NOT NULL,
+    `type` ENUM('INTRODUCE', 'NEWS', 'PROMOTION') NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
 
@@ -128,6 +130,7 @@ CREATE TABLE `Order` (
     `district` VARCHAR(191) NOT NULL,
     `province` VARCHAR(191) NOT NULL,
     `note` VARCHAR(191) NULL,
+    `isDeleted` BOOLEAN NOT NULL DEFAULT false,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -198,9 +201,6 @@ ALTER TABLE `Product` ADD CONSTRAINT `Product_categoryId_fkey` FOREIGN KEY (`cat
 
 -- AddForeignKey
 ALTER TABLE `ProductAttribute` ADD CONSTRAINT `ProductAttribute_productId_fkey` FOREIGN KEY (`productId`) REFERENCES `Product`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `Post` ADD CONSTRAINT `Post_authorId_fkey` FOREIGN KEY (`authorId`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `Comment` ADD CONSTRAINT `Comment_productId_fkey` FOREIGN KEY (`productId`) REFERENCES `Product`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;

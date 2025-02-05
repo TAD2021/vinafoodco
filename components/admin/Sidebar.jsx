@@ -10,6 +10,7 @@ import {
   FaTags,
   FaMoneyBill,
 } from 'react-icons/fa';
+import { MdArticle } from 'react-icons/md';
 import { TbCategoryFilled } from 'react-icons/tb';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/navigation';
@@ -100,6 +101,17 @@ export const Sidebar = ({ isOpen, toggleSidebar, currentPath }) => {
             >
               <FaBox className="mr-3" />
               Products
+            </a>
+          </li>
+          <li className="mb-4">
+            <a
+              className={`flex items-center p-2 ${
+                currentPath === '/admin/posts' ? 'bg-gray-700' : ''
+              }`}
+              href="/admin/posts"
+            >
+              <MdArticle className="mr-3" />
+              Posts
             </a>
           </li>
           <li className="mb-4">

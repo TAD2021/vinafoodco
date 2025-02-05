@@ -1,7 +1,7 @@
 'use client';
 
 import LoadingIcon from '@/components/LoadingIcon';
-import { ImageUpload } from '@/components/admin/products/ImageUpload';
+import { ImageUpload } from '@/components/admin/ImageUpload';
 import { InputText } from '@/components/admin/products/InputText';
 import { ProductAttributes } from '@/components/admin/products/ProductAttributes';
 import { SelectCategory } from '@/components/admin/products/SelectCategory';
