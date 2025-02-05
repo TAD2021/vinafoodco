@@ -112,6 +112,7 @@ model Post {
   slug        String    @unique
   type        PostType
   comments    Comment[]
+  isDeleted   Boolean   @default(false)
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 }

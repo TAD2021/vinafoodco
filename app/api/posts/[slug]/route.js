@@ -1,20 +1,34 @@
 import { NextResponse } from 'next/server';
-import prisma from "@/lib/prisma";
+import { SuccessResponse } from '@/core/success.response';
+import { errorHandler } from '@/middleware/errorHandler';
+import { getPost, updatePost, deletePost } from '@/services/postService';
 
-export async function GET(req, {params}) {
-    const { slug } = params;
-    try {
-        const post = await prisma.post.findUnique({
-            where: { slug: slug },
-        });
+export const GET = errorHandler(async (req) => {
+  const pathParts = req.nextUrl.pathname.split('/');
+  const slug = pathParts[3];
+  return new SuccessResponse({
+    message: 'Get post list',
+    metadata: await getPost(slug),
+  }).send(NextResponse);
+});
 
-        if (!post) {
-            return NextResponse.json({message: 'Post not found'}, { status: 404 });
-        }
+export const PATCH = errorHandler(async (req) => {
+  const pathParts = req.nextUrl.pathname.split('/');
+  const slug = pathParts[3];
+  const reqBody = await req.json();
 
-        return NextResponse.json(post, { status: 200 });
-    } catch (error) {
-        console.error(error);
-        return NextResponse.json({message: 'Internal server error'}, { status: 500 });
-    }
-}
+  return new SuccessResponse({
+    message: 'Get post list',
+    metadata: await updatePost(slug, reqBody),
+  }).send(NextResponse);
+});
+
+export const DELETE = errorHandler(async (req) => {
+  const pathParts = req.nextUrl.pathname.split('/');
+  const id = pathParts[3];
+
+  return new SuccessResponse({
+    message: 'delete post success',
+    metadata: deletePost(id),
+  }).send(NextResponse);
+});

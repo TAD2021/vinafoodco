@@ -7,11 +7,18 @@ export const getPosts = async ({ page = 1, limit = 5, type }) => {
   const offset = (page - 1) * limit;
   // Tạo điều kiện where nếu type được truyền vào
   const whereCondition = type ? { type } : {};
+  whereCondition['isDeleted'] = false;
 
   return await prisma.post.findMany({
     skip: offset,
     take: parseInt(limit),
     where: whereCondition, // Thêm điều kiện lọc
+  });
+};
+
+export const getPost = async (slug) => {
+  return await prisma.post.findFirst({
+    where: { slug, isDeleted: false },
   });
 };
 
@@ -54,3 +61,30 @@ export const createPost = async ({
     },
   });
 };
+
+export const updatePost = async (
+  slug,
+  { title, description, content, thumbnail, type }
+) => {
+  if (!title || !content) {
+    throw new BadRequestError('Title and content are required');
+  }
+
+  return await prisma.post.update({
+    where: { slug: slug },
+    data: {
+      title,
+      description,
+      content,
+      thumbnail,
+      type,
+    },
+  });
+};
+
+export const deletePost = async(id) => {
+  return await prisma.post.update({
+    where: {id: parseInt(id)},
+    data: {isDeleted: true}
+  })
+}
