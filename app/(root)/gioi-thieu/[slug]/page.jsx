@@ -38,7 +38,7 @@ export default function PostDetail() {
     try {
       const res = await axiosInstance.get(`/api/rating?postId=${postId}`);
       const data = await res.data?.metadata;
-      setRating(data.averageRating); // Lưu giá trị rating vào state
+      setRating(data.averageRating);
     } catch (error) {
       setError(error.message);
     }
