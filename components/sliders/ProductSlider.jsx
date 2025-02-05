@@ -74,7 +74,7 @@ const ProductSlider = ({ title, products }) => {
                   width={160}
                   height={160}
                   className="w-auto h-40 rounded-lg mb-2 object-cover"
-                  src={product.image}
+                  src={product.image || product.images[0].url}
                 />
                 <div className="flex-grow">
                   <h3 className="text-center line-clamp-2">{product.name}</h3>

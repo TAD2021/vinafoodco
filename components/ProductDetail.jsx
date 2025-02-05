@@ -18,15 +18,17 @@ import useSlug from '@/hooks/useSlug';
 import { useDispatch } from 'react-redux';
 import { addToCart } from '@/redux/cartSlice';
 import axiosInstance from '@/utils/axiosInstance';
+import ProductSlider from './sliders/ProductSlider'; // Đảm bảo bạn đã import ProductSlider
 
 function ProductDetail() {
   const slug = useSlug();
-  const dispatch = useDispatch(); // Khởi tạo dispatch
+  const dispatch = useDispatch();
 
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [quantity, setQuantity] = useState(1); // State to manage quantity
+  const [quantity, setQuantity] = useState(1);
+  const [similarProducts, setSimilarProducts] = useState([]);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -34,6 +36,7 @@ function ProductDetail() {
         const response = await axiosInstance.get(`/api/products/${slug}`);
         const data = await response.data;
         setProduct(data);
+        await fetchSimilarProducts(data.tags); // Gọi fetchSimilarProducts với tags của sản phẩm
       } catch (error) {
         setError(error.message);
       } finally {
@@ -44,25 +47,32 @@ function ProductDetail() {
     fetchProduct();
   }, [slug]);
 
+  const fetchSimilarProducts = async (tags) => {
+    try {
+      const response = await axiosInstance.get(
+        `/api/products/similar?slug=${slug}`
+      );
+      setSimilarProducts(response.data?.metadata);
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
   const handleAddToCart = () => {
-    // Logic để thêm sản phẩm vào giỏ hàng
     dispatch(
       addToCart({
         id: product.id,
         name: product.name,
         price: product.price,
         quantity: quantity,
-        image: product.images[0], // Hoặc bất kỳ hình ảnh nào bạn muốn
+        image: product.images[0],
       })
     );
     console.log('Thêm vào giỏ hàng:', { ...product, quantity });
   };
 
   const handleBuyNow = () => {
-    // Logic to buy the product immediately
     console.log('Mua ngay:', { ...product, quantity });
-    // Redirect to checkout page with the product details
-    // For example: navigate to /checkout with product details
   };
 
   const increaseQuantity = () => {
@@ -70,17 +80,15 @@ function ProductDetail() {
   };
 
   const decreaseQuantity = () => {
-    setQuantity((prev) => (prev > 1 ? prev - 1 : 1)); // Prevent quantity from going below 1
+    setQuantity((prev) => (prev > 1 ? prev - 1 : 1));
   };
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
 
-  // Tổ chức lại thuộc tính để hiển thị
   const organizedAttributes = product.attributes.reduce((acc, attribute) => {
     const { attributeName, attributeValue, displayType } = attribute;
 
-    // Nếu thuộc tính đã có trong acc, thêm giá trị vào mảng
     if (!acc[attributeName]) {
       acc[attributeName] = { displayType, values: [] };
     }
@@ -162,20 +170,17 @@ function ProductDetail() {
                 />
               </div>
             </div>
-            {/* Hiển thị tag sản phẩm */}
             {product.tags && product.tags.length > 0 && (
               <div className="mt-4">
                 <div className="flex items-center">
                   <h2 className="font-semibold mr-2">Từ khoá:</h2>
-                  {/* Giảm cỡ chữ tiêu đề và thêm khoảng cách */}
                   <div className="flex flex-wrap">
                     {product.tags.map((tag, index) => (
                       <span
                         key={index}
                         className="bg-gray-200 text-gray-700 text-xs px-3 py-1 rounded mr-2 mb-2"
                       >
-                        {tag.name}{' '}
-                        {/* Assuming tag is an object and the name is the key */}
+                        {tag.name}
                       </span>
                     ))}
                   </div>
@@ -208,9 +213,11 @@ function ProductDetail() {
           </div>
         )}
       </div>
-      <div className="bg-white rounded shadow p-6 mb-6">
-        {/* <ProductSlider title="SẢN PHẨM TƯƠNG TỰ" products={teaProducts} /> */}
-      </div>
+      {similarProducts.length > 0 && (
+        <div className="bg-white rounded shadow p-6 mb-6">
+          <ProductSlider title="SẢN PHẨM Tương Tự" products={similarProducts} />
+        </div>
+      )}
       <div className="bg-white rounded shadow p-6">
         <CommentSection slug={slug} type="product" />
       </div>

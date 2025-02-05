@@ -1,4 +1,3 @@
-import { metadata } from '@/app/(root)/layout';
 import { BadRequestError, NotFoundError } from '@/core/error.response';
 import prisma from '@/lib/prisma';
 
@@ -259,5 +258,34 @@ export const deleteProduct = async (id) => {
   return await prisma.product.update({
     where: { id: Number(id) },
     data: { isDeleted: true },
+  });
+};
+
+export const getSimilarProduct = async (slug) => {
+  const product = await prisma.product.findUnique({
+    where: { slug },
+    include: {
+      tags: true,
+    },
+  });
+
+  if (!product) {
+    throw new NotFoundError('Sản phẩm không tồn tại');
+  }
+
+  const tagIds = product.tags.map((tag) => tag.id);
+  return await prisma.product.findMany({
+    where: {
+      tags: {
+        some: {
+          id: { in: tagIds },
+        },
+      },
+      id: { not: product.id },
+    },
+    include: {
+      images: true,
+      tags: true,
+    },
   });
 };

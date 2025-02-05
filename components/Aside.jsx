@@ -8,6 +8,12 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { CiCalendar } from 'react-icons/ci';
 
+const typeToPathMap = {
+  INTRODUCE: 'gioi-thieu',
+  NEWS: 'tin-tuc',
+  PROMOTION: 'khuyen-mai',
+};
+
 function Aside() {
   const [categories, setCategories] = useState([]);
   const [newProducts, setNewProducts] = useState([]);
@@ -100,7 +106,10 @@ function Aside() {
         <h3 className="text-lg font-bold text-gray-800 mb-4">TIN MỚI NHẤT</h3>
         <ul className="space-y-4">
           {latestPosts.map((post) => (
-            <Link key={post.id} href={`/${post.type}/${post.slug}`}>
+            <Link
+              key={post.id}
+              href={`/${typeToPathMap[post.type]}/${post.slug}`}
+            >
               <li className="flex items-center">
                 <Image
                   alt={post.title}
