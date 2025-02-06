@@ -3,6 +3,7 @@ import Footer from '@/components/Footer';
 import Navbar from '@/components/navbars/Navbar';
 import { Inter } from 'next/font/google';
 import '../globals.css';
+import '../../styles/user.css';
 import { ReduxProvider } from '@/redux/provider';
 import { Suspense } from 'react';
 import Loading from './loading';

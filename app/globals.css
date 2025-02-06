@@ -94,14 +94,3 @@ body {
 .ql-toolbar.ql-snow .ql-button:hover {
   background: #4b5563; /* Màu nền khi hover trên các nút */
 }
-
-h1,
-h2,
-h3,
-h4,
-h5,
-div,
-li,
-span {
-  color: black;
-}
