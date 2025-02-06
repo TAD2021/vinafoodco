@@ -65,7 +65,7 @@ function Aside() {
               key={category.id}
               className="flex justify-between items-center border-b border-orange-300 pb-2 last:border-b-0"
             >
-              <Link href={category.slug} passHref>
+              <Link href={`/danh-muc/${category.slug}`} passHref>
                 <span className="text-gray-700">{category.name}</span>
               </Link>
             </li>
@@ -110,7 +110,7 @@ function Aside() {
               key={post.id}
               href={`/${typeToPathMap[post.type]}/${post.slug}`}
             >
-              <li className="flex items-center">
+              <li className="flex items-center mb-4">
                 <Image
                   alt={post.title}
                   className="w-16 h-16 object-cover rounded mr-4"
