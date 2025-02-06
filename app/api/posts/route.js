@@ -25,7 +25,6 @@ export const GET = errorHandler(async (req) => {
 
 export const POST = errorHandler(async (req) => {
   const reqBody = await req.json();
-  console.log(reqBody);
   return new SuccessResponse({
     message: 'Create post success',
     metadata: await createPost(reqBody),

@@ -74,7 +74,7 @@ const ProductSlider = ({ title, products }) => {
                 itemType="http://schema.org/Product"
               >
                 <Image
-                  alt={product.name} // Tối ưu hóa alt
+                  alt={product.name}
                   width={160}
                   height={160}
                   className="w-auto h-40 rounded-lg mb-2 object-cover"
@@ -85,12 +85,6 @@ const ProductSlider = ({ title, products }) => {
                   <h3 className="text-center line-clamp-2" itemProp="name">
                     {product.name}
                   </h3>
-                  <p
-                    className="text-center text-gray-700 line-clamp-3"
-                    itemProp="description"
-                  >
-                    {product.description}
-                  </p>
                 </div>
                 <p
                   className="text-center text-yellow-500 font-bold"

@@ -35,7 +35,6 @@ export default function CustomerInfo({ setCustomerInfo }) {
   const handleWardChange = (e) => {
     const wardCode = e.target.value;
     const ward = wards.find(w => w.code == wardCode);
-    console.log(wardCode, wards)
 
     setSelectedWard(wardCode);
     setCustomerInfo(prev => ({ ...prev, ward: ward.name }));

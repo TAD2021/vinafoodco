@@ -53,7 +53,6 @@ function ProductDetail() {
           image: product.images[0],
         })
       );
-      console.log('Thêm vào giỏ hàng:', { ...product, quantity });
     }
   };
 

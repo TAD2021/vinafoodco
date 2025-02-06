@@ -247,7 +247,6 @@ export default function Update() {
         `/api/products/${target}`,
         productData
       );
-      console.log(response);
       if (response.data.status === 200) {
         toast.success('Product updated successfully!');
       }

@@ -2,9 +2,7 @@ import { NextResponse } from 'next/server';
 import prisma from "@/lib/prisma";
 
 export async function POST(req) {
-    const { content, name, slug, rating, type } = await req.json(); // Lấy dữ liệu từ body
-    console.log(slug, type)
-
+    const { content, name, slug, rating, type } = await req.json(); 
     try {
         let item;
 

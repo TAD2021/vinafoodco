@@ -1,4 +1,3 @@
-// utils/email.js
 import nodemailer from 'nodemailer';
 
 export const sendResetPasswordEmail = async (email, token) => {
@@ -29,7 +28,6 @@ export const sendResetPasswordEmail = async (email, token) => {
   // Gửi email
   try {
     await transporter.sendMail(mailOptions);
-    console.log('Reset password email sent successfully');
   } catch (error) {
     console.error('Error sending reset password email:', error);
     throw error;

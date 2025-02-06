@@ -55,9 +55,6 @@ export default function AddPost() {
       userId,
     };
 
-    console.log('Post data to be sent:', postData);
-
-    // Upload thumbnail to Cloudinary
     try {
       if (imageFile) {
         const formData = new FormData();

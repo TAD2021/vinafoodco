@@ -1,18 +1,20 @@
 'use client';
 
-import Image from "next/image";
-import Link from "next/link";
-import { Fragment } from "react";
-import { GrFormPreviousLink } from "react-icons/gr";
+import Image from 'next/image';
+import Link from 'next/link';
+import { Fragment } from 'react';
+import { GrFormPreviousLink } from 'react-icons/gr';
 import { useSelector, useDispatch } from 'react-redux';
-import { removeFromCart, incrementQuantity, decrementQuantity } from '@/redux/cartSlice'; // Import actions
-import { formatCurrency } from "@/utils/formatCurrency";
+import {
+  removeFromCart,
+  incrementQuantity,
+  decrementQuantity,
+} from '@/redux/cartSlice';
+import { formatCurrency } from '@/utils/formatCurrency';
 
 export default function Cart() {
   const cart = useSelector((state) => state.cart);
   const dispatch = useDispatch();
-
-  console.log(cart)
 
   const handleRemoveFromCart = (id) => {
     dispatch(removeFromCart({ id }));
@@ -30,7 +32,7 @@ export default function Cart() {
     <Fragment>
       <main className="container mx-auto my-8">
         <h1 className="text-center text-2xl font-bold mb-4">Giỏ hàng</h1>
-        
+
         {cart.items.length === 0 ? (
           <div className="border-dashed border-2 border-red-600 p-4 text-center">
             <p>Chưa có sản phẩm nào trong giỏ hàng</p>
@@ -49,8 +51,8 @@ export default function Cart() {
                   />
                   <div>
                     <p className="text-lg">{item.name}</p>
-                    <a 
-                      className="text-red-500 cursor-pointer" 
+                    <a
+                      className="text-red-500 cursor-pointer"
                       onClick={() => handleRemoveFromCart(item.id)}
                     >
                       Xóa
@@ -60,14 +62,24 @@ export default function Cart() {
                 <div className="flex items-center space-x-4">
                   <p className="text-lg">{formatCurrency(item.price)}</p>
                   <div className="flex items-center border rounded">
-                    <button className="px-2" onClick={() => handleDecrement(item.id)}>-</button>
+                    <button
+                      className="px-2"
+                      onClick={() => handleDecrement(item.id)}
+                    >
+                      -
+                    </button>
                     <input
                       className="w-8 text-center border-l border-r"
                       type="text"
-                      value={item.quantity }
+                      value={item.quantity}
                       readOnly
                     />
-                    <button className="px-2" onClick={() => handleIncrement(item.id)}>+</button>
+                    <button
+                      className="px-2"
+                      onClick={() => handleIncrement(item.id)}
+                    >
+                      +
+                    </button>
                   </div>
                 </div>
               </div>
@@ -78,7 +90,7 @@ export default function Cart() {
         <div className="text-center mt-4">
           <Link
             className="flex items-center text-green-600 hover:underline"
-            href="/products" // Redirect to products page
+            href="/products"
           >
             <GrFormPreviousLink className="mr-2" />
             Tiếp tục mua hàng

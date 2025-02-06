@@ -34,8 +34,6 @@ export const signUp = async ({ email, password, name }) => {
       const privateKey = crypto.randomBytes(64).toString('hex');
       const publicKey = crypto.randomBytes(64).toString('hex');
 
-      console.log({ privateKey, publicKey });
-
       const keyStore = await createKeyToken({
         userId: newUser.id,
         publicKey,
@@ -48,8 +46,6 @@ export const signUp = async ({ email, password, name }) => {
         publicKey,
         privateKey
       );
-
-      console.log(`Created Token success`, tokens);
 
       return {
         metadata: {
@@ -100,8 +96,6 @@ export const login = async ({ email, password, refreshToken = null }) => {
     privateKey,
     publicKey,
   });
-
-  console.log(key);
 
   return {
     user: {

@@ -18,7 +18,6 @@ const CommentSection = ({ slug, type }) => {
       const response = await axiosInstance.get(
         `/api/comments/${slug}?type=${type}&page=1&limit=5`
       );
-      console.log(response);
       const data = response.data;
       setComments(data);
     } catch (error) {

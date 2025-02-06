@@ -1,4 +1,3 @@
-// Checkout.js
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -31,14 +30,11 @@ export default function Checkout() {
   useEffect(() => {
     const fetchPaymentMethods = async () => {
       try {
-        const response = await fetch(
-          'http://localhost:3000/api/paymentMethods'
-        );
+        const response = await fetch('/api/paymentMethods');
         const data = await response.json();
         setPaymentMethods(data.paymentMethods);
-        // Nếu có phương thức thanh toán, đặt phương thức đầu tiên làm mặc định
         if (data.paymentMethods.length > 0) {
-          setPaymentMethod(data.paymentMethods[0].code); // Đặt phương thức đầu tiên làm mặc định
+          setPaymentMethod(data.paymentMethods[0].code);
         }
       } catch (error) {
         console.error('Error fetching payment methods:', error);
@@ -84,8 +80,6 @@ export default function Checkout() {
       cartItems,
     };
 
-    console.log(orderData);
-
     try {
       const response = await axiosInstance.post('/api/orders', orderData, {
         headers: {
@@ -95,7 +89,6 @@ export default function Checkout() {
 
       const data = response.data;
       toast.success('Đặt hàng thành công!');
-      console.log('Order Response:', data);
 
       // Xóa giỏ hàng sau khi đặt hàng thành công
       dispatch(clearCart());

@@ -163,8 +163,6 @@ export default function Add() {
       tags: selectedTags,
     };
 
-    console.log('Product data to be sent:', productData);
-
     // Upload images to Cloudinary
     try {
       const uploadPromises = imageFiles.map((file) => {
@@ -184,8 +182,6 @@ export default function Add() {
       const imageUrls = uploadResponses.map(
         (response) => response.data.secure_url
       );
-
-      console.log(imageUrls);
 
       // Thêm URL hình ảnh vào dữ liệu sản phẩm
       productData.images = imageUrls;
