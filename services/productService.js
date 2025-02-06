@@ -161,7 +161,7 @@ export const createProduct = async ({
       description,
       price,
       stock,
-      categoryId,
+      categoryId: parseInt(categoryId),
       images: {
         create: images.map((url) => ({ url })),
       },
