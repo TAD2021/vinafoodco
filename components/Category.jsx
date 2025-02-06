@@ -46,7 +46,7 @@ function Category() {
       >
         <ul>
           {categories.map((category) => (
-            <Link href={category.slug} key={category.id}>
+            <Link href={`/danh-muc/${category.slug}`} key={category.id}>
               <li className="border-t border-b border-gray-300 p-2">
                 <span className="text-gray-800">{category.name}</span>
               </li>

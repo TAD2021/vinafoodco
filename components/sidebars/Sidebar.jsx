@@ -1,29 +1,48 @@
-"use client";
+'use client';
 
-import useRoutes from "@/hooks/useRoutes";
-import Link from "next/link";
-import { Fragment, useEffect, useState } from "react";
-import { FaBars } from "react-icons/fa";
-import SidebarItem from "./SidebarItem";
+import useRoutes from '@/hooks/useRoutes';
+import Link from 'next/link';
+import { Fragment, useEffect, useState } from 'react';
+import { FaBars } from 'react-icons/fa';
+import SidebarItem from './SidebarItem';
+import axiosInstance from '@/utils/axiosInstance';
 
 function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [categories, setCategories] = useState([]); // State để lưu danh mục
   const routes = useRoutes();
+
+  // Hàm để lấy danh mục từ API
+  const fetchCategories = async () => {
+    try {
+      const response = await axiosInstance.get('/api/categories');
+      if (response.data && response.data.metadata) {
+        setCategories(response.data.metadata); // Lưu danh mục vào state
+      }
+    } catch (error) {
+      console.error('Lỗi khi lấy danh mục:', error);
+    }
+  };
+
+  // Gọi API khi component được render
+  useEffect(() => {
+    fetchCategories();
+  }, []);
 
   const handleToggle = () => {
     setIsOpen(!isOpen);
   };
 
   const handleClickOutside = (event) => {
-    if (!event.target.closest(".sidebar")) {
+    if (!event.target.closest('.sidebar')) {
       setIsOpen(false);
     }
   };
 
   useEffect(() => {
-    document.addEventListener("click", handleClickOutside);
+    document.addEventListener('click', handleClickOutside);
     return () => {
-      document.removeEventListener("click", handleClickOutside);
+      document.removeEventListener('click', handleClickOutside);
     };
   }, [isOpen]);
 
@@ -50,25 +69,20 @@ function Sidebar() {
                     active={item.active}
                   />
                 ))}
+                {/* Hiển thị danh mục từ API */}
                 <li className="py-2 border-b border-green-500 transition duration-300 font-bold">
                   <Link href="/danh-muc">DANH MỤC</Link>
                 </li>
-                <li className="py-2 border-b border-green-500 hover:text-white transition duration-300">
-                  <Link href="/tra-thanh-loc">Trà Thanh Lọc</Link>
-                </li>
-                <li className="py-2 border-b border-green-500 hover:text-white transition duration-300">
-                  <Link href="/bot-thuc-pham">Bột Thực Dưỡng</Link>
-                </li>
-                <li className="py-2 border-b border-green-500 hover:text-white transition duration-300 flex justify-between items-center">
-                  <Link href="/bot-dinh-duong-bo-sung">
-                    Bột Dinh Dưỡng Bổ Sung
-                  </Link>
-                  <i className="fas fa-plus text-yellow-500" />
-                </li>
-                <li className="py-2 border-b border-green-500 hover:text-white transition duration-300 flex justify-between items-center">
-                  <Link href="/bot-an-dam">Bột Ăn Dặm</Link>
-                  <i className="fas fa-plus text-yellow-500" />
-                </li>
+                {categories.map((category) => (
+                  <li
+                    key={category.id}
+                    className="py-2 border-b border-green-500 hover:text-white transition duration-300"
+                  >
+                    <Link href={`/danh-muc/${category.slug}`}>
+                      {category.name}
+                    </Link>
+                  </li>
+                ))}
               </ul>
             </div>
           </div>
