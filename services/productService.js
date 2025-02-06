@@ -289,3 +289,25 @@ export const getSimilarProduct = async (slug) => {
     },
   });
 };
+
+export const getProductsByCategory = async (slug) => {
+  const category = await prisma.category.findUnique({
+    where: { slug },
+    include: {
+      products: {
+        include: {
+          images: true, // Bao gồm các hình ảnh liên quan đến sản phẩm
+        },
+      },
+    },
+  });
+
+  if (!category) {
+    throw new NotFoundError('Danh mục không tồn tại');
+  }
+
+  return {
+    categoryName: category.name,
+    products: category.products,
+  };
+};

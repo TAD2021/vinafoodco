@@ -203,3 +203,12 @@ model Image {
   product   Product  @relation(fields: [productId], references: [id])
   createdAt DateTime @default(now())
 }
+
+model Contact {
+  id          Int      @id @default(autoincrement())
+  name        String   // Họ tên
+  email       String   // Email
+  phoneNumber String   // Số điện thoại
+  message     String   @db.Text // Tin nhắn
+  createdAt   DateTime @default(now()) // Thời gian tạo
+}

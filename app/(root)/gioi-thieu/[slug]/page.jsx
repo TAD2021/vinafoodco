@@ -7,7 +7,7 @@ import axiosInstance from '@/utils/axiosInstance';
 import { formatDate } from '@/utils/formatDate';
 import { renderStars } from '@/utils/renderStars';
 import { useEffect, useState } from 'react';
-import { CiCalendar, CiStar } from 'react-icons/ci';
+import { CiCalendar } from 'react-icons/ci';
 
 export default function PostDetail() {
   const slug = useSlug();

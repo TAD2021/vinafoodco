@@ -97,7 +97,7 @@ function ProductDetail() {
   }, {});
 
   return (
-    <div className="w-full lg:w-3/4 lg:mr-6">
+    <>
       <div className="bg-white rounded shadow p-6 mb-6">
         <div className="flex flex-col md:flex-row">
           <div className="w-full md:w-1/3">
@@ -221,7 +221,7 @@ function ProductDetail() {
       <div className="bg-white rounded shadow p-6">
         <CommentSection slug={slug} type="product" />
       </div>
-    </div>
+    </>
   );
 }
 
