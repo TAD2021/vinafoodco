@@ -22,7 +22,7 @@ export default function Lienhe() {
     setResponseMessage('');
 
     try {
-      const response = await fetch('/api/contact', {
+      const response = await fetch('/api/contacts', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
