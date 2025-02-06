@@ -210,5 +210,6 @@ model Contact {
   email       String   // Email
   phoneNumber String   // Số điện thoại
   message     String   @db.Text // Tin nhắn
+  isDeleted   Boolean  @default(false)
   createdAt   DateTime @default(now()) // Thời gian tạo
 }

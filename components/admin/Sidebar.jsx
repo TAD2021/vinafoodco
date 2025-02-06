@@ -11,6 +11,7 @@ import {
   FaMoneyBill,
 } from 'react-icons/fa';
 import { MdArticle } from 'react-icons/md';
+import { RiContactsBook3Fill } from 'react-icons/ri';
 import { TbCategoryFilled } from 'react-icons/tb';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/navigation';
@@ -123,6 +124,17 @@ export const Sidebar = ({ isOpen, toggleSidebar, currentPath }) => {
             >
               <FaExchangeAlt className="mr-3" />
               Transactions
+            </a>
+          </li>
+          <li className="mb-4">
+            <a
+              className={`flex items-center p-2 ${
+                currentPath === '/admin/contacts' ? 'bg-gray-700' : ''
+              }`}
+              href="/admin/contacts"
+            >
+              <RiContactsBook3Fill className="mr-3" />
+              Contacts
             </a>
           </li>
           <li className="mb-4">
