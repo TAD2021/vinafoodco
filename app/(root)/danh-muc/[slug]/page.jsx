@@ -5,7 +5,7 @@ import axiosInstance from '@/utils/axiosInstance';
 import { formatCurrency } from '@/utils/formatCurrency';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import Image from 'next/image'; // Nhập component Image từ next/image
+import Image from 'next/image';
 
 export default function DanhMuc() {
   const slug = useSlug();
@@ -29,13 +29,13 @@ export default function DanhMuc() {
   }, [slug]);
 
   return (
-    <main className="container mx-auto mt-6 px-6">
+    <main className="container mx-auto mt-6 px-4 lg:px-6 ">
       <div className="flex flex-col lg:flex-row">
         <div className="w-full lg:w-3/4 lg:pr-6">
           <h2 className="text-xl font-bold text-gray-800 mb-4">
             {categoryName}
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-4">
             {products.map((product, index) => (
               <div key={index} className="p-4">
                 <Link href={`/san-pham/${product.slug}`}>
@@ -55,9 +55,6 @@ export default function DanhMuc() {
                       <h3 className="text-center line-clamp-2">
                         {product.name}
                       </h3>
-                      <p className="text-center text-gray-700 line-clamp-3">
-                        {product.description}
-                      </p>
                     </div>
                     <p className="text-center text-yellow-500 font-bold">
                       {formatCurrency(product.price)}

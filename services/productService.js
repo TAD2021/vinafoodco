@@ -28,13 +28,11 @@ export const updateProductStock = async (cartItems, prismaClient = prisma) => {
   const updatePromises = cartItems.map(async (item) => {
     const product = await getProductById(item.id, prismaClient);
 
-    // Kiểm tra xem số lượng tồn kho có đủ không
     if (!product || product.stock < item.quantity)
       throw new BadRequestError(
         `Some products have been updated, please return to the cart`
       );
 
-    // Nếu tồn kho đủ, thực hiện cập nhật
     return prismaClient.product.update({
       where: { id: item.id },
       data: { stock: { decrement: item.quantity } },
@@ -56,7 +54,6 @@ const getFormattedProducts = (products) => {
   }));
 };
 
-// Common product selection fields
 const commonSelect = {
   id: true,
   name: true,
@@ -75,7 +72,7 @@ const commonSelect = {
 export const getProductByCategory = async () => {
   const products = await prisma.product.findMany({
     where: {
-      isDeleted: false, // Only select products that are not deleted
+      isDeleted: false,
     },
     select: {
       ...commonSelect,
@@ -87,10 +84,9 @@ export const getProductByCategory = async () => {
     },
   });
 
-  // Organize products by category
   const productsByCategory = products.reduce((acc, product) => {
     const categoryName = product.category.name;
-    const productData = getFormattedProducts([product])[0]; // Reuse formatting function
+    const productData = getFormattedProducts([product])[0];
 
     if (!acc[categoryName]) {
       acc[categoryName] = [];
@@ -105,16 +101,16 @@ export const getProductByCategory = async () => {
 export const getProductByPages = async (pageNum, pageSize) => {
   const products = await prisma.product.findMany({
     where: {
-      isDeleted: false, // Only select products that are not deleted
+      isDeleted: false,
     },
-    skip: (pageNum - 1) * pageSize, // Bỏ qua số lượng sản phẩm đã có
-    take: pageSize, // Lấy số lượng sản phẩm theo limit
+    skip: (pageNum - 1) * pageSize,
+    take: pageSize,
     select: commonSelect,
   });
 
   const totalProducts = await prisma.product.count({
     where: {
-      isDeleted: false, // Count only products that are not deleted
+      isDeleted: false,
     },
   });
 
@@ -129,14 +125,12 @@ export const getProductByPages = async (pageNum, pageSize) => {
 const generateUniqueSlug = async (slug) => {
   let uniqueSlug = slug;
   let count = 1;
-
-  // Kiểm tra slug có tồn tại hay không
   while (await prisma.product.findUnique({ where: { slug: uniqueSlug } })) {
-    uniqueSlug = `${slug}-${count}`; // Thêm số đếm vào cuối slug
+    uniqueSlug = `${slug}-${count}`;
     count++;
   }
 
-  return uniqueSlug; // Trả về slug duy nhất
+  return uniqueSlug;
 };
 
 export const createProduct = async ({
@@ -167,7 +161,6 @@ export const createProduct = async ({
       },
       attributes: {
         create: attributes.flatMap((attr) => {
-          // Nếu displayType là LIST, tạo một bản ghi cho mỗi giá trị
           if (attr.displayType === 'LIST') {
             return attr.attributeValues.map((value) => ({
               attributeName: attr.attributeName,
@@ -175,7 +168,6 @@ export const createProduct = async ({
               displayType: attr.displayType,
             }));
           } else {
-            // Nếu không, chỉ tạo một bản ghi cho giá trị đầu tiên
             return {
               attributeName: attr.attributeName,
               attributeValue: attr.attributeValues[0],
@@ -224,7 +216,7 @@ export const updateProduct = async (
       categoryId,
       stock,
       attributes: {
-        deleteMany: {}, // Xóa tất cả thuộc tính cũ (nếu cần)
+        deleteMany: {},
         create: attributes
           ? attributes.flatMap((attr) => {
               if (attr.displayType === 'LIST') {
@@ -247,8 +239,8 @@ export const updateProduct = async (
         set: tags.map((tagId) => ({ id: tagId })),
       },
       images: {
-        deleteMany: {}, // Xóa tất cả hình ảnh cũ (nếu cần)
-        create: images ? images.map((url) => ({ url })) : [], // Tạo các hình ảnh mới nếu có
+        deleteMany: {},
+        create: images ? images.map((url) => ({ url })) : [],
       },
     },
   });
@@ -296,7 +288,7 @@ export const getProductsByCategory = async (slug) => {
     include: {
       products: {
         include: {
-          images: true, // Bao gồm các hình ảnh liên quan đến sản phẩm
+          images: true,
         },
       },
     },
