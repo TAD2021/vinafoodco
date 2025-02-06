@@ -65,25 +65,43 @@ const ProductSlider = ({ title, products }) => {
         {title.toUpperCase()}
       </h2>
       <Slider {...settings}>
-        {displayProducts.map((product, index) => (
-          <div key={index} className="p-4">
+        {displayProducts.map((product) => (
+          <div key={product.id} className="p-4">
             <Link href={`/san-pham/${product.slug}`}>
-              <article className="bg-white p-4 rounded-lg shadow h-80 flex flex-col justify-between">
+              <article
+                className="bg-white p-4 rounded-lg shadow h-80 flex flex-col justify-between"
+                itemScope
+                itemType="http://schema.org/Product"
+              >
                 <Image
-                  alt={product.name}
+                  alt={product.name} // Tối ưu hóa alt
                   width={160}
                   height={160}
                   className="w-auto h-40 rounded-lg mb-2 object-cover"
                   src={product.image || product.images[0].url}
+                  loading="lazy" // Lazy loading
                 />
                 <div className="flex-grow">
-                  <h3 className="text-center line-clamp-2">{product.name}</h3>
-                  <p className="text-center text-gray-700 line-clamp-3">
+                  <h3 className="text-center line-clamp-2" itemProp="name">
+                    {product.name}
+                  </h3>
+                  <p
+                    className="text-center text-gray-700 line-clamp-3"
+                    itemProp="description"
+                  >
                     {product.description}
                   </p>
                 </div>
-                <p className="text-center text-yellow-500 font-bold">
-                  {formatCurrency(product.price)}
+                <p
+                  className="text-center text-yellow-500 font-bold"
+                  itemProp="offers"
+                  itemScope
+                  itemType="http://schema.org/Offer"
+                >
+                  <span itemProp="priceCurrency" content="VND">
+                    ₫
+                  </span>
+                  <span itemProp="price">{formatCurrency(product.price)}</span>
                 </p>
               </article>
             </Link>
