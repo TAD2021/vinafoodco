@@ -5,7 +5,7 @@ import { formatCurrency } from '@/utils/formatCurrency';
 import { formatDate } from '@/utils/formatDate';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, memo } from 'react'; // Import memo
 import { CiCalendar } from 'react-icons/ci';
 
 const typeToPathMap = {
@@ -14,7 +14,7 @@ const typeToPathMap = {
   PROMOTION: 'khuyen-mai',
 };
 
-function Aside() {
+const Aside = memo(() => {
   const [categories, setCategories] = useState([]);
   const [newProducts, setNewProducts] = useState([]);
   const [latestPosts, setLatestPosts] = useState([]);
@@ -77,13 +77,9 @@ function Aside() {
           SẢN PHẨM MỚI NHẤT
         </h3>
         <ul className="space-y-4">
-          {' '}
-          {/* Giữ space-y-4 để có khoảng cách giữa các sản phẩm */}
           {newProducts.map((product) => (
             <Link key={product.slug} href={`/san-pham/${product.slug}`}>
               <li className="flex items-center mb-4">
-                {' '}
-                {/* Thêm margin-bottom cho mỗi sản phẩm */}
                 <Image
                   alt={product.name}
                   className="w-16 h-16 object-cover rounded mr-4"
@@ -120,7 +116,7 @@ function Aside() {
                 />
                 <div className="flex-1">
                   <p className="text-gray-700 break-words">{post.title}</p>
-                  <div className="text-sm text -gray-500 flex items-center mt-1 flex-wrap">
+                  <div className="text-sm text-gray-500 flex items-center mt-1 flex-wrap">
                     <CiCalendar className="mr-1" />
                     <span>{formatDate(post.createdAt)}</span>
                   </div>
@@ -132,6 +128,6 @@ function Aside() {
       </div>
     </aside>
   );
-}
+});
 
 export default Aside;

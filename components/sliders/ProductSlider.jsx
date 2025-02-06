@@ -98,9 +98,6 @@ const ProductSlider = ({ title, products }) => {
                   itemScope
                   itemType="http://schema.org/Offer"
                 >
-                  <span itemProp="priceCurrency" content="VND">
-                    ₫
-                  </span>
                   <span itemProp="price">{formatCurrency(product.price)}</span>
                 </p>
               </article>

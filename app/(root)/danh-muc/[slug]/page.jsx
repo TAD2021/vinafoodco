@@ -49,7 +49,7 @@ export default function DanhMuc() {
                         product.images.length > 0
                           ? product.images[0].url
                           : '/default-image.png'
-                      } // Sử dụng hình ảnh mặc định nếu không có hình
+                      }
                     />
                     <div className="flex-grow">
                       <h3 className="text-center line-clamp-2">

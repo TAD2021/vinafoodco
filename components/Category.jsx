@@ -8,15 +8,17 @@ import { FaBars } from 'react-icons/fa';
 
 function Category() {
   const pathname = usePathname();
-  const [menuOpen, setMenuOpen] = useState(pathname === '/' ? true : false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const [categories, setCategories] = useState([]);
 
+  // Hàm để toggle menu
   const toggleMenu = () => {
     if (pathname !== '/') {
       setMenuOpen(!menuOpen);
     }
   };
 
+  // Gọi API để lấy danh mục
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -30,6 +32,15 @@ function Category() {
 
     fetchCategories();
   }, []);
+
+  // Theo dõi sự thay đổi của pathname
+  useEffect(() => {
+    if (pathname === '/') {
+      setMenuOpen(true); // Mở menu khi ở trang chính
+    } else {
+      setMenuOpen(false); // Đóng menu khi ở các trang khác
+    }
+  }, [pathname]);
 
   return (
     <div className="w-64 relative">
